@@ -1,0 +1,74 @@
+const { 
+    getAllUsers,
+    getUserById,
+    changeUserRoleById,
+    createNewUser,
+    deleteUserById,
+} = require('../../models/users.model');
+
+const {
+    getAccountBasicInformation,
+} = require('../../services/query');
+
+async function httpGetAllUsers(req, res) {
+    const { role, loc }  = getAccountBasicInformation(req.query); 
+    // Filter users list based on this user's role and work location
+    const users = await getAllUsers(role, loc);
+    return res.status(200).json(users);
+}
+
+async function httpGetUserById(req, res) {
+    const userId = Number(req.params.id);
+    
+    const user = await getUserById(userId);
+    if (!user) {
+        return res.status(404).json({
+            error: 'User not found',
+        });
+    }
+
+    return res.status(200).json(user);
+}
+
+async function httpChangeUserRoleById(req, res) {
+
+}
+
+async function httpAddNewUser(req, res) {
+    const user = req.body;
+    
+    // check for authentication and stuff
+
+    await createNewUser(user);
+    return res.status(201).json(user);
+}
+
+async function httpDeleteUserById(req, res) {
+    const userId = Number(req.params.id);
+
+    const user = await getUserById(userId);
+    if (!user) {
+        return res.status(404).json({
+            error: 'User not found',
+        });
+    }
+
+    const deleted = await deleteUserById(userId);
+    if (!deleted) {
+        return res.status(400).json({
+            error: 'Launch not aborted',
+        });
+    }
+
+    return res.status(200).json({
+        ok: true,
+    });
+}
+
+module.exports = {
+    httpGetAllUsers,
+    httpGetUserById,
+    httpChangeUserRoleById,
+    httpAddNewUser,
+    httpDeleteUserById,
+};
