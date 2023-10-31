@@ -31,7 +31,18 @@ async function httpGetUserById(req, res) {
 }
 
 async function httpChangeUserRoleById(req, res) {
+    // authentication stuff
 
+    const changed = await changeUserRoleById(userId, role);
+    if (!changed) {
+        return res.status(500).json({
+            error: 'User role not changed'
+        });
+    }
+
+    return res.status(200).json({
+        ok: true,
+    });
 }
 
 async function httpAddNewUser(req, res) {
