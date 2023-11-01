@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const transfersSchema = new mongoose.Schema({
     transferId: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
     orderId: {
