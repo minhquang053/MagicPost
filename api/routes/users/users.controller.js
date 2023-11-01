@@ -11,9 +11,10 @@ const {
 } = require('../../services/query');
 
 async function httpGetAllUsers(req, res) {
-    const { role, loc }  = getAccountBasicInformation(req.query); 
-    // Filter users list based on this user's role and work location
-    const users = await getAllUsers(role, loc);
+    userId; // retrieve userId through some authorization stuff
+    requestingUser = getUserById(userId)
+    // Filter users list based on the requesting user's role and work location
+    const users = await getAllUsers(requestingUser.role, requestingUser.location);
     return res.status(200).json(users);
 }
 
@@ -47,10 +48,15 @@ async function httpChangeUserRoleById(req, res) {
 
 async function httpAddNewUser(req, res) {
     const user = req.body;
-    
+ 
     // check for authentication and stuff
-
-    await createNewUser(user);
+    try {
+        await createNewUser(user);
+    } catch (err) {
+        return res.status(400).json({
+            error: err.message,
+        });
+    }
     return res.status(201).json(user);
 }
 
