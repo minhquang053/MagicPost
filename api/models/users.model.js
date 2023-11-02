@@ -5,7 +5,7 @@ const { getHashedPassword } = require('../services/bcrypt');
 
 const DEFAULT_USER_ID = 0;
 
-async function getAllUsers() {
+async function getAllUsers(role, location) {
     return await usersDatabase
         .find()
         .sort()
@@ -22,7 +22,7 @@ async function getUserByEmail(email) {
     return user;
 }
 
-async function changeUserRoleById(userId) {
+async function changeUserRoleById(userId, newRole) {
 
 }
 
