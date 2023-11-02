@@ -1,6 +1,7 @@
 const axios = require('axios');
 
 const User = require('./users.mongo');
+const { getHashedPassword } = require('../services/bcrypt');
 
 const DEFAULT_USER_ID = 0;
 
@@ -14,6 +15,11 @@ async function getAllUsers() {
 
 async function getUserById(userId) {
     
+}
+
+async function getUserByEmail(email) {
+    const user = await User.findOne({ "email": email });
+    return user;
 }
 
 async function changeUserRoleById(userId) {
@@ -47,7 +53,7 @@ async function createNewUser(user) {
         email: user.email,
         role: user.role,
         location: user.location,
-        password: "hash-later",
+        password: await getHashedPassword(user.password),
     })
     await saveUser(newUser);
 }
@@ -59,6 +65,7 @@ async function deleteUserById(userId) {
 module.exports = {
     getAllUsers,
     getUserById,
+    getUserByEmail,
     changeUserRoleById,
     createNewUser,
     deleteUserById,
