@@ -11,8 +11,8 @@ const {
 } = require('../../services/query');
 
 async function httpGetAllUsers(req, res) {
-    userId; // retrieve userId through some authorization stuff
-    requestingUser = getUserById(userId)
+    const userId = req.uid;
+    const requestingUser = await getUserById(userId)
     // Filter users list based on the requesting user's role and work location
     const users = await getAllUsers(requestingUser.role, requestingUser.location);
     return res.status(200).json(users);
@@ -32,9 +32,16 @@ async function httpGetUserById(req, res) {
 }
 
 async function httpChangeUserRoleById(req, res) {
-    // authentication stuff
+    const userId = req.uid;
+    const newRole = req.body.newRole;
+    const requestingUser = await getUserById(userId);
+    if (requestingUser.role !== "Admin") {
+        return res.status(401).json({
+            error: "User role not changed"
+        });
+    }
 
-    const changed = await changeUserRoleById(userId, role);
+    const changed = await changeUserRoleById(userId, newRole);
     if (!changed) {
         return res.status(500).json({
             error: 'User role not changed'

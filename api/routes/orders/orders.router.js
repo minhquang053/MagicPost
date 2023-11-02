@@ -4,8 +4,13 @@ const {
     httpGetOrdersById,
     httpAddNewOrder,
 } = require('./orders.controller');
+const { validateUser } = require('../../middlewares/authentication');
+const { extractAuthorization } = require('../../middlewares/authorization');
 
 const ordersRouter = express.Router();
+
+ordersRouter.use(validateUser);
+ordersRouter.use(extractAuthorization);
 
 /*
 ordersRouter.get('/', httpGetAllOrders);

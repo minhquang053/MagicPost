@@ -12,7 +12,7 @@ async function httpLogin(req, res) {
     .then(async valid => {
         if (valid) {
             return res.status(200).json({
-                token: createAccessToken(user.role),
+                token: createAccessToken(user.userId),
             });
         } else {
             return res.status(400).json({
