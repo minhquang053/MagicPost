@@ -1,3 +1,4 @@
+const { request } = require('express');
 const { 
     getAllUsers,
     getUserById,
@@ -6,8 +7,8 @@ const {
     deleteUserById,
 } = require('../../models/users.model');
 
-const {
-} = require('../../services/query');
+const { editRolePermissionGranted } = require('../../services/internal');
+const { validateInfo } = require('../../services/internal');
 
 async function httpGetAllUsers(req, res) {
     const userId = req.uid;
@@ -31,15 +32,29 @@ async function httpGetUserById(req, res) {
 }
 
 async function httpChangeUserRoleById(req, res) {
-    const targetId = req.uid;
+    const targetId = Number(req.params.id);
+    const targetUser = await getUserById(targetId);
     const newRole = req.body.role;
+    targetUser.newRole = newRole;
+
+    if (!validateInfo({ role: newRole })) {
+        return res.status(400).json({
+            error: "Invalid role"
+        })
+    }
+
+    if (targetUser.role === targetUser.newRole) {
+        return res.status(400).json({
+            error: "New role is the same as before"
+        })
+    }
 
     const requestingUser = await getUserById(req.uid);
-    // if (requestingUser.role !== "Admin") {
-    //     return res.status(401).json({
-    //         error: "Require administrator access"
-    //     });
-    // }
+    if (!editRolePermissionGranted(requestingUser, targetUser)) {
+        return res.status(401).json({
+            error: "Permission required"
+        });
+    }
 
     const user = await changeUserRoleById(targetId, newRole);
     if (!user) {
@@ -54,7 +69,21 @@ async function httpChangeUserRoleById(req, res) {
 async function httpAddNewUser(req, res) {
     const user = req.body;
  
-    // check for authentication and stuff
+    if (!validateInfo({ role: user.role, location: user.location })) {
+        return res.status(400).json({
+            error: "Invalid role or location"
+        })
+    }
+
+    const requestingUser = await getUserById(req.uid);
+    if (requestingUser.role !== "Admin" &&
+        !(requestingUser.role == "Manager" &&
+        requestingUser.location == user.location)) {
+        return res.status(401).json({
+            error: "Require administrator or location manager access"
+        });
+    }
+
     try {
         await createNewUser(user);
     } catch (err) {
