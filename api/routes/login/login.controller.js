@@ -21,6 +21,7 @@ async function httpLogin(req, res) {
         }
     })
     .catch(err => {
+        console.log(err);
         return res.status(500).json({
             error: "Couldn't validate user"
         })
