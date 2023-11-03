@@ -6,24 +6,26 @@ const { getHashedPassword } = require('../services/bcrypt');
 const DEFAULT_USER_ID = 0;
 
 async function getAllUsers(role, location) {
-    return await usersDatabase
-        .find()
-        .sort()
-        .skip()
-        .limit()
+    const all_roles = ['Admin', 'Manager', 'Clerk', 'Shipper'];
+    const find_roles = all_roles.slice(all_roles.indexOf(role));
+    return await User
+        .find({ role: { $in: find_roles }, location: location })
+        .select({ _id: 0, userId: 1, name: 1, role: 1});
 };
 
 async function getUserById(userId) {
-    
+    return await User
+        .findOne({ userId: userId })
+        .select({ _id: 0, userId: 1, name: 1, email: 1, role: 1, location: 1 });
 }
 
 async function getUserByEmail(email) {
-    const user = await User.findOne({ "email": email });
-    return user;
+    return await User.findOne({ "email": email })
+        .select({ _id: 0, userId: 1, name: 1, email: 1, role: 1, location: 1});
 }
 
 async function changeUserRoleById(userId, newRole) {
-
+    return await User.updateOne({ userId: userId }, { role: newRole });
 }
 
 async function getLatestUserId() {
