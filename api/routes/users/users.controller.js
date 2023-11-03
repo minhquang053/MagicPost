@@ -7,7 +7,6 @@ const {
 } = require('../../models/users.model');
 
 const {
-    getAccountBasicInformation,
 } = require('../../services/query');
 
 async function httpGetAllUsers(req, res) {
@@ -15,6 +14,7 @@ async function httpGetAllUsers(req, res) {
     const requestingUser = await getUserById(userId)
     // Filter users list based on the requesting user's role and work location
     const users = await getAllUsers(requestingUser.role, requestingUser.location);
+    
     return res.status(200).json(users);
 }
 
@@ -27,30 +27,28 @@ async function httpGetUserById(req, res) {
             error: 'User not found',
         });
     }
-
     return res.status(200).json(user);
 }
 
 async function httpChangeUserRoleById(req, res) {
-    const userId = req.uid;
-    const newRole = req.body.newRole;
-    const requestingUser = await getUserById(userId);
-    if (requestingUser.role !== "Admin") {
-        return res.status(401).json({
-            error: "User role not changed"
-        });
-    }
+    const targetId = req.uid;
+    const newRole = req.body.role;
 
-    const changed = await changeUserRoleById(userId, newRole);
-    if (!changed) {
+    const requestingUser = await getUserById(req.uid);
+    // if (requestingUser.role !== "Admin") {
+    //     return res.status(401).json({
+    //         error: "Require administrator access"
+    //     });
+    // }
+
+    const user = await changeUserRoleById(targetId, newRole);
+    if (!user) {
         return res.status(500).json({
             error: 'User role not changed'
         });
     }
 
-    return res.status(200).json({
-        ok: true,
-    });
+    return res.status(200).json(user);
 }
 
 async function httpAddNewUser(req, res) {
