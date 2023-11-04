@@ -1,4 +1,3 @@
-const { request } = require('express');
 const { 
     getAllUsers,
     getUserById,
@@ -8,11 +7,13 @@ const {
 } = require('../../models/users.model');
 
 const { editRolePermissionGranted } = require('../../services/internal');
-const { validateInfo } = require('../../services/internal');
+const { validateUserInfo } = require('../../services/internal');
 
 async function httpGetAllUsers(req, res) {
-    const userId = req.uid;
-    const requestingUser = await getUserById(userId)
+    // to use query instead later
+    const query = req.body;
+    const requestingUser = await getUserById(req.uid);
+
     // Filter users list based on the requesting user's role and work location
     const users = await getAllUsers(requestingUser.role, requestingUser.location);
     
@@ -37,7 +38,7 @@ async function httpChangeUserRoleById(req, res) {
     const newRole = req.body.role;
     targetUser.newRole = newRole;
 
-    if (!validateInfo({ role: newRole })) {
+    if (!validateUserInfo({ role: newRole })) {
         return res.status(400).json({
             error: "Invalid role"
         })
@@ -69,7 +70,7 @@ async function httpChangeUserRoleById(req, res) {
 async function httpAddNewUser(req, res) {
     const user = req.body;
  
-    if (!validateInfo({ role: user.role, location: user.location })) {
+    if (!validateUserInfo({ role: user.role, location: user.location })) {
         return res.status(400).json({
             error: "Invalid role or location"
         })
