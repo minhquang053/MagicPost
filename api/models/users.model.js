@@ -1,5 +1,3 @@
-const axios = require('axios');
-
 const User = require('./users.mongo');
 const { getHashedPassword } = require('../services/bcrypt');
 
