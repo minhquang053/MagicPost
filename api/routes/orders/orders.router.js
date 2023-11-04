@@ -1,7 +1,7 @@
 const express = require('express');
 const {
     httpGetAllOrders,
-    httpGetOrdersById,
+    httpGetOrderById,
     httpAddNewOrder,
 } = require('./orders.controller');
 const { validateUser } = require('../../middlewares/authentication');
@@ -12,10 +12,8 @@ const ordersRouter = express.Router();
 ordersRouter.use(validateUser);
 ordersRouter.use(extractAuthorization);
 
-/*
 ordersRouter.get('/', httpGetAllOrders);
-ordersRouter.get('/:id', httpGetOrdersById);
+ordersRouter.get('/:id', httpGetOrderById);
 ordersRouter.post('/', httpAddNewOrder);
-*/
 
 module.exports = ordersRouter;
