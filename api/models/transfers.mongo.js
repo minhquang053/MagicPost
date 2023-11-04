@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const transfersSchema = new mongoose.Schema({
     transferId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         required: true,
     },
     orderId: {
@@ -16,16 +16,16 @@ const transfersSchema = new mongoose.Schema({
         type: String,
         required: true, 
     },
-    sendDate: {
-        type: Date,
-        required: true,
-    },
     receiveDate: {
-        type: Date,
+        type: String,
         required: false,
     },
-    status: {
+    forwardDate: {
         type: String,
+        required: false,
+    },
+    done: {
+        type: Boolean,
         required: true,
     }
 });
