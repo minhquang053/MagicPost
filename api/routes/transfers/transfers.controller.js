@@ -1,8 +1,12 @@
 const {
-    httpGetAllTransfers,
-    httpGetTransferById,
-    httpAddNewTransfer,
+    getAllTransfers,
+    getTransferById,
+    finishTransferById,
 } = require('../../models/transfers.model');
+
+const {
+    getUserById,
+} = require('../../models/users.model');
 
 async function httpGetAllTransfers(req, res) {
     // to use query later
@@ -15,7 +19,7 @@ async function httpGetAllTransfers(req, res) {
 }
 
 async function httpGetTransferById(req, res) {
-    const transferId = Number(req.params.id);
+    const transferId = req.params.id;
 
     const transfer = await getTransferById(transferId);
     if (!transfer) {
@@ -23,10 +27,24 @@ async function httpGetTransferById(req, res) {
             error: 'Transfer not found',
         });
     }
-    return res.status(200).json(order);
+    return res.status(200).json(transfer);
+}
+
+async function httpFinishTransferById(req, res) {
+    const transferId = req.params.id;
+    
+    const transfer = await finishTransferById(transferId);
+    if (!transfer) {
+        return res.status(400).json({
+            error: "Transfer not found"
+        });  
+    }
+
+    return res.status(200).json(transfer);
 }
 
 module.exports = {
     httpGetAllTransfers,
     httpGetTransferById,
+    httpFinishTransferById,
 }
