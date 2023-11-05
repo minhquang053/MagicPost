@@ -6,12 +6,22 @@ const {
 
 async function getAllOrders(sendLoc) {
     return await Order
-        .find({ sendlocation: sendLoc });
+        .find({ sendLocation: sendLoc })
 };
 
 async function getOrderById(orderId) {
     return await Order
-        .findOne({ orderId: orderId });
+        .findOne({ orderId: orderId })
+}
+
+async function changeOrderStatusById(orderId, newStatus) {
+    const order = await getOrderById(orderId);
+    if (!order) {
+        return null;
+    }
+    order.orderStatus = newStatus;
+    order.save();
+    return order;
 }
 
 async function saveOrder(order) {
@@ -36,10 +46,13 @@ async function createNewOrder(order) {
         weight: order.weight,
     })
     await saveOrder(newOrder);
+    
+    return newOrder;
 }
 
 module.exports = {
     getAllOrders,
     getOrderById,
+    changeOrderStatusById,
     createNewOrder,
 }

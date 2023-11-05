@@ -18,6 +18,10 @@ const ordersSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    receiveLocation: {
+        type: String,
+        required: true,
+    },
     senderName: {
         type: String,
         required: true,
