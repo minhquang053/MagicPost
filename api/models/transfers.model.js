@@ -6,17 +6,27 @@ const {
 
 async function getAllTransfers(sendLoc) {
     return await Transfer
-        .find({ sendlocation: sendLoc });
+        .find({ fromLoc: sendLoc })
 };
 
 async function getTransferById(transferId) {
     return await Transfer
-        .findOne({ transferId: transferId });
+        .findOne({ transferId: transferId })
 }
 
 async function getTransfersByOrderId(orderId) {
     return await Transfer
-        .find({ orderId: orderId });
+        .find({ orderId: orderId })
+}
+
+async function finishTransferById(transferId) {
+    const transfer = await getTransferById(transferId);
+    if (!transfer) {
+        return null;
+    }
+    transfer.done = true;
+    transfer.save();
+    return transfer;
 }
 
 async function saveTransfer(transfer) {
@@ -39,6 +49,7 @@ async function createNewTransfer(transfer) {
 module.exports = {
     getAllTransfers,
     getTransferById,
+    finishTransferById,
     getTransfersByOrderId,
     createNewTransfer,
 }

@@ -6,6 +6,7 @@ const transfersSchema = new mongoose.Schema({
         required: true,
     },
     orderId: {
+        type: String,
         required: true,
     },
     fromLoc: {
