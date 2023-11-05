@@ -13,16 +13,19 @@ async function getAllUsers(role, location) {
 
 async function getUserById(userId) {
     return await User
-        .findOne({ userId: userId });
+        .findOne({ userId: userId })
 }
 
 async function getUserByEmail(email) {
     return await User
-        .findOne({ "email": email });
+        .findOne({ "email": email })
 }
 
 async function changeUserRoleById(userId, newRole) {
     const user = await getUserById(userId);
+    if (!user) {
+        return null;
+    }
     user.role = newRole;
     user.save();
     return user;
