@@ -31,25 +31,7 @@ export const items = [
         <UsersIcon />
       </SvgIcon>
     )
-  },
-  {
-    title: 'Địa điểm',
-    icon: (
-      <SvgIcon fontSize="small">
-        <MapBinIcon />
-      </SvgIcon>
-    ),
-    subItems: [
-      {
-        title: 'Điểm giao dịch',
-        path: '/locations/pickup-point',
-      },
-      {
-        title: 'Điểm tập kết',
-        path: '/locations/assemble-point'
-      }
-    ]
-  },
+  }, 
   {
     title: 'Đơn hàng',
     icon: (
@@ -60,12 +42,15 @@ export const items = [
     subItems: [
       {
         title: "Tra cứu đơn hàng",
+        path: '/orders/search_orders'
       },
       {
-        title: "Xác nhận đơn hàng"
+        title: "Xác nhận đơn hàng",
+        path: '/orders/confirm_orders',
       },
       {
         title: "Tạo đơn hàng",
+        path: '/orders/create_orders',
       },
     ]
   },
