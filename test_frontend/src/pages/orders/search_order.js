@@ -1,13 +1,13 @@
-// pages/your-page.js
+// pages/orders/search_orders.js
 import Head from 'next/head';
 import { Container } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import OrderSearch from 'src/sections/orders/orders-search';
+import OrderSearch from 'src/sections/order/search-order/orders-search';
 
 const Page = () => (
   <>
     <Head>
-      <title>Tra cuu don hang | Magic Post</title>
+      <title>Tra cứu đơn hàng | Magic Post</title>
     </Head>
 
     <Container>
@@ -18,6 +18,6 @@ const Page = () => (
   </>
 );
 
-Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>
 
 export default Page;

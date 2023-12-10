@@ -41,16 +41,20 @@ export const items = [
     ),
     subItems: [
       {
-        title: "Tra cứu đơn hàng",
-        path: '/orders/search_orders'
+        title: "Tạo đơn hàng",
+        path: '/orders/create_order',
       },
       {
         title: "Xác nhận đơn hàng",
-        path: '/orders/confirm_orders',
+        path: '/orders/confirm_order',
       },
       {
-        title: "Tạo đơn hàng",
-        path: '/orders/create_orders',
+        title: "Tra cứu đơn hàng",
+        path: '/orders/search_order'
+      },
+      {
+        title: "Tất cả đơn hàng",
+        path: '/orders/all_orders'
       },
     ]
   },
@@ -63,13 +67,16 @@ export const items = [
     ),
     subItems: [
       {
-        title: "Tra cứu đơn vận chuyển",
+        title: "Tạo đơn vận chuyển"
       },
       {
         title: "Xác nhận đơn vận chuyển"
       },
       {
-        title: "Tạo đơn vận chuyển"
+        title: "Tra cứu đơn vận chuyển",
+      },
+      {
+        title: "Tất cả đơn vận chuyển",
       }
     ]
   },
