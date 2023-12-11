@@ -8,7 +8,6 @@ import {
   Alert,
   Box,
   Button,
-  FormHelperText,
   Link,
   Stack,
   Tab,
@@ -25,8 +24,8 @@ const Page = () => {
   const [method, setMethod] = useState('email');
   const formik = useFormik({
     initialValues: {
-      email: 'demo@devias.io',
-      password: 'Password123!',
+      email: 'minhquang@gmail.com',
+      password: 'hellomanager',
       submit: null
     },
     validationSchema: Yup.object({
@@ -59,19 +58,11 @@ const Page = () => {
     []
   );
 
-  const handleSkip = useCallback(
-    () => {
-      auth.skip();
-      router.push('/');
-    },
-    [auth, router]
-  );
-
   return (
     <>
       <Head>
         <title>
-          Login | Devias Kit
+          Đăng nhập | Magic Post
         </title>
       </Head>
       <Box
@@ -97,23 +88,8 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Login
-              </Typography>
-              <Typography
-                color="text.secondary"
-                variant="body2"
-              >
-                Don&apos;t have an account?
-                &nbsp;
-                <Link
-                  component={NextLink}
-                  href="/auth/register"
-                  underline="hover"
-                  variant="subtitle2"
-                >
-                  Register
-                </Link>
-              </Typography>
+                Đăng nhập
+              </Typography> 
             </Stack>
             <Tabs
               onChange={handleMethodChange}
@@ -123,10 +99,6 @@ const Page = () => {
               <Tab
                 label="Email"
                 value="email"
-              />
-              <Tab
-                label="Phone Number"
-                value="phoneNumber"
               />
             </Tabs>
             {method === 'email' && (
@@ -139,7 +111,7 @@ const Page = () => {
                     error={!!(formik.touched.email && formik.errors.email)}
                     fullWidth
                     helperText={formik.touched.email && formik.errors.email}
-                    label="Email Address"
+                    label="Địa chỉ email"
                     name="email"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
@@ -150,7 +122,7 @@ const Page = () => {
                     error={!!(formik.touched.password && formik.errors.password)}
                     fullWidth
                     helperText={formik.touched.password && formik.errors.password}
-                    label="Password"
+                    label="Mật khẩu"
                     name="password"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
@@ -158,9 +130,6 @@ const Page = () => {
                     value={formik.values.password}
                   />
                 </Stack>
-                <FormHelperText sx={{ mt: 1 }}>
-                  Optionally you can skip.
-                </FormHelperText>
                 {formik.errors.submit && (
                   <Typography
                     color="error"
@@ -179,37 +148,16 @@ const Page = () => {
                 >
                   Continue
                 </Button>
-                <Button
-                  fullWidth
-                  size="large"
-                  sx={{ mt: 3 }}
-                  onClick={handleSkip}
-                >
-                  Skip authentication
-                </Button>
                 <Alert
                   color="primary"
                   severity="info"
                   sx={{ mt: 3 }}
                 >
                   <div>
-                    You can use <b>demo@devias.io</b> and password <b>Password123!</b>
+                    You can use <b>tester@gmail.com</b> and password <b>hellotester</b>
                   </div>
                 </Alert>
               </form>
-            )}
-            {method === 'phoneNumber' && (
-              <div>
-                <Typography
-                  sx={{ mb: 1 }}
-                  variant="h6"
-                >
-                  Not available in the demo
-                </Typography>
-                <Typography color="text.secondary">
-                  To prevent unnecessary costs we disabled this feature in the demo.
-                </Typography>
-              </div>
             )}
           </div>
         </Box>

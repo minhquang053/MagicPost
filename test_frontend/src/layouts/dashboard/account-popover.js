@@ -8,7 +8,7 @@ export const AccountPopover = (props) => {
   const { anchorEl, onClose, open } = props;
   const router = useRouter();
   const auth = useAuth();
-
+  
   const handleSignOut = useCallback(
     () => {
       onClose?.();
@@ -36,13 +36,13 @@ export const AccountPopover = (props) => {
         }}
       >
         <Typography variant="overline">
-          Account
+          Tài khoản
         </Typography>
         <Typography
           color="text.secondary"
           variant="body2"
         >
-          Anika Visser
+          {auth?.user?.name}
         </Typography>
       </Box>
       <Divider />
@@ -57,7 +57,7 @@ export const AccountPopover = (props) => {
         }}
       >
         <MenuItem onClick={handleSignOut}>
-          Sign out
+          Đăng xuất
         </MenuItem>
       </MenuList>
     </Popover>

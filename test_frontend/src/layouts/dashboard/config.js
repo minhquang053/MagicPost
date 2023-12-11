@@ -25,12 +25,21 @@ export const items = [
   },
   {
     title: 'Nhân viên',
-    path: '/staffs',
     icon: (
       <SvgIcon fontSize="small">
         <UsersIcon />
       </SvgIcon>
-    )
+    ),
+    subItems: [
+      {
+        title: "Thêm nhân viên",
+        path: '/staffs/add_staff',
+      },
+      {
+        title: "Tất cả nhân viên",
+        path: '/staffs/all_staffs'
+      },
+    ]
   }, 
   {
     title: 'Đơn hàng',

@@ -16,7 +16,7 @@ import {
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 
-export const CustomersTable = (props) => {
+export const StaffsTable = (props) => {
   const {
     count = 0,
     items = [],
@@ -24,7 +24,6 @@ export const CustomersTable = (props) => {
     onRowsPerPageChange,
     page = 0,
     rowsPerPage = 0,
-    selected = []
   } = props;
 
   return (
@@ -52,14 +51,11 @@ export const CustomersTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((customer) => {
-                const isSelected = selected.includes(customer.id);
-
+              {items.map((staff) => {
                 return (
                   <TableRow
                     hover
-                    key={customer.id}
-                    selected={isSelected}
+                    key={staff.id}
                   >
                     <TableCell>
                       <Stack
@@ -67,25 +63,25 @@ export const CustomersTable = (props) => {
                         direction="row"
                         spacing={2}
                       >
-                        <Avatar src={customer.avatar}>
-                          {getInitials(customer.name)}
+                        <Avatar src={staff.avatar}>
+                          {getInitials(staff.name)}
                         </Avatar>
                         <Typography variant="subtitle2">
-                          {customer.name}
+                          {staff.name}
                         </Typography>
                       </Stack>
                     </TableCell>
                     <TableCell>
-                      {customer.email}
+                      {staff.email}
                     </TableCell>
                     <TableCell>
-                      {customer.role}
+                      {staff.role}
                     </TableCell>
                     <TableCell>
-                      {customer.location}
+                      {staff.location}
                     </TableCell>
                     <TableCell>
-                      {customer.phone}
+                      {staff.phone}
                     </TableCell>
                   </TableRow>
                 );
@@ -107,16 +103,11 @@ export const CustomersTable = (props) => {
   );
 };
 
-CustomersTable.propTypes = {
+StaffsTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
-  onDeselectAll: PropTypes.func,
-  onDeselectOne: PropTypes.func,
   onPageChange: PropTypes.func,
   onRowsPerPageChange: PropTypes.func,
-  onSelectAll: PropTypes.func,
-  onSelectOne: PropTypes.func,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
-  selected: PropTypes.array
 };

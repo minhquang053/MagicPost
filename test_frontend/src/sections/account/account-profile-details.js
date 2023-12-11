@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { useAuth } from 'src/hooks/use-auth';
 import {
   Box,
   Button,
@@ -12,13 +13,14 @@ import {
 } from '@mui/material';
 
 export const AccountProfileDetails = () => {
+  const { user } = useAuth();
   const [values, setValues] = useState({
-    firstName: 'Minh Quang',
-    lastName: 'Bùi',
-    email: 'minhquang@gmail.com',
-    phone: '',
-    role: 'Giao dịch viên',
-    location: 'H5'
+    name: user.name,
+    id: user.id,
+    email: user.email,
+    phone: user.phone,
+    role: user.role,
+    location: user.location,
   });
 
   const handleChange = useCallback(
@@ -61,12 +63,12 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
-                  helperText="Vui lòng nhập tên"
-                  label="Tên"
-                  name="firstName"
+                  helperText="Vui lòng nhập họ tên"
+                  label="Họ tên"
+                  name="name"
                   onChange={handleChange}
                   required
-                  value={values.firstName}
+                  value={values.name}
                 />
               </Grid>
               <Grid
@@ -75,11 +77,11 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
-                  label="Họ"
-                  name="lastName"
+                  label="Mã nhân viên"
+                  name="id"
                   onChange={handleChange}
                   required
-                  value={values.lastName}
+                  value={values.id}
                 />
               </Grid>
               <Grid

@@ -73,30 +73,36 @@ export const AuthProvider = (props) => {
     initialized.current = true;
 
     let isAuthenticated = false;
+    let user = null;
 
     try {
-      isAuthenticated = window.sessionStorage.getItem('authenticated') === 'true';
+      const token = localStorage.getItem('accessToken');
+      isAuthenticated = token !== null;
+
+      if (isAuthenticated) {
+        // const decodedToken  jwt.decode(token)
+        // const response = await fetch(`http://localhost:3030/v1/users/${}`, {
+        //   method: 'GET',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     'Authorization': token,
+        //   },
+        // });
+
+        // if (!response.ok) {
+        //   throw new Error('Invalid email or password');
+        // } 
+
+        // const user = await response.json(); 
+      }
     } catch (err) {
       console.error(err);
     }
 
-    if (isAuthenticated) {
-      const user = {
-        id: '5e86809283e28b96d2d38537',
-        avatar: '/assets/avatars/avatar-anika-visser.png',
-        name: 'Anika Visser',
-        email: 'anika.visser@devias.io'
-      };
-
-      dispatch({
-        type: HANDLERS.INITIALIZE,
-        payload: user
-      });
-    } else {
-      dispatch({
-        type: HANDLERS.INITIALIZE
-      });
-    }
+    dispatch({
+      type: HANDLERS.INITIALIZE,
+      payload: user,
+    });
   };
 
   useEffect(
@@ -127,28 +133,57 @@ export const AuthProvider = (props) => {
     });
   };
 
+  // const signIn = async (email, password) => {
+  //   if (email !== 'demo@devias.io' || password !== 'Password123!') {
+  //     throw new Error('Please check your email and password');
+  //   }
+
+  //   try {
+  //     window.sessionStorage.setItem('authenticated', 'true');
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+
+  //   const user = {
+  //     id: '5e86809283e28b96d2d38537',
+  //     avatar: '/assets/avatars/avatar-anika-visser.png',
+  //     name: 'Anika Visser',
+  //     email: 'anika.visser@devias.io'
+  //   };
+
+  //   dispatch({
+  //     type: HANDLERS.SIGN_IN,
+  //     payload: user
+  //   });
+  // };
+
   const signIn = async (email, password) => {
-    if (email !== 'demo@devias.io' || password !== 'Password123!') {
-      throw new Error('Please check your email and password');
-    }
-
     try {
-      window.sessionStorage.setItem('authenticated', 'true');
-    } catch (err) {
-      console.error(err);
+      const response = await fetch('http://localhost:3030/v1/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Invalid email or password');
+      } 
+
+      const user = await response.json();
+      user.avatar = '/assets/avatars/avatar-anika-visser.png';
+
+      localStorage.setItem('accessToken', user.token)
+      
+      dispatch({
+        type: HANDLERS.SIGN_IN,
+        payload: user,
+      });
+    } catch (error) {
+      console.error('Error during login:', error.message);
+      throw error;
     }
-
-    const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Anika Visser',
-      email: 'anika.visser@devias.io'
-    };
-
-    dispatch({
-      type: HANDLERS.SIGN_IN,
-      payload: user
-    });
   };
 
   const signUp = async (email, name, password) => {
