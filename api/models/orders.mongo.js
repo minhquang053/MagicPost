@@ -6,40 +6,36 @@ const ordersSchema = new mongoose.Schema({
         unique: true,
         required: true,
     },
-    orderName: {
-        type: String,
-        required: true,
-    },
     orderStatus: {
         type: String,
         required: true,
     },
-    sendLocation: {
+    startLocation: {
         type: String,
         required: true,
     },
-    receiveLocation: {
+    senderInfo: {
+        type: mongoose.Schema.Types.Mixed,
+        required: true,
+    },
+    recipientInfo: {
+        type: mongoose.Schema.Types.Mixed,
+        required: true,
+    },
+    recipientFees: {
+        type: mongoose.Schema.Types.Mixed,
+        required: true,
+    },
+    goodsType: {
         type: String,
         required: true,
     },
-    senderName: {
-        type: String,
-        required: true,
+    costInfo: {
+        type: mongoose.Schema.Types.Mixed,
+        required: true, 
     },
-    senderPhone: {
-        type: String,
-        required: true,
-    },
-    recipientName: {
-        type: String,
-        required: true,
-    },
-    recipientPhone: {
-        type: String,
-        required: true,
-    },
-    recipientAddress: {
-        type: String,
+    weightInfo: {
+        type: mongoose.Schema.Types.Mixed,
         required: true,
     },
     createdDate: {
@@ -49,14 +45,6 @@ const ordersSchema = new mongoose.Schema({
     doneDate: {
         type: String,
         required: false,
-    },
-    cost: {
-        type: mongoose.Schema.Types.Mixed,
-        required: true, 
-    },
-    weight: {
-        type: Number,
-        required: true,
     },
 });
 

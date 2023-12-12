@@ -3,12 +3,15 @@ const { getHashedPassword } = require('../services/bcrypt');
 
 const DEFAULT_USER_ID = 0;
 
-const { lowerRolesThan } = require('../services/internal');
-
-async function getAllUsers(role, location) {
-    const find_roles = lowerRolesThan(role);
+async function getAllUsers(role, location, searchTerm) {
+    const roleRegex = new RegExp(role, 'i');
+    const locRegex = new RegExp(location, 'i');
+    const termRegex = new RegExp(searchTerm, 'i');
     return await User
-        .find({ role: { $in: find_roles }, location: location });
+        .find({ role: roleRegex, location: locRegex, $or: [
+            { name: { $regex: termRegex } }, 
+            { email: { $regex: termRegex} }
+        ]})
 };
 
 async function getUserById(userId) {
@@ -53,7 +56,7 @@ async function createNewUser(user) {
     }
     const newUserId = await getLatestUserId() + 1; 
     const newUser = Object.assign(user, {
-        userId: newUserId,
+         userId: newUserId,
         name: user.name,
         email: user.email,
         role: user.role,

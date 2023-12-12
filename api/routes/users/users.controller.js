@@ -8,14 +8,14 @@ const {
 
 const { editRolePermissionGranted } = require('../../services/internal');
 const { validateUserInfo } = require('../../services/internal');
+const { isEmailValid, isVietnamesePhoneNumberValid } = require('../../services/validator');
 
 async function httpGetAllUsers(req, res) {
     // to use query instead later
-    const query = req.body;
-    const requestingUser = await getUserById(req.uid);
+    const query = req.query;
 
     // Filter users list based on the requesting user's role and work location
-    const users = await getAllUsers(requestingUser.role, requestingUser.location);
+    const users = await getAllUsers(query.role, query.location, query.searchTerm);
     
     return res.status(200).json(users);
 }
@@ -73,6 +73,16 @@ async function httpAddNewUser(req, res) {
     if (!validateUserInfo({ role: user.role, location: user.location })) {
         return res.status(400).json({
             error: "Invalid role or location"
+        })
+    }
+    if (!isEmailValid(user.email)) {
+        return res.status(400).json({
+            error: "Invalid email"
+        })
+    }
+    if (!isVietnamesePhoneNumberValid(user.phone)) {
+        return res.status(400).json({
+            error: "Invalid phone number"
         })
     }
 

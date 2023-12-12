@@ -76,19 +76,14 @@ async function httpChangeOrderStatusById(req, res) {
 async function httpAddNewOrder(req, res) {
     const order = req.body;
  
-    if (!validateOrderInfo({ sendLocation: order.sendLocation })) {
-        return res.status(400).json({
-            error: "Invalid sender location"
-        })
-    }
-
     const requestingUser = await getUserById(req.uid);
-    if (requestingUser.role !== "Processor" ||
-        requestingUser.location !== order.sendLocation) {
+    if (requestingUser.role !== "Processor" && requestingUser.role !== "Manager") {
         return res.status(401).json({
             error: "Require proper processor access"
         });
     }
+    order.startLocation = requestingUser.location;
+    console.log(order);
 
     try {
         const createdOrder = await createNewOrder(order); 

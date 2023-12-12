@@ -33,17 +33,13 @@ async function createNewOrder(order) {
 
     const newOrder = Object.assign(order, {
         orderId: generateOrderId(),
-        orderName: order.orderName,
         orderStatus: "processing",
-        sendLocation: order.sendLocation, 
-        senderName: order.senderName,
-        senderPhone: order.senderPhone,
-        recipientName: order.recipientName,
-        recipientPhone: order.recipientPhone,
-        recipientAddress: order.recipientAddress,
+        startLocation: order.startLocation,
+        senderInfo: order.senderInfo,
+        recipientInfo: order.recipientInfo,
+        cost: order.costInfo,
+        weight: order.weightInfo,
         createdDate: now,
-        cost: order.cost,
-        weight: order.weight,
     })
     await saveOrder(newOrder);
     

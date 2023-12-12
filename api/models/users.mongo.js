@@ -17,6 +17,16 @@ const usersSchema = new mongoose.Schema({
         unique: true,
         required: true,
     },
+    phone: {
+        type: String,
+        trim: true,
+        required: false,
+    },
+    avatar: {
+        type: String,
+        trim: true,
+        required: false,
+    },
     role: {
         type: String,
         required: true,

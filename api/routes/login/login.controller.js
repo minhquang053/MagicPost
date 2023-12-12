@@ -8,10 +8,22 @@ const { createAccessToken } = require('../../services/jwt');
 async function httpLogin(req, res) {
     const login = req.body;
     const user = await getUserByEmail(login.email);
+    if (!user) {
+        return res.status(400).json({
+            error: "User not found"
+        })
+    }
+
     bcrypt.compare(login.password, user.password)
     .then(async valid => {
         if (valid) {
             return res.status(200).json({
+                id: user.userId,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                role: user.role,
+                location: user.location,
                 token: createAccessToken(user.userId),
             });
         } else {
