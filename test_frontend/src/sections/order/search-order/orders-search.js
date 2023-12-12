@@ -1,4 +1,3 @@
-// src/sections/orders/order-search.js
 import React, { useState } from 'react';
 import {
   Box,
@@ -6,33 +5,48 @@ import {
   TextField,
   Button,
   Typography,
+  Paper,
   List,
-  Card,
-  CardContent,
+  ListItem,
+  ListItemText,
 } from '@mui/material';
 
 const OrderSearchSection = () => {
   const [orderId, setOrderId] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [order, setOrder] = useState(null);
 
-  const handleSearch = () => {
-    // Implement your search logic here using the orderId state
-    console.log('Searching for order ID:', orderId);
-    // Assume searchResults is an array of orders, update it with your search results
-    const dummySearchResults = [
-      { id: '1', name: 'Order 1', createdDay: '2023-01-01', status: 'Pending' },
-      { id: '2', name: 'Order 2', createdDay: '2023-02-02', status: 'Completed' },
-      // Add more orders as needed
-    ];
-    setSearchResults(dummySearchResults);
+  const fetchOrderById = async (orderId) => {
+    const response = await fetch(
+      `http://localhost:3030/v1/orders/${orderId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      }
+    );
+    const data = await response.json();
+    return data;
+  };
+
+  const handleSearch = async () => {
+    try {
+      setOrder(null);
+      const data = await fetchOrderById(orderId);
+      setOrder(data);
+    } catch (error) {
+      console.error('Error fetching order:', error);
+    }
   };
 
   return (
     <Box
+      component="form"
       display="flex"
       flexDirection="column"
       alignItems="center"
-      mt={4} // Adjust top margin as needed
+      mt={4}
     >
       <Typography variant="h4" gutterBottom>
         Tra cứu đơn hàng
@@ -49,28 +63,101 @@ const OrderSearchSection = () => {
         </Button>
       </Stack>
 
-      {/* Display search results in cards */}
-      {searchResults.length > 0 && (
-        <List>
-          {searchResults.map((order) => (
-            <Card key={order.id} variant="outlined" style={{ margin: '16px', width: '300px' }}>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Order ID: {order.id}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Order Name: {order.name}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Created Day: {order.createdDay}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Status: {order.status}
-                </Typography>
-              </CardContent>
-            </Card>
-          ))}
-        </List>
+      {order && (
+        <Paper elevation={3} style={{ padding: '16px', width: '400px', marginTop: '16px' }}>
+          <Typography variant="h6" gutterBottom>
+            Order ID: {order.orderId}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Status: {order.orderStatus}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Start Location: {order.startLocation}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            End Location: {order.endLocation}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Sender Info:
+            <List>
+              {Object.entries(order.senderInfo).map(([key, value]) => (
+                <ListItem key={key}>
+                  <ListItemText
+                    primary={key}
+                    secondary={value}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Recipient Info:
+            <List>
+              {Object.entries(order.recipientInfo).map(([key, value]) => (
+                <ListItem key={key}>
+                  <ListItemText
+                    primary={key}
+                    secondary={value}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Recipient Fees:
+            <List>
+              {Object.entries(order.recipientFees).map(([key, value]) => (
+                <ListItem key={key}>
+                  <ListItemText
+                    primary={key}
+                    secondary={value}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Goods Type: {order.goodsType}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Cost Info:
+            <List>
+              {Object.entries(order.costInfo).map(([key, value]) => (
+                <ListItem key={key}>
+                  <ListItemText
+                    primary={key}
+                    secondary={value}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Weight Info:
+            <List>
+              {Object.entries(order.weightInfo).map(([key, value]) => (
+                <ListItem key={key}>
+                  <ListItemText
+                    primary={key}
+                    secondary={value}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Created Date: {order.createdDate}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Done Date: {order.doneDate || 'Not available'}
+          </Typography>
+        </Paper>
+      )}
+
+      {!order && orderId && (
+        <Typography variant="body2" color="textSecondary">
+          Loading...
+        </Typography>
       )}
     </Box>
   );
