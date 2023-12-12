@@ -8,16 +8,12 @@ const {
 const {
     getUserById
 } = require('../../models/users.model');
-const { 
-    createNewTransfer 
-} = require('../../models/transfers.model');
-const { validateOrderInfo, findTransferPath } = require('../../services/internal');
+const { validateOrderInfo } = require('../../services/internal');
 
 async function httpGetAllOrders(req, res) {
-    const userId = req.uid;
-    const requestingUser = await getUserById(userId)
+    const query = req.query
 
-    const orders = await getAllOrders(requestingUser.location);
+    const orders = await getAllOrders(query.start, query.end, query.searchTerm);
     
     return res.status(200).json(orders);
 }
@@ -83,19 +79,9 @@ async function httpAddNewOrder(req, res) {
         });
     }
     order.startLocation = requestingUser.location;
-    console.log(order);
 
     try {
-        const createdOrder = await createNewOrder(order); 
-        
-        const locs = findTransferPath(createdOrder);
-        for (let i = 0; i < locs.length - 1; i++) {
-            await createNewTransfer({
-                orderId: createdOrder.orderId,
-                fromLoc: locs[i],
-                toLoc: locs[i + 1],
-            });
-        }
+        await createNewOrder(order); 
     } catch (err) {
         console.log(err);
         return res.status(500).json({

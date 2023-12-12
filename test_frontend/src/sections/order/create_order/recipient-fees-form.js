@@ -1,24 +1,35 @@
 // src/sections/orders/recipient-fees-form.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Typography, Box } from '@mui/material';
 
-const RecipientFeesForm = ({ setFormData }) => {
+const RecipientFeesForm = ({ setFormData, formData, reset }) => {
   const [codShippingFee, setCodShippingFee] = useState('');
   const [additionalFee, setAdditionalFee] = useState('');
+  const [totalFee, setTotalFee] = useState('');
 
-  // Calculate total fee
-  const totalFee = (parseFloat(codShippingFee) || 0) + (parseFloat(additionalFee) || 0);
+  useEffect(() => {
+    const cod = parseFloat(codShippingFee) || 0;
+    const additional = parseFloat(additionalFee) || 0;
 
-  // Update the parent form data when values change
-  const updateParentForm = () => {
+    // Calculate total cost including VAT
+    const total = cod + additional;
+    setTotalFee(total.toFixed(2));
+
     setFormData({
+      ...formData,
       recipientFees: {
-        codShippingFee,
-        additionalFee,
-        totalFee,
-      },
+        cod: cod,
+        additional: additional,
+      }
     });
-  };
+  }, [codShippingFee, additionalFee]);
+
+  useEffect(() => {
+    if (reset) {
+      setCodShippingFee('');
+      setAdditionalFee('');
+    }
+  }, [reset]);
 
   return (
     <Box sx={{ padding: 0 }}>
@@ -31,7 +42,6 @@ const RecipientFeesForm = ({ setFormData }) => {
         value={codShippingFee}
         onChange={(e) => {
           setCodShippingFee(e.target.value);
-          updateParentForm();
         }}
         sx={{ marginBottom: 2 }}
       />
@@ -41,7 +51,6 @@ const RecipientFeesForm = ({ setFormData }) => {
         value={additionalFee}
         onChange={(e) => {
           setAdditionalFee(e.target.value);
-          updateParentForm();
         }}
         sx={{ marginBottom: 2 }}
       />

@@ -1,20 +1,27 @@
 // components/orders/WeightForm.js
-import React, { useState } from 'react';
-import { TextField, Typography, Box, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { TextField, Typography, Box } from '@mui/material';
 
-const WeightForm = ({ setFormData }) => {
+const WeightForm = ({ setFormData, formData, reset }) => {
   const [realWeight, setRealWeight] = useState('');
   const [exchangedWeight, setExchangedWeight] = useState('');
 
-  const updateParentForm = () => {
+  useEffect(() => {
     setFormData({
-      WeightInfo: {
-        codShippingFee,
-        additionalFee,
-        totalFee,
-      },
+      ...formData,
+      weightInfo: {
+        real: realWeight,
+        exchanged: exchangedWeight,
+      }
     });
-  };
+  }, [realWeight, exchangedWeight]);
+
+  useEffect(() => {
+    if (reset) {
+      setRealWeight('');
+      setExchangedWeight('');
+    }
+  }, [reset]);
 
   return (
     <Box sx={{ padding: 0 }}>
@@ -27,7 +34,6 @@ const WeightForm = ({ setFormData }) => {
         value={realWeight}
         onChange={(e) => {
           setRealWeight(e.target.value)
-          updateParentForm()
         }}
         sx={{ marginBottom: 2 }}
       />
@@ -37,7 +43,6 @@ const WeightForm = ({ setFormData }) => {
         value={exchangedWeight}
         onChange={(e) => {
           setExchangedWeight(e.target.value)
-          updateParentForm()
         }}
         sx={{ marginBottom: 2 }}
       />

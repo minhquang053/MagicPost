@@ -1,18 +1,15 @@
-// src/components/orders/SenderInformationForm.js
 import React, { useState, useEffect } from 'react';
 import {
   TextField,
-  Select,
   MenuItem,
-  FormControl,
-  InputLabel,
   Grid,
   Typography,
 } from '@mui/material';
 
-const SenderInformationForm = ({ setFormData }) => {
+const SenderInformationForm = ({ setFormData, formData, reset }) => {
+  
   const [senderInfo, setSenderInfo] = useState({
-    name: '',
+    fullName: '',
     phoneNumber: '',
     address: '',
     province: '',
@@ -64,9 +61,10 @@ const SenderInformationForm = ({ setFormData }) => {
   }, []);
 
   const handleInputChange = (event) => {
-    setFormData({
-      senderInfo: senderInfo,
-    }) 
+    setSenderInfo((prevInfo) => ({
+      ...prevInfo,
+      [event.target.name]: event.target.value,
+    }));
   };
 
   const handleProvinceChange = (event) => {
@@ -79,10 +77,6 @@ const SenderInformationForm = ({ setFormData }) => {
       district: '',
       ward: '',
     });
-
-    setFormData({
-      senderInfo: senderInfo,
-    }) 
 
     fetchDistrictsByProvince(selectedProvinceCode);
   };
@@ -97,10 +91,6 @@ const SenderInformationForm = ({ setFormData }) => {
       ward: '',
     }));
 
-    setFormData({
-      senderInfo: senderInfo,
-    }) 
-
     fetchWardsByDistrict(selectedDistrictCode);
   };
 
@@ -109,11 +99,30 @@ const SenderInformationForm = ({ setFormData }) => {
       ...prevInfo,
       ward: event.target.value,
     }));
-
-    setFormData({
-      senderInfo: senderInfo,
-    }) 
   };
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      senderInfo: senderInfo,
+    });
+  }, [senderInfo.address, senderInfo.fullName, senderInfo.phoneNumber, senderInfo.province, senderInfo.district, senderInfo.ward]);
+
+  useEffect(() => {
+    if (reset) {
+      setSenderInfo({
+        fullName: '',
+        phoneNumber: '',
+        address: '',
+        province: '',
+        district: '',
+        ward: '',
+      })
+      setProvinces([]);
+      setDistricts([]);
+      setWards([]);
+    }
+  }, [reset]);
 
   return (
     <>
@@ -123,8 +132,8 @@ const SenderInformationForm = ({ setFormData }) => {
           <TextField
             fullWidth
             label="Họ tên"
-            name="name"
-            value={senderInfo.name}
+            name="fullName"
+            value={senderInfo.fullName}
             onChange={handleInputChange}
           />
         </Grid>

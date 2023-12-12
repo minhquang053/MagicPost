@@ -14,6 +14,10 @@ const ordersSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    endLocation: {
+        type: String,
+        required: true,
+    },
     senderInfo: {
         type: mongoose.Schema.Types.Mixed,
         required: true,

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Typography, Box } from '@mui/material';
 
-const CostForm = ({ setFormData }) => {
+const CostForm = ({ setFormData , formData, reset }) => {
   const [mainCost, setMainCost] = useState('');
   const [additionalCost, setAdditionalCost] = useState('');
   const [gtgtCost, setGtgtCost] = useState('');
@@ -19,43 +19,52 @@ const CostForm = ({ setFormData }) => {
 
     setTotalCost(total.toFixed(2));
     setFormData({
+      ...formData,
       costInfo: {
-        main,
-        additional,
-        gtgt,
+        main: main,
+        additional: additional,
+        gtgt: gtgt,
       }
-    })
+    });
   }, [mainCost, additionalCost, gtgtCost]);
+
+  useEffect(() => {
+    if (reset) {
+      setMainCost('')
+      setAdditionalCost('')
+      setGtgtCost('')
+    }
+  }, [reset]);
 
   return (
     <Box sx={{ padding: 0 }}>
       <Typography variant="h6" gutterBottom>
-        Cost Information
+        Cước phí
       </Typography>
       <TextField
         fullWidth
-        label="Main Cost"
+        label="Cước chính"
         value={mainCost}
         onChange={(e) => setMainCost(e.target.value)}
         sx={{ marginBottom: 2 }}
       />
       <TextField
         fullWidth
-        label="Additional Cost"
+        label="Phụ phí"
         value={additionalCost}
         onChange={(e) => setAdditionalCost(e.target.value)}
         sx={{ marginBottom: 2 }}
       />
       <TextField
         fullWidth
-        label="GTGT Cost"
+        label="Cước GTGT"
         value={gtgtCost}
         onChange={(e) => setGtgtCost(e.target.value)}
         sx={{ marginBottom: 2 }}
       />
       <TextField
         fullWidth
-        label="Total Cost (Included VAT)"
+        label="Tổng cước (gồm VAT)"
         value={totalCost}
         readOnly
         sx={{ marginBottom: 2 }}

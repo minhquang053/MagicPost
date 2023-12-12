@@ -2,15 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import {
   TextField,
-  Select,
   MenuItem,
-  FormControl,
-  InputLabel,
   Grid,
   Typography,
 } from '@mui/material';
 
-const RecipientInformationForm = ({ setFormData }) => {
+const RecipientInformationForm = ({ setFormData, formData, reset }) => {
   const [recipientInfo, setRecipientInfo] = useState({
     fullName: '',
     phoneNumber: '',
@@ -68,9 +65,6 @@ const RecipientInformationForm = ({ setFormData }) => {
       ...prevInfo,
       [event.target.name]: event.target.value,
     }));
-    setFormData({
-      recipientInfo: recipientInfo,
-    })
   };
 
   const handleProvinceChange = (event) => {
@@ -83,9 +77,6 @@ const RecipientInformationForm = ({ setFormData }) => {
       district: '',
       ward: '',
     });
-    setFormData({
-      recipientInfo: recipientInfo,
-    })
 
     fetchDistrictsByProvince(selectedProvinceCode);
   };
@@ -99,9 +90,6 @@ const RecipientInformationForm = ({ setFormData }) => {
       district: selectedDistrict,
       ward: '',
     }));
-    setFormData({
-      recipientInfo: recipientInfo,
-    })
 
     fetchWardsByDistrict(selectedDistrictCode);
   };
@@ -111,10 +99,30 @@ const RecipientInformationForm = ({ setFormData }) => {
       ...prevInfo,
       ward: event.target.value,
     }));
-    setFormData({
-      recipientInfo: recipientInfo,
-    })
   };
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      recipientInfo: recipientInfo,
+    });
+  }, [recipientInfo.address, recipientInfo.fullName, recipientInfo.phoneNumber, recipientInfo.province, recipientInfo.district, recipientInfo.ward]);
+
+  useEffect(() => {
+    if (reset) {
+      setRecipientInfo({
+        fullName: '',
+        phoneNumber: '',
+        address: '',
+        province: '',
+        district: '',
+        ward: '',
+      })
+      setProvinces([]);
+      setDistricts([]);
+      setWards([]);
+    }
+  }, [reset]);
 
   return (
     <>

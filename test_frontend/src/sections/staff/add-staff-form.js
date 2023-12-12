@@ -137,7 +137,7 @@ const AddStaffForm = () => {
     // Close the dialog after a delay (you can adjust the delay duration)
     setTimeout(() => {
       setDialogOpen(false);
-    }, 5000);
+    }, 10000);
   };
 
   return (

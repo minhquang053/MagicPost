@@ -1,35 +1,89 @@
 // components/orders/OrdersTable.js
-import React from 'react';
 import PropTypes from 'prop-types';
-import { Box, Card, Stack, Table, TableBody, TableCell, TableHead, TableRow, TablePagination, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
+} from '@mui/material';
+import { Scrollbar } from 'src/components/scrollbar';
 
-export const OrdersTable = ({ count, items, onPageChange, onRowsPerPageChange, page, rowsPerPage }) => {
+export const OrdersTable = (props) => {
+  const {
+    count = 0,
+    items = [],
+    onPageChange = () => {},
+    onRowsPerPageChange,
+    page = 0,
+    rowsPerPage = 0,
+  } = props;
+
+  const vn_translate = {
+    "goods": "Hàng hóa",
+    "document": "Tài liệu",
+    "processing": "Đang xử lý",
+    "transfering": "Đang vận chuyển",
+    "done": "Đã hoàn thành",
+    "failed": "Thất bại",
+  }
+
   return (
     <Card>
-      <Box sx={{ minWidth: 800 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Order ID</TableCell>
-              <TableCell>Sender Address</TableCell>
-              <TableCell>Recipient Address</TableCell>
-              <TableCell>Goods Type</TableCell>
-              <TableCell>Order Status</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {items.map((order) => (
-              <TableRow key={order.id}>
-                <TableCell>{/* Add link to search order page with order ID */}</TableCell>
-                <TableCell>{order.senderAddress}</TableCell>
-                <TableCell>{order.recipientAddress}</TableCell>
-                <TableCell>{order.goodsType}</TableCell>
-                <TableCell>{order.orderStatus}</TableCell>
+      <Scrollbar>
+        <Box sx={{ minWidth: 800 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  Mã đơn hàng
+                </TableCell>
+                <TableCell>
+                  Điểm gửi hàng
+                </TableCell>
+                <TableCell>
+                  Điểm giao hàng
+                </TableCell>
+                <TableCell>
+                  Loại hàng gửi
+                </TableCell>
+                <TableCell>
+                  Trạng thái
+                </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Box>
+            </TableHead>
+            <TableBody>
+              {items.map((order) => {
+                return (
+                  <TableRow
+                    hover
+                    key={order.orderId}
+                  >
+                    <TableCell>
+                      {order.orderId}
+                    </TableCell>
+                    <TableCell>
+                      {order.startLocation}
+                    </TableCell>
+                    <TableCell>
+                      {order.endLocation}
+                    </TableCell>
+                    <TableCell>
+                      {vn_translate[order.goodsType]}
+                    </TableCell>
+                    <TableCell>
+                      {vn_translate[order.orderStatus]}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </Box>
+      </Scrollbar>
       <TablePagination
         component="div"
         count={count}

@@ -1,6 +1,18 @@
 // src/sections/orders/create-order-form.js
 import React, { useState } from 'react';
-import { Paper, Typography, Button, Grid, Container } from '@mui/material';
+import { useAuth } from 'src/hooks/use-auth';
+import {
+  Button,
+  Paper,
+  Grid,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Typography,
+} from '@mui/material';
 import SenderInformationForm from './sender-information-form';
 import RecipientInformationForm from './recipient-information-form';
 import GoodsTypeForm from './goods-type-form';
@@ -9,46 +21,75 @@ import RecipientFeesForm from './recipient-fees-form';  // Updated import
 import WeightForm from './weight-form';
 
 const CreateOrderForm = () => {
-  // const [formData, setFormData] = useState({
-  //   senderInfo: {},
-  //   recipientInfo: {},
-  //   goodsType: {},
-  //   costInfo: {},
-  //   recipientFees: {},  // Updated field for recipient fees
-  //   weightInfo: {},
-  // });
-  const [senderInfo, setFormSI] = useState('');
-  const [recipientInfo, setFormRI] = useState('');
-  const [goodsType, setFormGT] = useState('');
-  const [costInfo, setFormCI] = useState('');
-  const [recipientFees, setFormRF] = useState('');
-  const [weightInfo, setFormWI] = useState('');
+  const { user } = useAuth();
+  const [formData, setFormData] = useState({
+    senderInfo: {},
+    recipientInfo: {},
+    startLocation: user.location,
+    endLocation: 'end',
+    goodsType: {},
+    costInfo: {},
+    recipientFees: {},  // Updated field for recipient fees
+    weightInfo: {},
+  });
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState('');
+  const [dialogTitle, setDialogTitle] = useState('');
+
+  const [reset, setResetForm] = useState(false);
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
 
   const handleSubmit = async (event) => {
-    // Handle submission logic here
-    console.log('Form Data:', formData);
     event.preventDefault();
+
+    setDialogTitle('');
+    setDialogMessage('Đang xử lý đơn hàng...');
+    setDialogOpen(true);
 
     try {
       const response = await fetch('http://localhost:3030/v1/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Add any other headers your API requires
+          'Authorization': localStorage.getItem('accessToken'),
         },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
-        // Handle success, e.g., show a success message
-        console.log('Order created successfully!');
+        // Reset form data after submission
+        setResetForm(true);
+        setFormData({
+          senderInfo: {},
+          recipientInfo: {},
+          startLocation: user.location,
+          endLocation: 'end',
+          goodsType: {},
+          costInfo: {},
+          recipientFees: {},  // Updated field for recipient fees
+          weightInfo: {},
+        })
+        setDialogTitle('Thành công');
+        setDialogMessage('Đơn hàng đã được tạo thành công!');
       } else {
-        // Handle error, e.g., show an error message
-        console.error('Error creating order:', response.statusText);
+        const msg = (await response.jsomsg).error;
+        setDialogTitle('Thất bại');
+        setDialogMessage(msg);
       }
     } catch (error) {
-      console.error('Error creating order:', error.message);
+      console.error('Error creating order:', error);
+      setDialogTitle('Thất bại');
+      setDialogMessage('Đã xảy ra lỗi tạo đơn hàng.');
     }
+
+    // Close the dialog after a delay (you can adjust the delay duration)
+    setTimeout(() => {
+      setDialogOpen(false);
+    }, 10000);
   };
 
   return (
@@ -60,31 +101,52 @@ const CreateOrderForm = () => {
       <Paper elevation={3} sx={{ padding: 2, marginTop: 4, boxShadow: 3 }}>
         <Grid container spacing={3} alignItems="stretch">
           <Grid item xs={12} md={6}>
-            <SenderInformationForm setFormData={setFormSI} />
+            <SenderInformationForm setFormData={setFormData} formData={formData} reset={reset} />
           </Grid>
           <Grid item xs={12} md={6}>
-            <RecipientInformationForm setFormData={setFormRI} />
+            <RecipientInformationForm setFormData={setFormData} formData={formData} reset={reset} />
           </Grid>
           
           <Grid item xs={12} md={6}>
-            <GoodsTypeForm setFormData={setFormGT} goodsType={goodsType} />
+            <GoodsTypeForm setFormData={setFormData} goodsType={formData.goodsType} />
           </Grid>
           <Grid item xs={12} md={6}>
-            <WeightForm setFormData={setFormWI} />
+            <WeightForm setFormData={setFormData} formData={formData} reset={reset} />
           </Grid>
           <Grid item xs={12} md={6}>
-            <RecipientFeesForm setFormData={setFormRF} />
+            <RecipientFeesForm setFormData={setFormData} formData={formData} reset={reset} />
           </Grid>
           <Grid item xs={12} md={6}>
-            <CostForm setFormData={setFormCI} />
+            <CostForm setFormData={setFormData} formData={formData} reset={reset} />
+          </Grid> 
+          <Grid item xs={12} md={6}>
+            <Typography variant="subtitle1" sx={{ marginTop: 0.4, marginBottom: 1 }}>
+              Điểm gửi hàng: {formData.startLocation}
+            </Typography>
           </Grid>
-          
+          <Grid item xs={12} md={6}>
+            <Typography variant="subtitle1" sx={{ marginTop: 0, marginBottom: 1 }}>
+              Điểm giao hàng: {formData.endLocation}
+            </Typography>
+          </Grid>
         </Grid>
-
         <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ marginTop: 4, float: 'right' }}>
           Tạo đơn
         </Button>
       </Paper>
+
+      {/* Dialog to indicate the status */}
+      <Dialog open={dialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>{dialogTitle}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{dialogMessage}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            Đóng
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

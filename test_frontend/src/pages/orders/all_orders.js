@@ -1,73 +1,79 @@
 // pages/orders/all_orders.js
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
-import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
-import ArrowDownOnSquareIcon from '@heroicons/react/24/outline/ArrowDownOnSquareIcon';
-import ArrowUpOnSquareIcon from '@heroicons/react/24/outline/ArrowUpOnSquareIcon';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { OrdersTable } from 'src/sections/order/all-orders/all-orders-table';  // Import your OrdersTable component
+import { AllOrdersSearch } from 'src/sections/order/all-orders/all-orders-search';
+import { OrdersTable } from 'src/sections/order/all-orders/all-orders-table';
 import { applyPagination } from 'src/utils/apply-pagination';
 
-// Mock data, replace it with your actual data retrieval logic
-const data = [
-  {
-    id: '1',
-    
-  }
-];
-
-const useOrders = (page, rowsPerPage) => {
-  return useMemo(
-    () => {
-      return applyPagination(data, page, rowsPerPage);
-    },
-    [page, rowsPerPage]
+const fetchOrders = async (start, end, searchTerm) => {
+  const response = await fetch(
+    `http://localhost:3030/v1/orders?start=${start}&end=${end}&searchTerm=${searchTerm}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: localStorage.getItem('accessToken'),
+      },
+    }
   );
+  const data = await response.json();
+  return data;
 };
 
-const useOrderIds = (orders) => {
-  return useMemo(() => {
-    return orders.map((order) => order.id);
-  }, [orders]);
+const useOrders = (page, rowsPerPage, data) => {
+  const paginatedData = useMemo(() => {
+    return applyPagination(data, page, rowsPerPage);
+  }, [page, rowsPerPage, data]);
+
+  return paginatedData;
 };
 
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const orders = useOrders(page, rowsPerPage);
-  const orderIds = useOrderIds(orders);
+  const [orders, setOrders] = useState([]);
 
-  const handlePageChange = useCallback((event, value) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchOrders('', '', '');
+      setOrders(data);
+    };
+  
+    fetchData();
+  }, []);
+
+  const paginatedOrders = useOrders(page, rowsPerPage, orders);
+
+  const handlePageChange = (event, value) => {
     setPage(value);
-  }, []);
+  };
 
-  const handleRowsPerPageChange = useCallback((event) => {
+  const handleRowsPerPageChange = (event) => {
     setRowsPerPage(event.target.value);
-  }, []);
+  };
+
+  const handleSearch = async (searchCriteria) => {
+    const { searchTerm, selectedStart, selectedEnd } = searchCriteria;
+    const data = await fetchOrders(selectedStart, selectedEnd, searchTerm);
+    setOrders(data);
+    setPage(0); // Reset page to 0 when performing a new search
+  };
 
   return (
     <>
       <Head>
-        <title>All Orders | Magic Post</title>
+        <title>Đơn hàng | Magic Post</title>
       </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8,
-        }}
-      >
+      <Box component="main" sx={{ flexGrow: 1, py: 8 }}>
         <Container maxWidth="xl">
           <Stack spacing={3}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              spacing={4}
-            >
+            <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">All Orders</Typography>
+                <Typography variant="h4">Đơn hàng</Typography>
               </Stack>
               <div>
                 <Link href="/orders/create_order">
@@ -77,19 +83,19 @@ const Page = () => {
                     </SvgIcon>}
                     variant="contained"
                   >
-                    Add New Order
+                    Thêm nhân viên
                   </Button>
                 </Link>
-              </div>
+              </div> 
             </Stack>
+            <AllOrdersSearch onSearch={handleSearch} />
             <OrdersTable
-              count={data.length}
-              items={orders}
+              count={orders.length}
+              items={paginatedOrders}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}
               rowsPerPage={rowsPerPage}
-              selected={orderIds}
             />
           </Stack>
         </Container>
@@ -98,6 +104,8 @@ const Page = () => {
   );
 };
 
-Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>
+Page.getLayout = (page) => (
+  <DashboardLayout>{page}</DashboardLayout>
+);
 
 export default Page;

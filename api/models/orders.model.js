@@ -4,9 +4,15 @@ const {
     generateOrderId
 } = require('../services/uuid');
 
-async function getAllOrders(sendLoc) {
+async function getAllOrders(startLoc, endLoc, searchTerm) {
+    const startRegex = new RegExp(startLoc, 'i');
+    const endRegex = new RegExp(endLoc, 'i');
+    const termRegex = new RegExp(searchTerm, 'i');
     return await Order
-        .find({ sendLocation: sendLoc })
+        .find({ startLocation: startRegex, 
+            endLocation: endRegex, 
+            orderId: termRegex 
+        }).select('orderId -_id orderStatus startLocation endLocation goodsType createdDate')
 };
 
 async function getOrderById(orderId) {
@@ -35,6 +41,7 @@ async function createNewOrder(order) {
         orderId: generateOrderId(),
         orderStatus: "processing",
         startLocation: order.startLocation,
+        endLocation: order.endLocation,
         senderInfo: order.senderInfo,
         recipientInfo: order.recipientInfo,
         cost: order.costInfo,
