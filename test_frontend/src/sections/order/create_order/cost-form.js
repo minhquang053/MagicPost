@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Typography, Box } from '@mui/material';
 
-const CostForm = ({ onUpdateFormData }) => {
+const CostForm = ({ setFormData }) => {
   const [mainCost, setMainCost] = useState('');
   const [additionalCost, setAdditionalCost] = useState('');
   const [gtgtCost, setGtgtCost] = useState('');
@@ -18,6 +18,13 @@ const CostForm = ({ onUpdateFormData }) => {
     const total = main + additional + gtgt;
 
     setTotalCost(total.toFixed(2));
+    setFormData({
+      costInfo: {
+        main,
+        additional,
+        gtgt,
+      }
+    })
   }, [mainCost, additionalCost, gtgtCost]);
 
   return (

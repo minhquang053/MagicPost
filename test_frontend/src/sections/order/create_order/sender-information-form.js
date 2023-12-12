@@ -64,10 +64,9 @@ const SenderInformationForm = ({ setFormData }) => {
   }, []);
 
   const handleInputChange = (event) => {
-    setSenderInfo((prevInfo) => ({
-      ...prevInfo,
-      [event.target.name]: event.target.value,
-    }));
+    setFormData({
+      senderInfo: senderInfo,
+    }) 
   };
 
   const handleProvinceChange = (event) => {
@@ -80,6 +79,10 @@ const SenderInformationForm = ({ setFormData }) => {
       district: '',
       ward: '',
     });
+
+    setFormData({
+      senderInfo: senderInfo,
+    }) 
 
     fetchDistrictsByProvince(selectedProvinceCode);
   };
@@ -94,6 +97,10 @@ const SenderInformationForm = ({ setFormData }) => {
       ward: '',
     }));
 
+    setFormData({
+      senderInfo: senderInfo,
+    }) 
+
     fetchWardsByDistrict(selectedDistrictCode);
   };
 
@@ -102,14 +109,11 @@ const SenderInformationForm = ({ setFormData }) => {
       ...prevInfo,
       ward: event.target.value,
     }));
-  };
 
-  useEffect(() => {
-    setFormData((prevData) => ({
-      ...prevData,
-      senderInfo,
-    }));
-  }, [senderInfo, setFormData]);
+    setFormData({
+      senderInfo: senderInfo,
+    }) 
+  };
 
   return (
     <>

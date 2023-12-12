@@ -5,7 +5,7 @@ import { RadioGroup, FormControlLabel, Radio, Typography } from '@mui/material';
 const GoodsTypeForm = ({ setFormData, goodsType }) => {
   const handleRadioChange = (event) => {
     const value = event.target.value;
-    setFormData((prevData) => ({ ...prevData, goodsType: value }));
+    setFormData({ goodsType: value });
   };
 
   return (

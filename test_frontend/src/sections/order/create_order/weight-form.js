@@ -2,9 +2,19 @@
 import React, { useState } from 'react';
 import { TextField, Typography, Box, Button } from '@mui/material';
 
-const WeightForm = ({ onUpdateFormData }) => {
+const WeightForm = ({ setFormData }) => {
   const [realWeight, setRealWeight] = useState('');
   const [exchangedWeight, setExchangedWeight] = useState('');
+
+  const updateParentForm = () => {
+    setFormData({
+      WeightInfo: {
+        codShippingFee,
+        additionalFee,
+        totalFee,
+      },
+    });
+  };
 
   return (
     <Box sx={{ padding: 0 }}>
@@ -15,14 +25,20 @@ const WeightForm = ({ onUpdateFormData }) => {
         fullWidth
         label="Cân nặng thực tế (kg)"
         value={realWeight}
-        onChange={(e) => setRealWeight(e.target.value)}
+        onChange={(e) => {
+          setRealWeight(e.target.value)
+          updateParentForm()
+        }}
         sx={{ marginBottom: 2 }}
       />
       <TextField
         fullWidth
         label="Cân nặng quy đổi"
         value={exchangedWeight}
-        onChange={(e) => setExchangedWeight(e.target.value)}
+        onChange={(e) => {
+          setExchangedWeight(e.target.value)
+          updateParentForm()
+        }}
         sx={{ marginBottom: 2 }}
       />
     </Box>
