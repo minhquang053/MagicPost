@@ -24,6 +24,32 @@ async function getOrderById(orderId) {
         .findOne({ orderId: orderId })
 }
 
+async function getOrderCountWithStatus(statuses) {
+    return await Order
+        .countDocuments({ orderStatus: { $in: statuses } })
+}
+
+async function getOrderCountWithType(type) {
+    return await Order
+        .countDocuments({ goodsType: type })
+}
+
+async function getLatestOrders() {
+    return await Order
+        .find({}).sort({ createdDate: -1 }).limit(6);
+}
+
+async function getOrderCountByMonths() {
+    return await Order.aggregate([
+    {
+        $group: {
+        _id: { $month: { $toDate: '$createdDate' } },
+        count: { $sum: 1 }
+        }
+    }
+    ]);
+}
+
 async function changeOrderStatusById(orderId, newStatus) {
     const order = await getOrderById(orderId);
     if (!order) {
@@ -60,6 +86,10 @@ async function createNewOrder(order) {
 module.exports = {
     getAllOrders,
     getOrderById,
+    getOrderCountWithStatus,
+    getOrderCountWithType,
+    getOrderCountByMonths,
+    getLatestOrders,
     changeOrderStatusById,
     createNewOrder,
 }

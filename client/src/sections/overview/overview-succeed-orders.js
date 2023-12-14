@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import ArrowDownIcon from '@heroicons/react/24/solid/ArrowDownIcon';
 import ArrowUpIcon from '@heroicons/react/24/solid/ArrowUpIcon';
-import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
+import CheckCircleIcon from '@heroicons/react/24/solid/CheckCircleIcon';
 import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from '@mui/material';
 
-export const OverviewTotalCustomers = (props) => {
+export const OverviewSucceedOrders = (props) => {
   const { difference, positive = false, sx, value } = props;
 
   return (
@@ -21,7 +21,7 @@ export const OverviewTotalCustomers = (props) => {
               color="text.secondary"
               variant="overline"
             >
-              Đơn hàng thất bại
+              Đơn hàng thành công
             </Typography>
             <Typography variant="h4">
               {value}
@@ -35,7 +35,7 @@ export const OverviewTotalCustomers = (props) => {
             }}
           >
             <SvgIcon>
-              <UsersIcon />
+              <CheckCircleIcon />
             </SvgIcon>
           </Avatar>
         </Stack>
@@ -68,7 +68,7 @@ export const OverviewTotalCustomers = (props) => {
               color="text.secondary"
               variant="caption"
             >
-              Since last month
+            So với tháng trước 
             </Typography>
           </Stack>
         )}
@@ -77,10 +77,9 @@ export const OverviewTotalCustomers = (props) => {
   );
 };
 
-OverviewTotalCustomers.propTypes = {
+OverviewSucceedOrders.prototypes = {
   difference: PropTypes.number,
   positive: PropTypes.bool,
-  value: PropTypes.string.isRequired,
-  sx: PropTypes.object
+  sx: PropTypes.object,
+  value: PropTypes.string.isRequired
 };
-

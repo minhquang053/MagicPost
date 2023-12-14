@@ -20,10 +20,20 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { SeverityPill } from 'src/components/severity-pill';
 
 const statusMap = {
-  pending: 'warning',
-  delivered: 'success',
-  refunded: 'error'
+  'processing': 'warning',
+  'transferring': 'warning',
+  'done': 'success',
+  'failed': 'error'
 };
+
+const vn_translate = {
+  "goods": "Hàng hóa",
+  "document": "Tài liệu",
+  "processing": "Đang xử lý",
+  "transferring": "Đang vận chuyển",
+  "done": "Đã hoàn thành",
+  "failed": "Thất bại",
+}
 
 export const OverviewLatestOrders = (props) => {
   const { orders = [], sx } = props;
@@ -55,28 +65,26 @@ export const OverviewLatestOrders = (props) => {
             </TableHead>
             <TableBody>
               {orders.map((order) => {
-                const createdAt = format(order.createdAt, 'dd/MM/yyyy');
-
                 return (
                   <TableRow
                     hover
-                    key={order.id}
+                    key={order.orderId}
                   >
                     <TableCell>
-                      {order.ref}
+                      {order.orderId}
                     </TableCell>
                     <TableCell>
-                      {order.customer.name}
+                      {order.startLocation}
                     </TableCell>
                     <TableCell>
-                      {createdAt}
+                      {order.endLocation}
                     </TableCell>
                     <TableCell>
-
+                      {vn_translate[order.goodsType]}
                     </TableCell>
                     <TableCell>
-                      <SeverityPill color={statusMap[order.status]}>
-                        {order.status}
+                      <SeverityPill color={statusMap[order.orderStatus]}>
+                        {vn_translate[order.orderStatus]}
                       </SeverityPill>
                     </TableCell>
                   </TableRow>

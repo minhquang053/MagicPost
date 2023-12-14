@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import CurrencyDollarIcon from '@heroicons/react/24/solid/CurrencyDollarIcon';
+import PauseCircleIcon from '@heroicons/react/24/solid/PauseCircleIcon';
 import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from '@mui/material';
 
-export const OverviewTotalProfit = (props) => {
+export const OverviewOngoingOrders = (props) => {
   const { value, sx } = props;
 
   return (
@@ -33,7 +33,7 @@ export const OverviewTotalProfit = (props) => {
             }}
           >
             <SvgIcon>
-              <CurrencyDollarIcon />
+              <PauseCircleIcon />
             </SvgIcon>
           </Avatar>
         </Stack>
@@ -42,7 +42,7 @@ export const OverviewTotalProfit = (props) => {
   );
 };
 
-OverviewTotalProfit.propTypes = {
+OverviewOngoingOrders.propTypes = {
   value: PropTypes.string,
   sx: PropTypes.object
 };

@@ -46,7 +46,7 @@ async function getUserByEmail(email) {
 
 async function changeUserProfile(userId, newProfile) {
     const user = await getUserById(userId);
-    if (!user) {
+    if (!user || !newProfile) {
         return null;
     }
     if (newProfile.avatar) {

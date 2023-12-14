@@ -74,21 +74,19 @@ async function httpChangeUserProfile(req, res) {
 
     if (userProfile.newPassword) {
         const oldProfile = await getUserById(userId);
-        bcrypt.compare(userProfile.oldPassword, oldProfile.password)
-        .then(async valid => {
+        try {
+            const valid = await bcrypt.compare(userProfile.oldPassword, oldProfile.password)
             if (!valid) {
                 return res.status(400).json({
-                    error: "Invalid old password"
+                    error: 'Invalid old password'
                 })
             }
-        })
-        .catch(err => {
-            console.log(err);
+        } catch (err) {
             return res.status(500).json({
-                error: "Couldn't validate old password"
+                error: 'Something wrong happened',
             })
-        });
-    }
+        }
+    } 
 
     try {
         const user = await changeUserProfile(userId, userProfile);
