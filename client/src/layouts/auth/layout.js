@@ -34,7 +34,7 @@ export const Layout = (props) => {
             component="header"
             sx={{
               left: 0,
-              p: 3,
+              'padding-bottom': 0, 'padding-left': 30, 'padding-top': 5,
               position: 'fixed',
               top: 0,
               width: '100%'
@@ -45,8 +45,8 @@ export const Layout = (props) => {
               href="/"
               sx={{
                 display: 'inline-flex',
-                height: 32,
-                width: 32
+                height: 100,
+                width: 128
               }}
             >
               <Logo />

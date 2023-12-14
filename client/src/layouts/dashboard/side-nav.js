@@ -42,14 +42,14 @@ export const SideNav = (props) => {
           height: '100%'
         }}
       >
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ 'padding-bottom': 0, 'padding-left': 30, 'padding-top': 5 }}>
           <Box
             component={NextLink}
             href="/"
             sx={{
               display: 'inline-flex',
-              height: 32,
-              width: 32
+              height: 100,
+              width: 129
             }}
           >
             <Logo />
