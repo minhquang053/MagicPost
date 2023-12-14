@@ -37,10 +37,10 @@ async function createNewTransfer(transfer) {
     const newTransfer = Object.assign(transfer, {
         transferId: generateTransferId(),
         orderId: transfer.orderId,
-        fromLoc: transfer.fromLoc,
-        toLoc: transfer.toLoc,
-        receiveDate: transfer.receiveDate,
-        forwardDate: transfer.forwardDate,
+        fromLocation: transfer.fromLocation,
+        toLocation: transfer.toLocation,
+        transferDate: transfer.transferDate,
+        confirmDate: transfer.confirmDate,
         done: false,
     })
     await saveTransfer(newTransfer);

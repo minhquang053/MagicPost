@@ -13,7 +13,7 @@ const { validateOrderInfo } = require('../../services/internal');
 async function httpGetAllOrders(req, res) {
     const query = req.query
 
-    const orders = await getAllOrders(query.start, query.end, query.searchTerm);
+    const orders = await getAllOrders(query.start, query.end, query.type, query.status, query.searchTerm);
     
     return res.status(200).json(orders);
 }
@@ -50,9 +50,16 @@ async function httpChangeOrderStatusById(req, res) {
             error: "New status is the same as before"
         })
     }
+    
+    if (targetOrder.newStatus === 'done' && targetOrder.orderStatus !== 'transferring') {
+        return res.status(400).json({
+            error: "Not transferred"
+        })
+    }
 
     const requestingUser = await getUserById(req.uid);
-    if (requestingUser.role !== 'Processor') {
+    if (requestingUser.role !== 'Processor' &&
+        requestingUser.role !== 'Manager') {
         return res.status(401).json({
             error: "Permission required"
         });

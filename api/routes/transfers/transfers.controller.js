@@ -2,6 +2,7 @@ const {
     getAllTransfers,
     getTransferById,
     finishTransferById,
+    createNewTransfer,
 } = require('../../models/transfers.model');
 
 const {
@@ -30,6 +31,29 @@ async function httpGetTransferById(req, res) {
     return res.status(200).json(transfer);
 }
 
+async function httpAddNewTransfer(req, res) {
+    const transfer = req.body;
+ 
+    const requestingUser = await getUserById(req.uid);
+    if (requestingUser.role !== "Processor" && requestingUser.role !== "Manager") {
+        return res.status(401).json({
+            error: "Require proper processor access"
+        });
+    }
+    transfer.fromLocation = requestingUser.location;
+
+    try {
+        await createNewTransfer(transfer); 
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            error: err.message,
+        });
+    }
+
+    return res.status(201).json(transfer);
+}
+
 async function httpFinishTransferById(req, res) {
     const transferId = req.params.id;
     
@@ -46,5 +70,6 @@ async function httpFinishTransferById(req, res) {
 module.exports = {
     httpGetAllTransfers,
     httpGetTransferById,
+    httpAddNewTransfer,
     httpFinishTransferById,
 }

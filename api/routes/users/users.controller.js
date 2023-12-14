@@ -1,10 +1,11 @@
 const { 
     getAllUsers,
     getUserById,
-    changeUserRoleById,
+    changeUserProfile,
     createNewUser,
     deleteUserById,
 } = require('../../models/users.model');
+const bcrypt = require('bcrypt');
 
 const { editRolePermissionGranted } = require('../../services/internal');
 const { validateUserInfo } = require('../../services/internal');
@@ -32,39 +33,78 @@ async function httpGetUserById(req, res) {
     return res.status(200).json(user);
 }
 
-async function httpChangeUserRoleById(req, res) {
-    const targetId = Number(req.params.id);
-    const targetUser = await getUserById(targetId);
-    const newRole = req.body.role;
-    targetUser.newRole = newRole;
+// async function httpChangeUserRoleById(req, res) {
+//     const targetId = Number(req.params.id);
+//     const targetUser = await getUserById(targetId);
+//     const newRole = req.body.role;
+//     targetUser.newRole = newRole;
 
-    if (!validateUserInfo({ role: newRole })) {
-        return res.status(400).json({
-            error: "Invalid role"
+//     if (!validateUserInfo({ role: newRole })) {
+//         return res.status(400).json({
+//             error: "Invalid role"
+//         })
+//     }
+
+//     if (targetUser.role === targetUser.newRole) {
+//         return res.status(400).json({
+//             error: "New role is the same as before"
+//         })
+//     }
+
+//     const requestingUser = await getUserById(req.uid);
+//     if (!editRolePermissionGranted(requestingUser, targetUser)) {
+//         return res.status(401).json({
+//             error: "Permission required"
+//         });
+//     }
+
+//     const user = await changeUserRoleById(targetId, newRole);
+//     if (!user) {
+//         return res.status(500).json({
+//             error: 'User role not changed'
+//         });
+//     }
+
+//     return res.status(200).json(user);
+// }
+
+async function httpChangeUserProfile(req, res) {
+    const userProfile = req.body.user;
+    const userId = req.uid;
+
+    if (userProfile.newPassword) {
+        const oldProfile = await getUserById(userId);
+        bcrypt.compare(userProfile.oldPassword, oldProfile.password)
+        .then(async valid => {
+            if (!valid) {
+                return res.status(400).json({
+                    error: "Invalid old password"
+                })
+            }
         })
-    }
-
-    if (targetUser.role === targetUser.newRole) {
-        return res.status(400).json({
-            error: "New role is the same as before"
-        })
-    }
-
-    const requestingUser = await getUserById(req.uid);
-    if (!editRolePermissionGranted(requestingUser, targetUser)) {
-        return res.status(401).json({
-            error: "Permission required"
+        .catch(err => {
+            console.log(err);
+            return res.status(500).json({
+                error: "Couldn't validate old password"
+            })
         });
     }
 
-    const user = await changeUserRoleById(targetId, newRole);
-    if (!user) {
+    try {
+        const user = await changeUserProfile(userId, userProfile);
+        if (!user) {
+            return res.status(500).json({
+                error: 'Profile not changed'
+            })
+        }
+    } catch (err) {
+        console.log(err);
         return res.status(500).json({
-            error: 'User role not changed'
-        });
-    }
-
-    return res.status(200).json(user);
+            error: 'Profile not changed'
+        })
+    } 
+    
+    return res.status(200).json(userProfile);
 }
 
 async function httpAddNewUser(req, res) {
@@ -130,7 +170,7 @@ async function httpDeleteUserById(req, res) {
 module.exports = {
     httpGetAllUsers,
     httpGetUserById,
-    httpChangeUserRoleById,
+    httpChangeUserProfile,
     httpAddNewUser,
     httpDeleteUserById,
 };

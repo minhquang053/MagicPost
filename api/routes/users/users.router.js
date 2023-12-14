@@ -2,7 +2,7 @@ const express = require('express');
 const {
   httpGetAllUsers,
   httpGetUserById,
-  httpChangeUserRoleById,
+  httpChangeUserProfile,
   httpAddNewUser,
   httpDeleteUserById,
 } = require('./users.controller');
@@ -18,7 +18,7 @@ usersRouter.use(extractAuthorization);
 usersRouter.get('/', httpGetAllUsers);
 usersRouter.get('/:id', httpGetUserById);
 usersRouter.post('/', httpAddNewUser);
-usersRouter.patch('/:id', httpChangeUserRoleById);
+usersRouter.patch('/:id', httpChangeUserProfile);
 usersRouter.delete('/:id', httpDeleteUserById);
 
 module.exports = usersRouter;

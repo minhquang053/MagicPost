@@ -18,7 +18,8 @@ async function httpLogin(req, res) {
     .then(async valid => {
         if (valid) {
             return res.status(200).json({
-                id: user.userId,
+                userId: user.userId,
+                avatar: user.avatar,
                 name: user.name,
                 email: user.email,
                 phone: user.phone,

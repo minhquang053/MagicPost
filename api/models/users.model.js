@@ -7,6 +7,16 @@ async function getAllUsers(role, location, searchTerm) {
     const roleRegex = new RegExp(role, 'i');
     const locRegex = new RegExp(location, 'i');
     const termRegex = new RegExp(searchTerm, 'i');
+    if (role === '') {
+        return await User.find({
+            role: { $ne: 'Admin' }, // Exclude documents with the role 'Admin'
+            location: locRegex,
+            $or: [
+                { name: { $regex: termRegex } },
+                { email: { $regex: termRegex } }
+            ]
+        });
+    }
     return await User
         .find({ role: roleRegex, location: locRegex, $or: [
             { name: { $regex: termRegex } }, 
@@ -24,12 +34,30 @@ async function getUserByEmail(email) {
         .findOne({ "email": email })
 }
 
-async function changeUserRoleById(userId, newRole) {
+// async function changeUserRoleById(userId, newRole) {
+//     const user = await getUserById(userId);
+//     if (!user) {
+//         return null;
+//     }
+//     user.role = newRole;
+//     user.save();
+//     return user;
+// }
+
+async function changeUserProfile(userId, newProfile) {
     const user = await getUserById(userId);
     if (!user) {
         return null;
     }
-    user.role = newRole;
+    if (newProfile.avatar) {
+        user.avatar = newProfile.avatar;
+    } else if (newProfile.newPassword) {
+        user.password = await getHashedPassword(newProfile.newPassword);
+    } else {
+        user.name = newProfile.name;
+        user.email = newProfile.email;
+        user.phone = newProfile.phone;
+    }
     user.save();
     return user;
 }
@@ -74,7 +102,7 @@ module.exports = {
     getAllUsers,
     getUserById,
     getUserByEmail,
-    changeUserRoleById,
+    changeUserProfile,
     createNewUser,
     deleteUserById,
 }

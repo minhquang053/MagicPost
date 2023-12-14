@@ -9,19 +9,19 @@ const transfersSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    fromLoc: {
+    fromLocation: {
         type: String,
         required: true,
     },
-    toLoc: {
+    toLocation: {
         type: String,
         required: true, 
     },
-    receiveDate: {
+    transferDate: {
         type: String,
         required: false,
     },
-    forwardDate: {
+    confirmDate: {
         type: String,
         required: false,
     },
