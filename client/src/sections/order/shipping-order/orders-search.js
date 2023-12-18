@@ -54,7 +54,7 @@ const OrderSearchSection = () => {
 
   const handleConfirm = async () => {
     setDialogTitle('');
-    setDialogMessage('Đang xác nhận đơn hàng...');
+    setDialogMessage('Đang kiểm tra đơn hàng...');
     setDialogOpen(true);
 
     try {
@@ -67,7 +67,7 @@ const OrderSearchSection = () => {
             'Authorization': localStorage.getItem('accessToken'),
           },
           body: JSON.stringify({
-            'status': 'done'
+            'status': 'shipping',
           })
         }
       );
@@ -78,18 +78,18 @@ const OrderSearchSection = () => {
         setOrderId('');
         console.log('Order updated successfully');
         setDialogTitle('Thành công');
-        setDialogMessage('Xác nhận đơn hàng thành công!');
+        setDialogMessage('Đơn hàng đã được đưa vào giao hàng');
       } else {
         // Handle the case where the update fails
+        console.error('Failed to update order');
         const msg = (await response.json()).error;
-        console.error(`Failed to update order: ${msg}`);
         setDialogTitle('Thất bại');
-        setDialogMessage('Đã xảy ra lỗi khi xác nhận.');
+        setDialogMessage('Đã xảy ra lỗi khi đưa vào giao hàng');
       }
     } catch (error) {
       console.error('Failed to update order:', error);
       setDialogTitle('Thất bại');
-      setDialogMessage('Đã xảy ra lỗi khi xác nhận đơn hàng.');
+      setDialogMessage('Đã xảy ra lỗi khi đưa vào giao hàng.');
     }
 
     setTimeout(() => {
@@ -112,7 +112,7 @@ const OrderSearchSection = () => {
         mt={4} // Adjust top margin as needed
       >
         <Typography variant="h4" gutterBottom>
-          Xác nhận đơn hàng
+          Giao đơn hàng
         </Typography>
 
         <Stack direction="row" spacing={2}>

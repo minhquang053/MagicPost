@@ -58,6 +58,10 @@ export const items = [
         path: '/orders/confirm_order',
       },
       {
+        title: "Giao đơn hàng",
+        path: '/orders/shipping_order',
+      },
+      {
         title: "Tra cứu đơn hàng",
         path: '/orders/search_order'
       },
@@ -76,16 +80,20 @@ export const items = [
     ),
     subItems: [
       {
-        title: "Tạo đơn vận chuyển"
+        title: "Tạo đơn vận chuyển",
+        path: 'transfers/create_transfer',
       },
       {
-        title: "Xác nhận đơn vận chuyển"
+        title: "Xác nhận đơn vận chuyển",
+        path: 'transfers/confirm_transfer',
       },
       {
         title: "Tra cứu đơn vận chuyển",
+        path: 'transfers/search_transfer',
       },
       {
         title: "Tất cả đơn vận chuyển",
+        path: 'transfers/all_transfers',
       }
     ]
   },

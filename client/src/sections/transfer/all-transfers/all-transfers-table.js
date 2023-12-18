@@ -43,10 +43,10 @@ export const OrdersTable = (props) => {
                   Mã đơn hàng
                 </TableCell>
                 <TableCell>
-                  Điểm gửi hàng
+                  Điểm giao dịch
                 </TableCell>
                 <TableCell>
-                  Điểm nhận hàng
+                  Điểm tập kết
                 </TableCell>
                 <TableCell>
                   Loại hàng gửi

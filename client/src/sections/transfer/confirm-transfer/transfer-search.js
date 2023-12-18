@@ -81,8 +81,8 @@ const OrderSearchSection = () => {
         setDialogMessage('Xác nhận đơn hàng thành công!');
       } else {
         // Handle the case where the update fails
+        console.error('Failed to update order');
         const msg = (await response.json()).error;
-        console.error(`Failed to update order: ${msg}`);
         setDialogTitle('Thất bại');
         setDialogMessage('Đã xảy ra lỗi khi xác nhận.');
       }
