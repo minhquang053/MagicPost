@@ -2,7 +2,7 @@ const role_orders = ["Admin", "Manager", "Processor", "Shipper"];
 const all_roles = ["Admin", "Manager", "Processor", "Shipper", undefined];
 const all_locations = ["a1", "test", undefined];
 const all_sendlocs = ["s1", "s2", "s3", "test", undefined];
-const all_statuses = ["processing", "transferring", "done", "failed", undefined];
+const all_statuses = ["processing", "transferring", "shipping", "done", "failed", undefined];
 
 function lowerRolesThan(role) {
     const lowerRoles = role_orders.slice(role_orders.indexOf(role) + 1);
@@ -37,7 +37,7 @@ function validateOrderInfo(order) {
         all_statuses.includes(order.orderStatus)) {
         // the status can only be update forward, if there is something wrong with the order
         // just mark it as failed and return the goods.
-        if (all_statuses.indexOf(order.newStatus) < all_statuses.indexOf(order.orderStatus)
+        if (all_statuses.indexOf(order.newStatus) <= all_statuses.indexOf(order.orderStatus)
             || order.orderStatus === "done") {
             return false;
         }
