@@ -4,6 +4,7 @@ const {
     changeOrderStatusById,
     createNewOrder,
 } = require('../../models/orders.model');
+const { getLatestTransferByOrderId } = require('../../models/transfers.model');
 
 const {
     getUserById
@@ -43,19 +44,28 @@ async function httpChangeOrderStatusById(req, res) {
         return res.status(400).json({
             error: "Invalid status or status order"
         })
-    }
+    } 
 
-    if (targetOrder.orderStatus === targetOrder.newStatus) {
-        return res.status(400).json({
-            error: "New status is the same as before"
-        })
+    if (targetOrder.newStatus === 'shipping') {
+        const latestTransfer = await getLatestTransferByOrderId(orderId);
+        if (!latestTransfer) {
+            return res.status(500).json({
+                error: "Order not ready for shipping"
+            })
+        }
+        if (latestTransfer.toLocation !== targetOrder.endLocation) {
+            return res.status(400).json({
+                error: "Invalid end location"
+            })
+        } 
     }
     
-    if (targetOrder.newStatus === 'done' && targetOrder.orderStatus !== 'transferring') {
+    if (targetOrder.newStatus === 'done' && targetOrder.orderStatus !== 'shipping') {
         return res.status(400).json({
-            error: "Not transferred"
+            error: "Not shipped"
         })
     }
+
 
     const requestingUser = await getUserById(req.uid);
     if (requestingUser.role !== 'Processor' &&

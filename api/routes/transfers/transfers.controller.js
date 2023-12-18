@@ -1,3 +1,4 @@
+const { getOrderById, changeOrderStatusById } = require('../../models/orders.model');
 const {
     getAllTransfers,
     getTransferById,
@@ -33,7 +34,14 @@ async function httpGetTransferById(req, res) {
 
 async function httpAddNewTransfer(req, res) {
     const transfer = req.body;
+    const order = await getOrderById(transfer.orderId);
  
+    if (!order) {
+        return res.status(400).json({
+            error: "Order not found"
+        });
+    }
+
     const requestingUser = await getUserById(req.uid);
     if (requestingUser.role !== "Processor" && requestingUser.role !== "Manager") {
         return res.status(401).json({
@@ -44,6 +52,9 @@ async function httpAddNewTransfer(req, res) {
 
     try {
         await createNewTransfer(transfer); 
+        if (order.orderStatus === 'processing') {
+            await changeOrderStatusById(order.orderId, 'transferring');
+        } 
     } catch (err) {
         console.log(err);
         return res.status(500).json({
