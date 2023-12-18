@@ -14,6 +14,13 @@ async function getTransferById(transferId) {
         .findOne({ transferId: transferId })
 }
 
+async function getLatestTransferByOrderId(orderId) {
+    return await Transfer 
+        .findOne({ orderId: orderId, done: true })
+        .sort({ confirmDate: -1 })
+        .exec();
+}
+
 async function getTransfersByOrderId(orderId) {
     return await Transfer
         .find({ orderId: orderId })
@@ -34,13 +41,14 @@ async function saveTransfer(transfer) {
 }
 
 async function createNewTransfer(transfer) {
+    const now = new Date().toLocaleString();
+
     const newTransfer = Object.assign(transfer, {
         transferId: generateTransferId(),
         orderId: transfer.orderId,
         fromLocation: transfer.fromLocation,
         toLocation: transfer.toLocation,
-        transferDate: transfer.transferDate,
-        confirmDate: transfer.confirmDate,
+        transferDate: now,
         done: false,
     })
     await saveTransfer(newTransfer);
@@ -49,6 +57,7 @@ async function createNewTransfer(transfer) {
 module.exports = {
     getAllTransfers,
     getTransferById,
+    getLatestTransferByOrderId,
     finishTransferById,
     getTransfersByOrderId,
     createNewTransfer,

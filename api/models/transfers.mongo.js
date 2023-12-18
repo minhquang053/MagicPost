@@ -19,7 +19,7 @@ const transfersSchema = new mongoose.Schema({
     },
     transferDate: {
         type: String,
-        required: false,
+        required: true,
     },
     confirmDate: {
         type: String,
