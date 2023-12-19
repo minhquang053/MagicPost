@@ -196,10 +196,9 @@ const AddStaffForm = () => {
               }}
             >
               {/* Add your role options here */}
-              <MenuItem value="Admin">Admin</MenuItem>
-              <MenuItem value="Manager">Manager</MenuItem>
-              <MenuItem value="Processor">Processor</MenuItem>
-              <MenuItem value="Shipper">Shipper</MenuItem>
+              <MenuItem value="Manager">Quản lý</MenuItem>
+              <MenuItem value="Transactor">Giao dịch viên</MenuItem>
+              <MenuItem value="Processor">Nhân viên</MenuItem>
             </TextField>
             <TextField
               select
@@ -218,7 +217,7 @@ const AddStaffForm = () => {
               }}
             >
               {/* Add your location options here */}
-              <MenuItem value="test">test</MenuItem>
+              <MenuItem value="A1">A1</MenuItem>
             </TextField>
             <TextField
               label="Mật khẩu"

@@ -1,15 +1,11 @@
 import PropTypes from 'prop-types';
-import BellIcon from '@heroicons/react/24/solid/BellIcon';
-import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import Bars3Icon from '@heroicons/react/24/solid/Bars3Icon';
 import {
   Avatar,
-  Badge,
   Box,
   IconButton,
   Stack,
   SvgIcon,
-  Tooltip,
   useMediaQuery
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
@@ -71,20 +67,7 @@ export const TopNav = (props) => {
             alignItems="center"
             direction="row"
             spacing={2}
-          >
-            <Tooltip title="Notifications">
-              <IconButton>
-                <Badge
-                  badgeContent={4}
-                  color="success"
-                  variant="dot"
-                >
-                  <SvgIcon fontSize="small">
-                    <BellIcon />
-                  </SvgIcon>
-                </Badge>
-              </IconButton>
-            </Tooltip>
+          > 
             <Avatar
               onClick={accountPopover.handleOpen}
               ref={accountPopover.anchorRef}

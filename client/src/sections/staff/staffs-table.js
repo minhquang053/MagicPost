@@ -25,6 +25,12 @@ export const StaffsTable = (props) => {
     rowsPerPage = 0,
   } = props;
 
+  const vn_translate = {
+    'Manager': "Trưởng điểm",
+    'Transactor': 'Giao dịch viên',
+    'Processor': 'Nhân viên',
+  }
+
   return (
     <Card>
       <Scrollbar>
@@ -74,7 +80,7 @@ export const StaffsTable = (props) => {
                       {staff.email}
                     </TableCell>
                     <TableCell>
-                      {staff.role}
+                      {vn_translate[staff.role]}
                     </TableCell>
                     <TableCell>
                       {staff.location}

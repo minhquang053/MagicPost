@@ -11,19 +11,17 @@ import {
   Button,
 } from '@mui/material';
 
-export const AllOrdersSearch = ({ onSearch }) => {
+export const AllTransfersSearch = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStart, setSelectedStart] = useState('');
-  const [selectedEnd, setSelectedEnd] = useState('');
-  const [selectedType, setSelectedType] = useState('');
+  const [selectedFrom, setSelectedStart] = useState('');
+  const [selectedTo, setSelectedEnd] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
 
   const handleSearch = () => {
     onSearch({
       searchTerm,
-      selectedStart,
-      selectedEnd,
-      selectedType,
+      selectedFrom,
+      selectedTo,
       selectedStatus,
     });
   };
@@ -33,7 +31,7 @@ export const AllOrdersSearch = ({ onSearch }) => {
       <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
         <OutlinedInput
           fullWidth
-          placeholder="Nhập mã đơn hàng"
+          placeholder="Nhập mã vận chuyển/đơn hàng"
           startAdornment={(
             <InputAdornment position="start">
               <SvgIcon color="action" fontSize="small">
@@ -47,10 +45,10 @@ export const AllOrdersSearch = ({ onSearch }) => {
         <Stack direction="row" spacing={1} justifyContent="flex-end">
           <TextField
             select
-            label="Điểm giao dịch"
-            value={selectedStart}
+            label="Điểm vận chuyển"
+            value={selectedFrom}
             onChange={(e) => setSelectedStart(e.target.value)}
-            sx={{ minWidth: 145 }}
+            sx={{ minWidth: 165 }}
             MenuProps={{
               PaperProps: {
                 style: {
@@ -64,10 +62,10 @@ export const AllOrdersSearch = ({ onSearch }) => {
           </TextField>
           <TextField
             select
-            label="Điểm tập kết"
-            value={selectedEnd}
+            label="Điểm nhận hàng"
+            value={selectedTo}
             onChange={(e) => setSelectedEnd(e.target.value)}
-            sx={{ minWidth: 132 }}
+            sx={{ minWidth: 160 }}
             MenuProps={{
               PaperProps: {
                 style: {
@@ -78,24 +76,6 @@ export const AllOrdersSearch = ({ onSearch }) => {
           >
             <MenuItem value="">- Tất cả -</MenuItem>
             <MenuItem value="end">end</MenuItem>
-          </TextField>
-          <TextField
-            select
-            label="Loại hàng"
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
-            sx={{ minWidth: 112 }}
-            MenuProps={{
-              PaperProps: {
-                style: {
-                  maxHeight: 200,
-                },
-              },
-            }}
-          >
-            <MenuItem value="">- Tất cả -</MenuItem>
-            <MenuItem value="goods">Hàng hóa</MenuItem>
-            <MenuItem value="document">Tài liệu</MenuItem>
           </TextField>
           <TextField
             select
@@ -112,7 +92,6 @@ export const AllOrdersSearch = ({ onSearch }) => {
             }}
           >
             <MenuItem value="">- Tất cả -</MenuItem>
-            <MenuItem value="processing">Đang xử lý</MenuItem>
             <MenuItem value="transferring">Đang vận chuyển</MenuItem>
             <MenuItem value="done">Đã hoàn thành</MenuItem>
           </TextField>

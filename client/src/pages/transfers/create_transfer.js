@@ -7,7 +7,7 @@ import CreateTransferForm from 'src/sections/transfer/create_transfer/create_tra
 const Page = () => (
   <>
     <Head>
-      <title>Tạo đơn hàng| Magic Post</title>
+      <title>Tạo vận chuyển| Magic Post</title>
     </Head>
 
     <Container>

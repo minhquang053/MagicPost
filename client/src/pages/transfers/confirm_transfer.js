@@ -2,22 +2,22 @@
 import Head from 'next/head';
 import { Container } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import OrderSearch from 'src/sections/order/confirm-order/orders-search';
+import TransferSearch from 'src/sections/transfer/confirm-transfer/transfer-search';
 
-const ConfirmOrderPage = () => (
+const ConfirmTransferPage = () => (
   <>
     <Head>
-      <title>Xác nhận đơn hàng | Magic Post</title>
+      <title>Xác nhận vận chuyển | Magic Post</title>
     </Head>
 
     <Container>
-      <OrderSearch />
+      <TransferSearch />
 
       {/* Add additional components or display search results here */}
     </Container>
   </>
 );
 
-ConfirmOrderPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+ConfirmTransferPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-export default ConfirmOrderPage;
+export default ConfirmTransferPage;

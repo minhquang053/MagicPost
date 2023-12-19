@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 
-export const OrdersTable = (props) => {
+export const TransfersTable = (props) => {
   const {
     count = 0,
     items = [],
@@ -23,15 +23,6 @@ export const OrdersTable = (props) => {
     rowsPerPage = 0,
   } = props;
 
-  const vn_translate = {
-    "goods": "Hàng hóa",
-    "document": "Tài liệu",
-    "processing": "Đang xử lý",
-    "transferring": "Đang vận chuyển",
-    "done": "Đã hoàn thành",
-    "failed": "Thất bại",
-  }
-
   return (
     <Card>
       <Scrollbar>
@@ -40,16 +31,16 @@ export const OrdersTable = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>
+                  Mã vận chuyển
+                </TableCell>
+                <TableCell>
+                  Điểm vận chuyển
+                </TableCell>
+                <TableCell>
+                  Điểm nhận hàng
+                </TableCell>
+                <TableCell>
                   Mã đơn hàng
-                </TableCell>
-                <TableCell>
-                  Điểm giao dịch
-                </TableCell>
-                <TableCell>
-                  Điểm tập kết
-                </TableCell>
-                <TableCell>
-                  Loại hàng gửi
                 </TableCell>
                 <TableCell>
                   Trạng thái
@@ -57,28 +48,31 @@ export const OrdersTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((order) => {
+              {items.map((transfer) => {
                 return (
                   <TableRow
                     hover
-                    key={order.orderId}
+                    key={transfer.transferId}
                   >
-                    <Link style={{textDecoration: 'none'}} href={`/orders/search_order?orderId=${order.orderId}`} passHref>
+                    <Link style={{textDecoration: 'none'}} href={`/transfers/search_transfer?transferId=${transfer.transferId}`} passHref>
                       <TableCell component="a" style={{ color: '#6366f1', cursor: 'pointer'}}>
-                        {order.orderId}
+                        {transfer.transferId}
                       </TableCell>
                     </Link>
+                    
                     <TableCell>
-                      {order.startLocation}
+                      {transfer.fromLocation}
                     </TableCell>
                     <TableCell>
-                      {order.endLocation}
+                      {transfer.toLocation}
+                    </TableCell>
+                    <TableCell comoponent="a" style={{ cursor: 'pointer'}}>
+                      <Link style={{textDecoration: 'none', color: '#6366f1'}} href={`/orders/search_order?orderId=${transfer.orderId}`} passHref>
+                          {transfer.orderId}
+                      </Link>
                     </TableCell>
                     <TableCell>
-                      {vn_translate[order.goodsType]}
-                    </TableCell>
-                    <TableCell>
-                      {vn_translate[order.orderStatus]}
+                      {transfer.done?"Đã hoàn thành":"Đang vận chuyển"}
                     </TableCell>
                   </TableRow>
                 );
@@ -100,7 +94,7 @@ export const OrdersTable = (props) => {
   );
 };
 
-OrdersTable.propTypes = {
+TransfersTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onPageChange: PropTypes.func,

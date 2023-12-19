@@ -2,16 +2,16 @@
 import Head from 'next/head';
 import { Container } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import OrderSearch from 'src/sections/order/search-order/orders-search';
+import TransferSearch from 'src/sections/transfer/search-transfer/transfer-search';
 
 const Page = () => (
   <>
     <Head>
-      <title>Tra cứu đơn hàng | Magic Post</title>
+      <title>Tra cứu vận chuyển | Magic Post</title>
     </Head>
 
     <Container>
-      <OrderSearch />
+      <TransferSearch />
 
       {/* Add additional components or display search results here */}
     </Container>

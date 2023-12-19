@@ -26,7 +26,7 @@ const CreateOrderForm = () => {
     senderInfo: {},
     recipientInfo: {},
     startLocation: user.location,
-    endLocation: 'end',
+    endLocation: '',
     goodsType: {},
     costInfo: {},
     recipientFees: {},  // Updated field for recipient fees

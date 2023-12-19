@@ -72,7 +72,7 @@ export const items = [
     ]
   },
   {
-    title: 'Đơn vận chuyển',
+    title: 'Vận chuyển',
     icon: (
       <SvgIcon fontSize="small">
         <TruckIcon />
@@ -80,20 +80,20 @@ export const items = [
     ),
     subItems: [
       {
-        title: "Tạo đơn vận chuyển",
-        path: 'transfers/create_transfer',
+        title: "Tạo vận chuyển",
+        path: '/transfers/create_transfer',
       },
       {
-        title: "Xác nhận đơn vận chuyển",
-        path: 'transfers/confirm_transfer',
+        title: "Xác nhận vận chuyển",
+        path: '/transfers/confirm_transfer',
       },
       {
-        title: "Tra cứu đơn vận chuyển",
-        path: 'transfers/search_transfer',
+        title: "Tra cứu vận chuyển",
+        path: '/transfers/search_transfer',
       },
       {
-        title: "Tất cả đơn vận chuyển",
-        path: 'transfers/all_transfers',
+        title: "Tất cả vận chuyển",
+        path: '/transfers/all_transfers',
       }
     ]
   },

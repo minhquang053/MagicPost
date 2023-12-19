@@ -5,6 +5,7 @@ import {
   TextField,
   Container,
   Button,
+  Paper,
   Typography,
   Dialog,
   DialogActions,
@@ -15,17 +16,17 @@ import {
   CardContent,
 } from '@mui/material';
 
-const OrderSearchSection = () => {
-  const [orderId, setOrderId] = useState('');
-  const [order, setOrder] = useState(null);
+const TransferSearch = () => {
+  const [transferId, setTransferId] = useState('');
+  const [transfer, setTransfer] = useState(null);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState('');
   const [dialogTitle, setDialogTitle] = useState('');
 
-  const fetchOrderById = async (orderId) => {
+  const fetchTransferById = async (transferId) => {
     const response = await fetch(
-      `http://localhost:3030/v1/orders/${orderId}`,
+      `http://localhost:3030/v1/transfers/${transferId}`,
       {
         method: 'GET',
         headers: {
@@ -44,52 +45,53 @@ const OrderSearchSection = () => {
 
   const handleSearch = async () => {
     try {
-      setOrder(null);
-      const data = await fetchOrderById(orderId);
-      setOrder(data);
+      setTransfer(null);
+      const data = await fetchTransferById(transferId);
+      setTransfer(data);
     } catch (error) {
-      console.error('Error fetching order:', error);
+      console.error('Error fetching transfer:', error);
     }
   }; 
 
   const handleConfirm = async () => {
     setDialogTitle('');
-    setDialogMessage('Đang xác nhận đơn hàng...');
+    setDialogMessage('Đang xác nhận vận chuyển...');
     setDialogOpen(true);
 
     try {
       const response = await fetch(
-        `http://localhost:3030/v1/orders/${orderId}`,
+        `http://localhost:3030/v1/transfers/${transferId}`,
         {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': localStorage.getItem('accessToken'),
           },
-          body: JSON.stringify({
-            'status': 'done'
-          })
         }
       );
 
       if (response.ok) {
-        const updatedOrder = await response.json();
-        setOrder(updatedOrder);
-        setOrderId('');
-        console.log('Order updated successfully');
+        const updatedTransfer = await response.json();
+        setTransfer(updatedTransfer);
+        setTransferId('');
+        console.log('transfer updated successfully');
         setDialogTitle('Thành công');
-        setDialogMessage('Xác nhận đơn hàng thành công!');
+        setDialogMessage('Xác nhận vận chuyển thành công!');
       } else {
         // Handle the case where the update fails
-        console.error('Failed to update order');
+        console.error('Failed to update transfer');
         const msg = (await response.json()).error;
         setDialogTitle('Thất bại');
-        setDialogMessage('Đã xảy ra lỗi khi xác nhận.');
+        if (msg === 'Package not available at your location') {
+          setDialogMessage("Điểm làm việc của bạn không thể xác nhận đơn hàng")
+        } else {
+          setDialogMessage(msg);
+        }
       }
     } catch (error) {
-      console.error('Failed to update order:', error);
+      console.error('Failed to update transfer:', error);
       setDialogTitle('Thất bại');
-      setDialogMessage('Đã xảy ra lỗi khi xác nhận đơn hàng.');
+      setDialogMessage('Đã xảy ra lỗi khi xác nhận.');
     }
 
     setTimeout(() => {
@@ -98,9 +100,9 @@ const OrderSearchSection = () => {
   };
 
   const handleCancel = () => {
-    // Clear the selected order and search term
-    setOrder(null);
-    setOrderId('');
+    // Clear the selected transfer and search term
+    setTransfer(null);
+    setTransferId('');
   };
 
   return (
@@ -112,14 +114,14 @@ const OrderSearchSection = () => {
         mt={4} // Adjust top margin as needed
       >
         <Typography variant="h4" gutterBottom>
-          Xác nhận đơn hàng
+          Xác nhận vận chuyển 
         </Typography>
 
         <Stack direction="row" spacing={2}>
           <TextField
-            label="Mã đơn hàng"
-            value={orderId}
-            onChange={(e) => setOrderId(e.target.value)}
+            label="Mã vận chuyển"
+            value={transferId}
+            onChange={(e) => setTransferId(e.target.value)}
           />
           <Button variant="contained" color="primary" onClick={handleSearch}>
             Xác nhận
@@ -127,28 +129,33 @@ const OrderSearchSection = () => {
         </Stack>
 
         {/* Display search results in cards */}
-        {order && (
-          <Card variant="outlined" style={{ margin: '16px', width: '300px' }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Mã đơn hàng: {order.orderId}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Điểm gửi hàng: {order.startLocation}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Điểm giao hàng: {order.endLocation}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Ngày gửi hàng: {order.createdDate}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Trạng thái đơn hàng: {order.orderStatus}
-              </Typography>
-            </CardContent>
+        {transfer && (
+          <Paper elevation={3} style={{ padding: '16px', width: '400px', marginTop: '16px' }}>
+            <Typography variant="h6" gutterBottom>
+              Transfer ID: {transfer.transferId}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Status: {transfer.done ? "Đã giao hàng": "Đang vận chuyển"}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              From Location: {transfer.fromLocation}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              To Location: {transfer.toLocation}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Transfer Date: {transfer.transferDate}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Confirm Date: {transfer.confirmDate || 'Not available'}
+            </Typography>
             <Stack direction="row" spacing={2} mt={2}>
               {/* Conditionally render buttons or "Already confirmed" message */}
-              {order.orderStatus !== 'done' ? (
+              {transfer.done ? (
+                <Typography color="textSecondary">
+                  Vận chuyển đã được xác nhận
+                </Typography>
+              ): (
                 <>
                   <Button variant="contained" color="primary" onClick={handleConfirm}>
                     Xác nhận
@@ -157,13 +164,14 @@ const OrderSearchSection = () => {
                     Hủy bỏ
                   </Button>
                 </>
-              ) : (
-                <Typography color="textSecondary">
-                  Đơn hàng đã được xác nhận
-                </Typography>
               )}
             </Stack>
-          </Card>
+          </Paper>
+        )}
+        {!transfer && transferId && (
+          <Typography variant="body2" color="textSecondary">
+            Loading...
+          </Typography>
         )}
       </Box>
     {/* Dialog to indicate the status */}
@@ -182,4 +190,4 @@ const OrderSearchSection = () => {
   );
 }; 
 
-export default OrderSearchSection;
+export default TransferSearch;

@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from 'src/hooks/use-auth';
 import {
   Box,
@@ -22,6 +22,12 @@ export const AccountProfileDetails = () => {
   const [name, setName] = useState(user?.name)
   const [email, setEmail] = useState(user?.email);
   const [phone, setPhone] = useState(user?.phone);
+
+  const vn_translate = {
+    'Manager': 'Trưởng điểm',
+    'Transactor': 'Giao dịch viên',
+    'Processor': 'Nhân viên xử lý',
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -128,7 +134,7 @@ export const AccountProfileDetails = () => {
                   fullWidth
                   label="Vai trò"
                   name="role"
-                  value={values.role}
+                  value={vn_translate[values.role]}
                   disabled
                 />
               </Grid>

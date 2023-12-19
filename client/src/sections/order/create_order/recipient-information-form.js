@@ -36,6 +36,20 @@ const RecipientInformationForm = ({ setFormData, formData, reset }) => {
     }
   };
 
+  const fetchLocationByProvince = async (province) => {
+    try {
+      const response = await fetch(`http://localhost:3030/v1/locations?province=${province}`);
+      const data = await response.json();
+
+      setFormData({
+        ...formData,
+        endLocation: data?.locationId,
+      });
+    } catch (err) {
+      console.error('Error fetch locatoin by province: ', err);
+    }
+  }
+
   const fetchDistrictsByProvince = async (selectedProvinceCode) => {
     try {
       const response = await fetch(`https://provinces.open-api.vn/api/p/${selectedProvinceCode}?depth=2`);
@@ -77,6 +91,8 @@ const RecipientInformationForm = ({ setFormData, formData, reset }) => {
       district: '',
       ward: '',
     });
+
+    fetchLocationByProvince(selectedProvince);
 
     fetchDistrictsByProvince(selectedProvinceCode);
   };
