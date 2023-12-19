@@ -17,7 +17,18 @@ function generateOrderId() {
 }
 
 function generateTransferId() {
-  return uuidv4();
+  const uuid = uuidv4();
+
+  // Convert the UUID to a hexadecimal string
+  const hexString = uuid.replace(/-/g, '');
+
+  // Take the first 9 characters from the hexadecimal string
+  const shortHexString = hexString.substring(0, 9);
+
+  // Convert the hexadecimal string to a decimal number
+  const transferID = parseInt(shortHexString, 16);
+
+  return `MP${transferID.toString()}TS`; // Convert the number to a string
 }
 
 module.exports = {

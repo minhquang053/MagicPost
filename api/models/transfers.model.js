@@ -4,9 +4,30 @@ const {
     generateTransferId
 } = require('../services/uuid');
 
-async function getAllTransfers(sendLoc) {
+async function getAllTransfers(fromLoc, toLoc, status, searchTerm) {
+    const fromRegex = new RegExp(fromLoc, 'i');
+    const toRegex = new RegExp(toLoc, 'i');
+    const termRegex = new RegExp(searchTerm, 'i');
+    console.log(status);
+    let statusValues;
+    if (status === 'done') {
+        statusValues = true;
+    } else if (status === 'transferring') {
+        statusValues = false;
+    } else {
+        statusValues = { $in: [true, false] };
+    }
+    
     return await Transfer
-        .find({ fromLoc: sendLoc })
+        .find({
+            fromLocation: fromRegex, 
+            toLocation: toRegex,
+            done: statusValues,
+            $or: [
+                { transferId: { $regex: termRegex } },
+                { orderId: { $regex: termRegex } }
+            ]
+        }).select('-_id')
 };
 
 async function getTransferById(transferId) {
@@ -31,7 +52,9 @@ async function finishTransferById(transferId) {
     if (!transfer) {
         return null;
     }
+    const now = new Date().toLocaleString();
     transfer.done = true;
+    transfer.confirmDate = now; 
     transfer.save();
     return transfer;
 }

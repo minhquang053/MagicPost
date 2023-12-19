@@ -40,11 +40,11 @@ async function httpChangeOrderStatusById(req, res) {
     const targetOrder = await getOrderById(orderId);
     targetOrder.newStatus = newStatus;
 
-    if (!validateOrderInfo(targetOrder)) {
-        return res.status(400).json({
-            error: "Invalid status or status order"
-        })
-    } 
+    // if (!validateOrderInfo(targetOrder)) {
+    //     return res.status(400).json({
+    //         error: "Invalid status or status order"
+    //     })
+    // } 
 
     if (targetOrder.newStatus === 'shipping') {
         const latestTransfer = await getLatestTransferByOrderId(orderId);

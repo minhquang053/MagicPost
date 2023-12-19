@@ -12,10 +12,9 @@ const {
 
 async function httpGetAllTransfers(req, res) {
     // to use query later
-    const query = req.body;
-    const requestingUser = await getUserById(req.uid)
+    const query = req.query;
     
-    const transfers = await getAllTransfers(requestingUser.location);
+    const transfers = await getAllTransfers(query.from, query.to, query.status, query.searchTerm);
     
     return res.status(200).json(transfers);
 }
@@ -68,14 +67,23 @@ async function httpAddNewTransfer(req, res) {
 async function httpFinishTransferById(req, res) {
     const transferId = req.params.id;
     
-    const transfer = await finishTransferById(transferId);
+    const transfer = await getTransferById(transferId);
     if (!transfer) {
         return res.status(400).json({
             error: "Transfer not found"
         });  
     }
 
-    return res.status(200).json(transfer);
+    const requestingUser = await getUserById(req.uid);
+    if (transfer.toLocation !== requestingUser.location) {
+        return res.status(400).json({
+            error: "Package not available at your location",
+        })
+    }
+
+    const confirmedTransfer = await finishTransferById(transferId);
+
+    return res.status(200).json(confirmedTransfer);
 }
 
 module.exports = {

@@ -7,7 +7,6 @@ const {
 } = require('../../models/users.model');
 const bcrypt = require('bcrypt');
 
-const { editRolePermissionGranted } = require('../../services/internal');
 const { validateUserInfo } = require('../../services/internal');
 const { isEmailValid, isVietnamesePhoneNumberValid } = require('../../services/validator');
 
@@ -108,11 +107,11 @@ async function httpChangeUserProfile(req, res) {
 async function httpAddNewUser(req, res) {
     const user = req.body;
  
-    if (!validateUserInfo({ role: user.role, location: user.location })) {
-        return res.status(400).json({
-            error: "Invalid role or location"
-        })
-    }
+    // if (!validateUserInfo({ role: user.role, location: user.location })) {
+    //     return res.status(400).json({
+    //         error: "Invalid role or location"
+    //     })
+    // }
     if (!isEmailValid(user.email)) {
         return res.status(400).json({
             error: "Invalid email"
@@ -128,6 +127,7 @@ async function httpAddNewUser(req, res) {
     if (requestingUser.role !== "Admin" &&
         !(requestingUser.role == "Manager" &&
         requestingUser.location == user.location)) {
+        console.log(user.location);
         return res.status(401).json({
             error: "Require administrator or location manager access"
         });
