@@ -1,14 +1,7 @@
 import ChartBarIcon from '@heroicons/react/24/solid/ChartBarIcon';
-import CogIcon from '@heroicons/react/24/solid/CogIcon';
-import LockClosedIcon from '@heroicons/react/24/solid/LockClosedIcon';
-import ShoppingBagIcon from '@heroicons/react/24/solid/ShoppingBagIcon';
-import UserIcon from '@heroicons/react/24/solid/UserIcon';
-import UserPlusIcon from '@heroicons/react/24/solid/UserPlusIcon';
 import UserCircleIcon from '@heroicons/react/24/solid/UserCircleIcon'
 import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
-import XCircleIcon from '@heroicons/react/24/solid/XCircleIcon';
 import TruckIcon from '@heroicons/react/24/solid/TruckIcon';
-import MapBinIcon from '@heroicons/react/24/solid/MapPinIcon'
 import ChartPieIcon from '@heroicons/react/24/solid/ChartPieIcon'
 import CliboardDocumentListIcon from '@heroicons/react/24/solid/ClipboardDocumentListIcon'
 import { SvgIcon } from '@mui/material';
@@ -21,7 +14,8 @@ export const items = [
       <SvgIcon fontSize="small">
         <ChartBarIcon />
       </SvgIcon>
-    )
+    ),
+    allowedRoles: ["Admin", "Manager"],
   },
   {
     title: 'Nhân viên',
@@ -34,6 +28,7 @@ export const items = [
       {
         title: "Thêm nhân viên",
         path: '/staffs/add_staff',
+        allowedRoles: ["Admin", "Manager"],
       },
       {
         title: "Tất cả nhân viên",
@@ -52,14 +47,17 @@ export const items = [
       {
         title: "Tạo đơn hàng",
         path: '/orders/create_order',
+        allowedRoles: ["Transactor"],
       },
       {
         title: "Xác nhận đơn hàng",
         path: '/orders/confirm_order',
+        allowedRoles: ["Transactor"],
       },
       {
         title: "Giao đơn hàng",
         path: '/orders/shipping_order',
+        allowedRoles: ["Transactor"],
       },
       {
         title: "Tra cứu đơn hàng",
@@ -82,10 +80,12 @@ export const items = [
       {
         title: "Tạo vận chuyển",
         path: '/transfers/create_transfer',
+        allowedRoles: ["Transactor", "Processor"],
       },
       {
         title: "Xác nhận vận chuyển",
         path: '/transfers/confirm_transfer',
+        allowedRoles: ["Transactor", "Processor"],
       },
       {
         title: "Tra cứu vận chuyển",
@@ -95,7 +95,7 @@ export const items = [
         title: "Tất cả vận chuyển",
         path: '/transfers/all_transfers',
       }
-    ]
+    ],
   },
   {
     title: "Thống kê",
@@ -103,7 +103,8 @@ export const items = [
       <SvgIcon fontSize="small">
         <ChartPieIcon />
       </SvgIcon>
-    )
+    ),
+    allowedRoles: ["Admin", "Manager"]
   },
   {
     title: 'Tài khoản',

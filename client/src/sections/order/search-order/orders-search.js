@@ -10,7 +10,11 @@ import {
   List,
   ListItem,
   ListItemText,
+  SvgIcon,
+  IconButton
 } from '@mui/material';
+import PrinterIcon from '@heroicons/react/24/solid/PrinterIcon';
+import { makeDeliveryReceipt } from 'src/utils/make-delivery-receipt';
 
 const OrderSearchSection = () => {
   const router = useRouter();
@@ -40,6 +44,10 @@ const OrderSearchSection = () => {
     } catch (error) {
       console.error('Error fetching order:', error);
     }
+  };
+
+  const handleIconClick = () => {
+    makeDeliveryReceipt(order);
   };
 
   useEffect(() => {
@@ -75,6 +83,11 @@ const OrderSearchSection = () => {
         <Paper elevation={3} style={{ padding: '16px', width: '400px', marginTop: '16px' }}>
           <Typography variant="h6" gutterBottom>
             Order ID: {order.orderId}
+            <IconButton onClick={handleIconClick}>
+              <SvgIcon color="action" fontSize="small">
+                <PrinterIcon />
+              </SvgIcon>
+            </IconButton>
           </Typography>
           <Typography variant="body2" color="textSecondary">
             Status: {order.orderStatus}

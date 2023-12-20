@@ -19,8 +19,10 @@ import {
 } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useAuth } from 'src/hooks/use-auth';
 
 const AddStaffForm = () => {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -29,6 +31,17 @@ const AddStaffForm = () => {
     location: '',
     password: '',
   });
+
+  const roles = user.role === "Manager"?["Transactor", "Processor"]:["Manager"];
+  const locations = user.role === "Admin" ? [
+    "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19", "A20", "A21", "A22", "A23", "A24", "A25", "A26", "A27", "A28", "A29", "A30", "A31", "A32", "A33", "A34", "A35", "A36", "A37", "A38", "A39", "A40", "A41", "A42", "A43", "A44", "A45", "A46", "A47", "A48", "A49", "A50", "A51", "A52", "A53", "A54", "A55", "A56", "A57", "A58", "A59", "A60", "A61", "A62", "A63",
+    "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9"
+  ] : [user.location];
+  const vn_translate = {
+    "Manager": "Trưởng điểm",
+    "Transactor": "Giao dịch viên",
+    "Processor": "Nhân viên",
+  }
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState('');
@@ -124,6 +137,10 @@ const AddStaffForm = () => {
           setDialogMessage('Email không hợp lệ');
         } else if (msg === 'Invalid phone number') {
           setDialogMessage('Số điện thoại không hợp lệ');
+        } else if (msg === 'This location already had a Manager') {
+          setDialogMessage('Địa điểm này đã có trưởng điểm');
+        } else if (msg === 'Account with the same email existed') {
+          setDialogMessage('Email đã được sử dụng');
         } else {
           setDialogMessage('Đã xảy ra lỗi khi thêm nhân viên.');
         }
@@ -187,18 +204,17 @@ const AddStaffForm = () => {
               value={formData.role}
               onChange={handleInputChange}
               sx={{ minWidth: 150 }}
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    maxHeight: 200,
-                  },
+              SelectProps={{
+                MenuProps: {
+                  style: { maxHeight: 250 },
                 },
               }}
             >
-              {/* Add your role options here */}
-              <MenuItem value="Manager">Quản lý</MenuItem>
-              <MenuItem value="Transactor">Giao dịch viên</MenuItem>
-              <MenuItem value="Processor">Nhân viên</MenuItem>
+              {roles.map((role) => (
+                <MenuItem key={role} value={role}>
+                  {vn_translate[role]}
+                </MenuItem>
+              ))} 
             </TextField>
             <TextField
               select
@@ -208,16 +224,17 @@ const AddStaffForm = () => {
               value={formData.location}
               onChange={handleInputChange}
               sx={{ minWidth: 180 }}
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    maxHeight: 200,
-                  },
+              SelectProps={{
+              MenuProps: {
+                  style: { maxHeight: 250 },
                 },
               }}
             >
-              {/* Add your location options here */}
-              <MenuItem value="A1">A1</MenuItem>
+              {locations.map((location) => (
+                <MenuItem key={location} value={location}>
+                  {location}
+                </MenuItem>
+              ))} 
             </TextField>
             <TextField
               label="Mật khẩu"

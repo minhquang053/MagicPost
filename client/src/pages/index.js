@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
+import { TextField,MenuItem, Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { OverviewSucceedOrders } from 'src/sections/overview/overview-succeed-orders';
 import { OverviewLatestOrders } from 'src/sections/overview/overview-latest-orders';
@@ -8,10 +8,11 @@ import { OverviewOrders } from 'src/sections/overview/overview-orders';
 import { OverviewFailedOrders } from 'src/sections/overview/overview-failed-orders';
 import { OverviewOngoingOrders } from 'src/sections/overview/overview-ongoing-orders';
 import { OverviewType } from 'src/sections/overview/overview-type';
+import { useAuth } from 'src/hooks/use-auth';
 
 const fetchOrderStats = async (location) => {
   const response = await fetch(
-    `http://localhost:3030/v1/stats`,
+    `http://localhost:3030/v1/stats?loc=${location}`,
     {
       method: 'GET',
       headers: {
@@ -36,14 +37,32 @@ const Page = () => {
     },
     latestOrders: [],
   })
+
+  const [selectedLocation, setSelectedLocation] = useState('');
+
+  const locations = [
+    "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19", "A20", "A21", "A22", "A23", "A24", "A25", "A26", "A27", "A28", "A29", "A30", "A31", "A32", "A33", "A34", "A35", "A36", "A37", "A38", "A39", "A40", "A41", "A42", "A43", "A44", "A45", "A46", "A47", "A48", "A49", "A50", "A51", "A52", "A53", "A54", "A55", "A56", "A57", "A58", "A59", "A60", "A61", "A62", "A63",
+    "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9"
+  ]
+
+  const { user } = useAuth();
+
+  const fetchData = async () => {
+    const data = await fetchOrderStats(selectedLocation);
+    setOrderStats(data);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchOrderStats('');
-      setOrderStats(data);
-    };
-  
-    fetchData();
+    if (user.role === "Manager") {
+      setSelectedLocation(user.location);
+    } else {
+      fetchData();
+    }
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [selectedLocation])
 
   return (
     <>
@@ -56,14 +75,40 @@ const Page = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8
+          py: 2
         }}
-      >
+      > 
         <Container maxWidth="xl">
           <Grid
             container
             spacing={3}
           >
+            <Grid
+              xs={12}
+              sm={12}
+              lg={12}
+            >
+              <TextField
+                select={user?.role !== "Manager"}
+                label="Địa điểm"
+                value={selectedLocation}
+                onChange={(e) => setSelectedLocation(e.target.value)}
+                sx={{ minWidth: 120, maxWidth: 120, float: "right" }}
+                SelectProps={{
+                  MenuProps: {
+                    style: { maxHeight: 250 },
+                  },
+                }}
+                InputProps={{ readOnly: user?.role === "Manager" }}
+              >
+                <MenuItem key="" value="">- Tất cả -</MenuItem>
+                {locations.map((location) => (
+                  <MenuItem key={location} value={location}>
+                    {location}
+                  </MenuItem>
+                ))} 
+              </TextField>
+            </Grid>
             <Grid
               xs={12}
               sm={6}

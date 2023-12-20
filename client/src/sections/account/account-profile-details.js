@@ -24,6 +24,7 @@ export const AccountProfileDetails = () => {
   const [phone, setPhone] = useState(user?.phone);
 
   const vn_translate = {
+    'Admin': 'Lãnh đạo',
     'Manager': 'Trưởng điểm',
     'Transactor': 'Giao dịch viên',
     'Processor': 'Nhân viên xử lý',

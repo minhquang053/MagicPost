@@ -79,9 +79,9 @@ export const StaffsSearch = ({ onSearch }) => {
               },
             }}
           >
-            <MenuItem value="">- Tất cả -</MenuItem>
+            <MenuItem key="" value="">- Tất cả -</MenuItem>
             {locations.map((location) => (
-              <MenuItem value={location}>
+              <MenuItem key={location} value={location}>
                 {location}
               </MenuItem>
             ))} 

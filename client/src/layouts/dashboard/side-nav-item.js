@@ -2,9 +2,10 @@ import { useState } from 'react';
 import NextLink from 'next/link';
 import PropTypes from 'prop-types';
 import { Box, ButtonBase, Collapse, List, ListItem } from '@mui/material';
+import { useAuth } from 'src/hooks/use-auth';
 
 export const SideNavItem = (props) => {
-  const { active = false, disabled, external, icon, path, title, subItems } = props;
+  const { active = false, disabled, external, icon, path, title, subItems, allowedRoles } = props;
 
   const [open, setOpen] = useState(false);
 
@@ -24,6 +25,16 @@ export const SideNavItem = (props) => {
         href: path,
       }
     : {};
+  
+  const { user } = useAuth();
+
+  const filteredSubItems = subItems?.filter(subItem => {
+    if (!subItem.allowedRoles || subItem.allowedRoles.length === 0) {
+      // Sub-item accessible to all roles
+      return true;
+    }
+    return subItem.allowedRoles.includes(user?.role);
+  });
 
   return (
     <li>
@@ -92,7 +103,7 @@ export const SideNavItem = (props) => {
         {subItems && (
           <Collapse in={open}>
             <List component="div" disablePadding>
-              {subItems.map((subItem, index) => (
+              {filteredSubItems.map((subItem, index) => (
                 <ListItem key={index}>
                   <SideNavItem {...subItem} />
                 </ListItem>
@@ -113,4 +124,5 @@ SideNavItem.propTypes = {
   path: PropTypes.string,
   title: PropTypes.string.isRequired,
   subItems: PropTypes.arrayOf(PropTypes.object),
+  allowedRoles: PropTypes.arrayOf(PropTypes.string),
 };

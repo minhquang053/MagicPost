@@ -1,27 +1,32 @@
 import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import PropTypes from 'prop-types';
-import ArrowTopRightOnSquareIcon from '@heroicons/react/24/solid/ArrowTopRightOnSquareIcon';
-import ChevronUpDownIcon from '@heroicons/react/24/solid/ChevronUpDownIcon';
 import {
   Box,
-  Button,
   Divider,
   Drawer,
   Stack,
-  SvgIcon,
-  Typography,
   useMediaQuery
 } from '@mui/material';
 import { Logo } from 'src/components/logo';
 import { Scrollbar } from 'src/components/scrollbar';
 import { items } from './config';
 import { SideNavItem } from './side-nav-item';
+import { useAuth } from 'src/hooks/use-auth';
 
 export const SideNav = (props) => {
-  const { open, onClose } = props;
+  const { open, onClose } = props; 
   const pathname = usePathname();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+
+  const { user } = useAuth();
+
+  const filteredItems = items.filter(item => {
+    if (!item.allowedRoles || item.allowedRoles.length === 0) {
+      return true;
+    }
+    return item.allowedRoles.includes(user?.role);
+  });
 
   const content = (
     <Scrollbar
@@ -73,7 +78,7 @@ export const SideNav = (props) => {
               m: 0
             }}
           >
-            {items.map((item) => {
+            {filteredItems.map((item) => {
               const active = item.path ? (pathname === item.path) : false;
 
               return (
@@ -86,6 +91,7 @@ export const SideNav = (props) => {
                   path={item.path}
                   title={item.title}
                   subItems={item.subItems}
+                  allowedRoles={item.allowedRoles}
                 />
               );
             })}
