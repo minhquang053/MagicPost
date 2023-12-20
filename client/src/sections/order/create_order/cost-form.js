@@ -6,6 +6,7 @@ const CostForm = ({ setFormData , formData, reset }) => {
   const [mainCost, setMainCost] = useState('');
   const [additionalCost, setAdditionalCost] = useState('');
   const [gtgtCost, setGtgtCost] = useState('');
+  const [vatCost, setVatCost] = useState('');
   const [totalCost, setTotalCost] = useState('');
 
   // Calculate total cost whenever mainCost, additionalCost, or gtgtCost changes
@@ -15,7 +16,9 @@ const CostForm = ({ setFormData , formData, reset }) => {
     const gtgt = parseFloat(gtgtCost) || 0;
 
     // Calculate total cost including VAT
-    const total = main + additional + gtgt;
+    const total_no_vat = main + additional + gtgt
+    const vat = total_no_vat / 100 * 10;
+    const total = total_no_vat + gtgt;
 
     setTotalCost(total.toFixed(2));
     setFormData({
@@ -24,6 +27,7 @@ const CostForm = ({ setFormData , formData, reset }) => {
         main: main,
         additional: additional,
         gtgt: gtgt,
+        vat: vat, 
       }
     });
   }, [mainCost, additionalCost, gtgtCost]);
