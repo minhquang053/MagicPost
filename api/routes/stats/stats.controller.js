@@ -6,19 +6,19 @@ const {
 } = require('../../models/orders.model');
 
 async function httpGetOrderStats(req, res) {
-    const query = req.query
+    const location = req.query.loc;
 
-    const orderSucceed = await getOrderCountWithStatus(['done']);
-    const orderFailed = await getOrderCountWithStatus(['failed']);
-    const orderOngoing = await getOrderCountWithStatus(['processing', 'transferring']);
+    const orderSucceed = await getOrderCountWithStatus(['done'], location);
+    const orderFailed = await getOrderCountWithStatus(['failed'], location);
+    const orderOngoing = await getOrderCountWithStatus(['processing', 'transferring'], location);
 
-    const orderDocument = await getOrderCountWithType('document');
-    const orderGoods = await getOrderCountWithType('goods');
+    const orderDocument = await getOrderCountWithType('document', location);
+    const orderGoods = await getOrderCountWithType('goods', location);
     const orderDocumentPercentage = orderDocument / (orderDocument + orderGoods) * 100;
     
-    const latestOrders = await getLatestOrders();
+    const latestOrders = await getLatestOrders(location);
 
-    const monthCount = await getOrderCountByMonths();
+    const monthCount = await getOrderCountByMonths(location);
     const numOrder = new Array().fill(0);
     monthCount.forEach(item => {
         const monthIndex = item._id - 1; 

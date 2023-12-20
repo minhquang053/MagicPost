@@ -24,30 +24,39 @@ async function getOrderById(orderId) {
         .findOne({ orderId: orderId })
 }
 
-async function getOrderCountWithStatus(statuses) {
+async function getOrderCountWithStatus(statuses, location) {
+    const locRegex = new RegExp(location, 'i');
     return await Order
-        .countDocuments({ orderStatus: { $in: statuses } })
+        .countDocuments({ startLocation: locRegex, orderStatus: { $in: statuses } })
 }
 
-async function getOrderCountWithType(type) {
+async function getOrderCountWithType(type, location) {
+    const locRegex = new RegExp(location, 'i');
     return await Order
-        .countDocuments({ goodsType: type })
+        .countDocuments({ startLocation: locRegex, goodsType: type })
 }
 
-async function getLatestOrders() {
+async function getLatestOrders(location) {
+    const locRegex = new RegExp(location, 'i');
     return await Order
-        .find({}).sort({ createdDate: -1 }).limit(6);
+        .find({ startLocation: locRegex }).sort({ createdDate: -1 }).limit(6);
 }
 
-async function getOrderCountByMonths() {
+async function getOrderCountByMonths(location) {
+    const locRegex = new RegExp(location, 'i');
     return await Order.aggregate([
-    {
-        $group: {
-        _id: { $month: { $toDate: '$createdDate' } },
-        count: { $sum: 1 }
+        {
+            $match: {
+                startLocation: locRegex,
+            }
+        },
+        {
+            $group: {
+            _id: { $month: { $toDate: '$createdDate' } },
+            count: { $sum: 1 }
+            }
         }
-    }
-    ]);
+        ]);
 }
 
 async function changeOrderStatusById(orderId, newStatus) {

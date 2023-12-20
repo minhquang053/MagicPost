@@ -80,8 +80,16 @@ async function saveUser(user) {
 async function createNewUser(user) {
     const existedUser = await User.findOne({ 'email': `${user.email}` });
     if (existedUser) {
-        throw new Error(`The email ${existedUser.email} has already been used for other account`);
+        throw new Error(`Account with the same email existed`);
     }
+
+    if (user.role === "Manager") {
+        const manager = await User.findOne({ role: "Manager" });
+        if (manager) {
+            throw new Error('This location already had a Manager');
+        }
+    }
+
     const newUserId = await getLatestUserId() + 1; 
     const newUser = Object.assign(user, {
          userId: newUserId,
