@@ -68,8 +68,7 @@ async function httpChangeOrderStatusById(req, res) {
 
 
     const requestingUser = await getUserById(req.uid);
-    if (requestingUser.role !== 'Processor' &&
-        requestingUser.role !== 'Manager') {
+    if (requestingUser.role !== 'Transactor') {
         return res.status(401).json({
             error: "Permission required"
         });
@@ -88,9 +87,10 @@ async function httpChangeOrderStatusById(req, res) {
 
 async function httpAddNewOrder(req, res) {
     const order = req.body;
+    console.log(order);
  
     const requestingUser = await getUserById(req.uid);
-    if (requestingUser.role !== "Processor" && requestingUser.role !== "Manager") {
+    if (requestingUser.role !== "Transactor") {
         return res.status(401).json({
             error: "Require proper processor access"
         });

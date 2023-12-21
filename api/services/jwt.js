@@ -6,7 +6,7 @@ function createAccessToken(userId) {
     const accessToken = jwt.sign({
         iss: "magic-post-access",
         sub: userId,
-    }, JWT_SECRET, { expiresIn: '1h' });
+    }, JWT_SECRET, { expiresIn: '4h' });
     return accessToken;
 }
 

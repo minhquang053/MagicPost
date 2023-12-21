@@ -34,11 +34,18 @@ const ordersSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    amount: {
+        type: String,
+        required: true,
+    },
     costInfo: {
         type: mongoose.Schema.Types.Mixed,
         required: true, 
     },
     weightInfo: {
+        type: mongoose.Schema.Types.Mixed,
+    },
+    sizeInfo: {
         type: mongoose.Schema.Types.Mixed,
         required: true,
     },

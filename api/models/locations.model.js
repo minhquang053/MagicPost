@@ -1,8 +1,9 @@
 const Location = require('./locations.mongo');
 
 async function getLocationByProvince(province) {
+    const provinceRegex = new RegExp(province, 'i');
     return Location
-        .findOne({ provinceName: province }) 
+        .findOne({ provinceName: provinceRegex }) 
 };
 
 async function getLocationById(locId) {
