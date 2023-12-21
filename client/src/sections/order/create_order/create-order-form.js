@@ -19,6 +19,8 @@ import GoodsTypeForm from './goods-type-form';
 import CostForm from './cost-form';
 import RecipientFeesForm from './recipient-fees-form';  // Updated import
 import WeightForm from './weight-form';
+import AmountForm from './amount-form';
+import SizeForm from './size-form';
 
 const CreateOrderForm = () => {
   const { user } = useAuth();
@@ -28,9 +30,11 @@ const CreateOrderForm = () => {
     startLocation: user.location,
     endLocation: '',
     goodsType: {},
+    amount: '',
     costInfo: {},
     recipientFees: {},  // Updated field for recipient fees
     weightInfo: {},
+    sizeInfo: {},
   });
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -67,11 +71,13 @@ const CreateOrderForm = () => {
           senderInfo: {},
           recipientInfo: {},
           startLocation: user.location,
-          endLocation: 'end',
+          endLocation: '',
           goodsType: {},
           costInfo: {},
+          amount: '',
           recipientFees: {},  // Updated field for recipient fees
           weightInfo: {},
+          sizeInfo: {},
         })
         setDialogTitle('Thành công');
         setDialogMessage('Đơn hàng đã được tạo thành công!');
@@ -98,7 +104,7 @@ const CreateOrderForm = () => {
         Tạo đơn hàng mới
       </Typography>
 
-      <Paper elevation={3} sx={{ padding: 2, marginTop: 4, boxShadow: 3 }}>
+      <Paper elevation={3} sx={{ padding: 3, marginTop: 4, boxShadow: 3 }}>
         <Grid container spacing={3} alignItems="stretch">
           <Grid item xs={12} md={6}>
             <SenderInformationForm setFormData={setFormData} formData={formData} reset={reset} />
@@ -111,9 +117,16 @@ const CreateOrderForm = () => {
             <GoodsTypeForm setFormData={setFormData} goodsType={formData.goodsType} />
           </Grid>
           <Grid item xs={12} md={6}>
+            <AmountForm setFormData={setFormData} formData={formData} reset={reset} />
+          </Grid>
+          <Grid item xs={12} md={6}>
             <WeightForm setFormData={setFormData} formData={formData} reset={reset} />
           </Grid>
           <Grid item xs={12} md={6}>
+            <SizeForm setFormData={setFormData} formData={formData} reset={reset} />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            
             <RecipientFeesForm setFormData={setFormData} formData={formData} reset={reset} />
           </Grid>
           <Grid item xs={12} md={6}>

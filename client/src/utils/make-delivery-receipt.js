@@ -165,9 +165,9 @@ export async function makeDeliveryReceipt(order) {
                                         },
                                         {
                                             text: [
-                                                `d. Tổng cước (gồm VAT): ${costInfo.main + costInfo.additional + costInfo.gtgt + costInfo.vat}\n`,
+                                                `d. Tổng cước (gồm VAT): ${costInfo.main + costInfo.additional + costInfo.gtgt}\n`,
                                                 `e. Thu khác: 0\n`,
-                                                { text: `f. Tổng thu: `, bold: true }, `${costInfo.main + costInfo.additional + costInfo.gtgt + costInfo.vat}`
+                                                { text: `f. Tổng thu: `, bold: true }, `${costInfo.main + costInfo.additional + costInfo.gtgt}`
                                             ],
                                             width: '*',
                                         },
@@ -204,9 +204,13 @@ export async function makeDeliveryReceipt(order) {
                                 text: [
                                     {
                                         text: `8. Bưu cục chấp nhận\n`,
+                                        alignment: 'center',
                                         bold: true
                                     },
-                                    `Chữ ký GDV nhận\n\n\n\n\n\n\n\n`
+                                    {
+                                        text: `Chữ ký GDV nhận\n\n\n\n\n\n\n\n`,
+                                        alignment: 'center',
+                                    }
                                 ],
                                 fontSize: 11
                             }

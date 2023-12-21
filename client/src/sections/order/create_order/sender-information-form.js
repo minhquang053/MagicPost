@@ -15,6 +15,7 @@ const SenderInformationForm = ({ setFormData, formData, reset }) => {
     province: '',
     district: '',
     ward: '',
+    fromDistrictId: '',
   });
 
   const [provinces, setProvinces] = useState([]);
@@ -23,12 +24,19 @@ const SenderInformationForm = ({ setFormData, formData, reset }) => {
 
   const fetchVietnamProvinces = async () => {
     try {
-      const response = await fetch('https://provinces.open-api.vn/api/');
-      const data = await response.json();
+      const response = await fetch('https://online-gateway.ghn.vn/shiip/public-api/master-data/province', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token': 'a13f6628-9fdd-11ee-a59f-a260851ba65c'
+        },
+      });
+      const data = (await response.json()).data;
 
       const provinceList = data.map((province) => ({
-        code: province.code,
-        name: province.name,
+        id: province.ProvinceID,
+        name: province.ProvinceName,
       }));
       setProvinces(provinceList);
     } catch (error) {
@@ -36,21 +44,45 @@ const SenderInformationForm = ({ setFormData, formData, reset }) => {
     }
   };
 
-  const fetchDistrictsByProvince = async (selectedProvinceCode) => {
+  const fetchDistrictsByProvince = async (selectedProvinceId) => {
     try {
-      const response = await fetch(`https://provinces.open-api.vn/api/p/${selectedProvinceCode}?depth=2`);
-      const data = await response.json();
-      setDistricts(data.districts);
+      const response = await fetch(`https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=${selectedProvinceId}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token': 'a13f6628-9fdd-11ee-a59f-a260851ba65c'
+        },
+      });
+      const data = (await response.json()).data;
+
+      const districtList = data.map((district) => ({
+        id: district.DistrictID,
+        name: district.DistrictName,
+      }))
+      setDistricts(districtList);
     } catch (error) {
       console.error('Error fetching districts:', error);
     }
   };
 
-  const fetchWardsByDistrict = async (selectedDistrictCode) => {
+  const fetchWardsByDistrict = async (selectedDistrictId) => {
     try {
-      const response = await fetch(`https://provinces.open-api.vn/api/d/${selectedDistrictCode}?depth=2`);
-      const data = await response.json();
-      setWards(data.wards);
+      const response = await fetch(`https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${selectedDistrictId}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token': 'a13f6628-9fdd-11ee-a59f-a260851ba65c'
+        },
+      });
+      const data = (await response.json()).data;
+
+      const wardList = data.map((ward) => ({
+        code: ward.WardCode,
+        name: ward.WardName,
+      }))
+      setWards(wardList);
     } catch (error) {
       console.error('Error fetching wards:', error);
     }
@@ -69,7 +101,7 @@ const SenderInformationForm = ({ setFormData, formData, reset }) => {
 
   const handleProvinceChange = (event) => {
     const selectedProvince = event.target.value;
-    const selectedProvinceCode = provinces.find((province) => province.name === selectedProvince)?.code;
+    const selectedProvinceId = provinces.find((province) => province.name === selectedProvince)?.id;
 
     setSenderInfo({
       ...senderInfo,
@@ -78,20 +110,21 @@ const SenderInformationForm = ({ setFormData, formData, reset }) => {
       ward: '',
     });
 
-    fetchDistrictsByProvince(selectedProvinceCode);
+    fetchDistrictsByProvince(selectedProvinceId);
   };
 
   const handleDistrictChange = (event) => {
     const selectedDistrict = event.target.value;
-    const selectedDistrictCode = districts.find((district) => district.name === selectedDistrict)?.code;
+    const selectedDistrictId = districts.find((district) => district.name === selectedDistrict)?.id;
 
     setSenderInfo((prevInfo) => ({
       ...prevInfo,
       district: selectedDistrict,
+      fromDistrictId: selectedDistrictId,
       ward: '',
     }));
 
-    fetchWardsByDistrict(selectedDistrictCode);
+    fetchWardsByDistrict(selectedDistrictId);
   };
 
   const handleWardChange = (event) => {
@@ -176,7 +209,7 @@ const SenderInformationForm = ({ setFormData, formData, reset }) => {
             }}
           >
             {provinces.map((province) => (
-              <MenuItem key={province.code} value={province.name}>
+              <MenuItem key={province.id} value={province.name}>
                 {province.name}
               </MenuItem>
             ))}

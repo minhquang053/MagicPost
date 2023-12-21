@@ -69,24 +69,24 @@ const TransferSearch = () => {
       </Stack>
 
       {transfer && (
-        <Paper elevation={3} style={{ padding: '16px', width: '400px', marginTop: '16px' }}>
-          <Typography variant="h6" gutterBottom>
-            Transfer ID: {transfer.transferId}
+        <Paper elevation={3} style={{ padding: '16px', width: '450px', marginTop: '16px' }}>
+          <Typography variant="h6" gutterBottom align='center'>
+           {transfer.transferId}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Status: {transfer.done}
+            Trạng thái: {transfer.done ?  'Đã nhận hàng' : 'Đang vận chuyển'}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            From Location: {transfer.fromLocation}
+            Điểm vận chuyển {transfer.fromLocation}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            To Location: {transfer.toLocation}
+            Điểm nhận hàng: {transfer.toLocation}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Transfer Date: {transfer.transferDate}
+            Thời điểm vận chuyển: {transfer.transferDate}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Confirm Date: {transfer.confirmDate || 'Not available'}
+            Thời điểm nhận hàng: {transfer.confirmDate || ''}
           </Typography>
         </Paper>
       )}

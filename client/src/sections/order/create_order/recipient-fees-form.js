@@ -13,7 +13,7 @@ const RecipientFeesForm = ({ setFormData, formData, reset }) => {
 
     // Calculate total cost including VAT
     const total = cod + additional;
-    setTotalFee(total.toFixed(2));
+    setTotalFee(`${parseInt(total)} VND`);
 
     setFormData({
       ...formData,
@@ -38,7 +38,7 @@ const RecipientFeesForm = ({ setFormData, formData, reset }) => {
       </Typography>
       <TextField
         fullWidth
-        label="COD"
+        label="COD (VND)"
         value={codShippingFee}
         onChange={(e) => {
           setCodShippingFee(e.target.value);

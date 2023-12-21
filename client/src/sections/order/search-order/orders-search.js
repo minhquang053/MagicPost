@@ -5,11 +5,9 @@ import {
   Stack,
   TextField,
   Button,
+  Grid,
   Typography,
   Paper,
-  List,
-  ListItem,
-  ListItemText,
   SvgIcon,
   IconButton
 } from '@mui/material';
@@ -20,6 +18,16 @@ const OrderSearchSection = () => {
   const router = useRouter();
   const [orderId, setOrderId] = useState(router.query.orderId);
   const [order, setOrder] = useState(null);
+
+  const vn_translate = {
+    'processing': 'Đang xử lý',
+    'transferring': 'Đang vận chuyển',
+    'shipping': 'Đang giao hàng',
+    'done': 'Đã hoàn thành',
+    'failed': 'Thất bại',
+    'document': 'Tài liệu',
+    'goods': 'Hàng hóa',
+  }
 
   const fetchOrderById = async (orderId) => {
     const response = await fetch(
@@ -80,98 +88,123 @@ const OrderSearchSection = () => {
       </Stack>
 
       {order && (
-        <Paper elevation={3} style={{ padding: '16px', width: '400px', marginTop: '16px' }}>
-          <Typography variant="h6" gutterBottom>
-            Order ID: {order.orderId}
-            <IconButton onClick={handleIconClick}>
-              <SvgIcon color="action" fontSize="small">
-                <PrinterIcon />
-              </SvgIcon>
-            </IconButton>
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Status: {order.orderStatus}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Start Location: {order.startLocation}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            End Location: {order.endLocation}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Sender Info:
-            <List>
-              {Object.entries(order.senderInfo).map(([key, value]) => (
-                <ListItem key={key}>
-                  <ListItemText
-                    primary={key}
-                    secondary={value}
-                  />
-                </ListItem>
-              ))}
-            </List>
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Recipient Info:
-            <List>
-              {Object.entries(order.recipientInfo).map(([key, value]) => (
-                <ListItem key={key}>
-                  <ListItemText
-                    primary={key}
-                    secondary={value}
-                  />
-                </ListItem>
-              ))}
-            </List>
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Recipient Fees:
-            <List>
-              {Object.entries(order.recipientFees).map(([key, value]) => (
-                <ListItem key={key}>
-                  <ListItemText
-                    primary={key}
-                    secondary={value}
-                  />
-                </ListItem>
-              ))}
-            </List>
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Goods Type: {order.goodsType}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Cost Info:
-            <List>
-              {Object.entries(order.costInfo).map(([key, value]) => (
-                <ListItem key={key}>
-                  <ListItemText
-                    primary={key}
-                    secondary={value}
-                  />
-                </ListItem>
-              ))}
-            </List>
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Weight Info:
-            <List>
-              {Object.entries(order.weightInfo).map(([key, value]) => (
-                <ListItem key={key}>
-                  <ListItemText
-                    primary={key}
-                    secondary={value}
-                  />
-                </ListItem>
-              ))}
-            </List>
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Created Date: {order.createdDate}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Done Date: {order.doneDate || 'Not available'}
-          </Typography>
+        <Paper elevation={3} sx={{ padding: 4, margin: [4, 4, 4 ,4], boxShadow: 3 }}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={12}>
+              <Typography variant="h5" align="center">
+                {order.orderId}
+                <IconButton onClick={handleIconClick}>
+                <SvgIcon color="action" fontSize="large">
+                    <PrinterIcon />
+                  </SvgIcon>
+                </IconButton>
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={12}>
+               <Typography variant="h6" color="textSecondary" gutterBottom>
+                  Chi tiết đơn hàng
+                </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Trạng thái: {vn_translate[order.orderStatus]}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Điểm gửi hàng: {order.startLocation}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Điểm giao hàng: {order.endLocation}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Thời gian tạo đơn: {order.createdDate}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Thời gian hoàn thành: {order.doneDate || ''}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <Typography variant="h6" color="textSecondary" gutterBottom>
+                Thông tin người gửi
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Họ tên: {order.senderInfo.fullName}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Điện thoại: {order.senderInfo.phoneNumber}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Địa chỉ: {order.senderInfo.address} - {order.senderInfo.ward} - {order.senderInfo.district} - {order.senderInfo.province}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <Typography variant="h6" color="textSecondary" gutterBottom>
+                Thông tin người nhận
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Họ tên: {order.recipientInfo.fullName}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Điện thoại: {order.recipientInfo.phoneNumber}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Địa chỉ: {order.recipientInfo.address} - {order.recipientInfo.ward} - {order.recipientInfo.district} - {order.recipientInfo.province}
+
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6" color="textSecondary" gutterBottom>
+                Loại hàng gửi
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {vn_translate[order.goodsType]}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6" color="textSecondary" gutterBottom>
+                Khối lượng (kg)
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Khối lượng thực tế: {order.weightInfo.real}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Khối lượng quy đổi: {order.weightInfo.exchanged}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6" color="textSecondary" gutterBottom>
+                Cước:
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                a. Cước chính: {order.costInfo.main}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                b. Cước phụ: {order.costInfo.additional}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                c. Cước GTGT: {order.costInfo.gtgt}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                d. Tổng cước (gồm VAT): {order.costInfo.main + order.costInfo.additional + order.costInfo.gtgt}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                e. Thu khác: 0
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                f. Tổng thu: {order.costInfo.main + order.costInfo.additional + order.costInfo.gtgt}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6" color="textSecondary" gutterBottom>
+                Thu của người nhận
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                COD: {order.recipientFees.cod}
+              </Typography><Typography variant="body2" color="textSecondary">
+                Thu khác: {order.recipientFees.additional}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Tổng thu: {order.recipientFees.cod + order.recipientFees.additional}
+              </Typography>
+            </Grid>
+          </Grid>
         </Paper>
       )}
 

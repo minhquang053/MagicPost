@@ -1,12 +1,18 @@
 // components/orders/WeightForm.js
 import React, { useState, useEffect } from 'react';
-import { TextField, Typography, Box } from '@mui/material';
+import { TextField, Typography, Box, Grid } from '@mui/material';
 
 const WeightForm = ({ setFormData, formData, reset }) => {
   const [realWeight, setRealWeight] = useState('');
   const [exchangedWeight, setExchangedWeight] = useState('');
 
   useEffect(() => {
+    const width = parseFloat(formData.sizeInfo?.width) || 0;
+    const height = parseFloat(formData.sizeInfo?.height) || 0;
+    const length = parseFloat(formData.sizeInfo?.length) || 0;
+
+    setExchangedWeight((width * height * length / 6000).toFixed(2));
+
     setFormData({
       ...formData,
       weightInfo: {
@@ -14,7 +20,7 @@ const WeightForm = ({ setFormData, formData, reset }) => {
         exchanged: exchangedWeight,
       }
     });
-  }, [realWeight, exchangedWeight]);
+  }, [realWeight, formData.sizeInfo]);
 
   useEffect(() => {
     if (reset) {
@@ -28,24 +34,31 @@ const WeightForm = ({ setFormData, formData, reset }) => {
       <Typography variant="h6" gutterBottom>
         Khối lượng
       </Typography>
-      <TextField
-        fullWidth
-        label="Cân nặng thực tế (kg)"
-        value={realWeight}
-        onChange={(e) => {
-          setRealWeight(e.target.value)
-        }}
-        sx={{ marginBottom: 2 }}
-      />
-      <TextField
-        fullWidth
-        label="Cân nặng quy đổi"
-        value={exchangedWeight}
-        onChange={(e) => {
-          setExchangedWeight(e.target.value)
-        }}
-        sx={{ marginBottom: 2 }}
-      />
+      <Grid container spacing={2} alignItems="stretch">
+        <Grid item xs={6} md={6}>
+          <TextField
+            fullWidth
+            label="Cân nặng thực tế (kg)"
+            value={realWeight}
+            onChange={(e) => {
+              setRealWeight(e.target.value)
+            }}
+            sx={{ marginBottom: 2 }}
+          />
+        </Grid>
+        <Grid item xs={6} md={6}>
+          <TextField
+            fullWidth
+            label="Cân nặng quy đổi (kg)"
+            value={exchangedWeight}
+            onChange={(e) => {
+              setExchangedWeight(e.target.value)
+            }}
+            sx={{ marginBottom: 2 }}
+            InputProps={{ readOnly: true }}
+          />
+        </Grid>
+      </Grid>
     </Box>
   );
 };

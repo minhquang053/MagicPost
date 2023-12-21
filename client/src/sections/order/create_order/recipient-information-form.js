@@ -1,4 +1,3 @@
-// src/components/orders/RecipientInformationForm.js
 import React, { useState, useEffect } from 'react';
 import {
   TextField,
@@ -8,6 +7,7 @@ import {
 } from '@mui/material';
 
 const RecipientInformationForm = ({ setFormData, formData, reset }) => {
+  
   const [recipientInfo, setRecipientInfo] = useState({
     fullName: '',
     phoneNumber: '',
@@ -15,6 +15,8 @@ const RecipientInformationForm = ({ setFormData, formData, reset }) => {
     province: '',
     district: '',
     ward: '',
+    toDistrictId: '',
+    toWardCode: '',
   });
 
   const [provinces, setProvinces] = useState([]);
@@ -23,12 +25,19 @@ const RecipientInformationForm = ({ setFormData, formData, reset }) => {
 
   const fetchVietnamProvinces = async () => {
     try {
-      const response = await fetch('https://provinces.open-api.vn/api/');
-      const data = await response.json();
+      const response = await fetch('https://online-gateway.ghn.vn/shiip/public-api/master-data/province', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token': 'a13f6628-9fdd-11ee-a59f-a260851ba65c'
+        },
+      });
+      const data = (await response.json()).data;
 
       const provinceList = data.map((province) => ({
-        code: province.code,
-        name: province.name,
+        id: province.ProvinceID,
+        name: province.ProvinceName,
       }));
       setProvinces(provinceList);
     } catch (error) {
@@ -50,21 +59,45 @@ const RecipientInformationForm = ({ setFormData, formData, reset }) => {
     }
   }
 
-  const fetchDistrictsByProvince = async (selectedProvinceCode) => {
+  const fetchDistrictsByProvince = async (selectedProvinceId) => {
     try {
-      const response = await fetch(`https://provinces.open-api.vn/api/p/${selectedProvinceCode}?depth=2`);
-      const data = await response.json();
-      setDistricts(data.districts);
+      const response = await fetch(`https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=${selectedProvinceId}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token': 'a13f6628-9fdd-11ee-a59f-a260851ba65c'
+        },
+      });
+      const data = (await response.json()).data;
+
+      const districtList = data.map((district) => ({
+        id: district.DistrictID,
+        name: district.DistrictName,
+      }))
+      setDistricts(districtList);
     } catch (error) {
       console.error('Error fetching districts:', error);
     }
   };
 
-  const fetchWardsByDistrict = async (selectedDistrictCode) => {
+  const fetchWardsByDistrict = async (selectedDistrictId) => {
     try {
-      const response = await fetch(`https://provinces.open-api.vn/api/d/${selectedDistrictCode}?depth=2`);
-      const data = await response.json();
-      setWards(data.wards);
+      const response = await fetch(`https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${selectedDistrictId}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token': 'a13f6628-9fdd-11ee-a59f-a260851ba65c'
+        },
+      });
+      const data = (await response.json()).data;
+
+      const wardList = data.map((ward) => ({
+        code: ward.WardCode,
+        name: ward.WardName,
+      }))
+      setWards(wardList);
     } catch (error) {
       console.error('Error fetching wards:', error);
     }
@@ -83,7 +116,7 @@ const RecipientInformationForm = ({ setFormData, formData, reset }) => {
 
   const handleProvinceChange = (event) => {
     const selectedProvince = event.target.value;
-    const selectedProvinceCode = provinces.find((province) => province.name === selectedProvince)?.code;
+    const selectedProvinceId = provinces.find((province) => province.name === selectedProvince)?.id;
 
     setRecipientInfo({
       ...recipientInfo,
@@ -94,26 +127,31 @@ const RecipientInformationForm = ({ setFormData, formData, reset }) => {
 
     fetchLocationByProvince(selectedProvince);
 
-    fetchDistrictsByProvince(selectedProvinceCode);
+    fetchDistrictsByProvince(selectedProvinceId);
   };
 
   const handleDistrictChange = (event) => {
     const selectedDistrict = event.target.value;
-    const selectedDistrictCode = districts.find((district) => district.name === selectedDistrict)?.code;
+    const selectedDistrictId = districts.find((district) => district.name === selectedDistrict)?.id;
 
     setRecipientInfo((prevInfo) => ({
       ...prevInfo,
       district: selectedDistrict,
+      toDistrictId: selectedDistrictId,
       ward: '',
     }));
 
-    fetchWardsByDistrict(selectedDistrictCode);
+    fetchWardsByDistrict(selectedDistrictId);
   };
 
   const handleWardChange = (event) => {
+    const selectedWard = event.target.value;
+    const selectedWardCode = wards.find((ward) => ward.name === selectedWard)?.code;
+    
     setRecipientInfo((prevInfo) => ({
       ...prevInfo,
       ward: event.target.value,
+      toWardCode: selectedWardCode, 
     }));
   };
 
@@ -164,7 +202,7 @@ const RecipientInformationForm = ({ setFormData, formData, reset }) => {
         </Grid>
         <Grid item xs={12}>
           <Typography variant="subtitle2" sx={{ marginTop: 2, marginBottom: 1 }}>
-            Địa chỉ người nhận
+            Địa chỉ người gửi
           </Typography>
         </Grid>
         <Grid item xs={12} md={6}>
@@ -192,7 +230,7 @@ const RecipientInformationForm = ({ setFormData, formData, reset }) => {
             }}
           >
             {provinces.map((province) => (
-              <MenuItem key={province.code} value={province.name}>
+              <MenuItem key={province.id} value={province.name}>
                 {province.name}
               </MenuItem>
             ))}
@@ -214,7 +252,7 @@ const RecipientInformationForm = ({ setFormData, formData, reset }) => {
             }}
           >
             {districts.map((district) => (
-              <MenuItem key={district.code} value={district.name}>
+              <MenuItem key={district.id} value={district.name}>
                 {district.name}
               </MenuItem>
             ))}
