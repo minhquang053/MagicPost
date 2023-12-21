@@ -46,20 +46,28 @@ function validateOrderInfo(order) {
     return false;
 }
 
-/*
-Find cost-effective to transfer an order from the send location 
-to the assemble locations
-*/
-function findTransferPath(order) {
-    // add finding logic if there are middle points between send and receive location
+const hasAnyEmptyField = (obj) => {
+  if (obj && typeof obj === 'object') {
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        const fieldValue = obj[key];
 
-    return [order.sendLocation, order.receiveLocation, "finloc"];
-}
+        if (typeof fieldValue === 'string' && fieldValue === '') {
+          return true; // Return true if any string field is empty
+        } else if (typeof fieldValue === 'object' && hasAnyEmptyField(fieldValue)) {
+          return true; // Return true if any nested field is empty
+        }
+      }
+    }
+  }
+
+  return false; // No empty fields found
+};
 
 module.exports = {
     lowerRolesThan,
     editRolePermissionGranted,
     validateUserInfo,
     validateOrderInfo,
-    findTransferPath
+    hasAnyEmptyField,
 }

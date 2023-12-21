@@ -9,7 +9,7 @@ const { getLatestTransferByOrderId } = require('../../models/transfers.model');
 const {
     getUserById
 } = require('../../models/users.model');
-const { validateOrderInfo } = require('../../services/internal');
+const { validateOrderInfo, isFieldEmpty, isAnyFieldEmpty, hasAnyEmptyField } = require('../../services/internal');
 
 async function httpGetAllOrders(req, res) {
     const query = req.query
@@ -87,7 +87,12 @@ async function httpChangeOrderStatusById(req, res) {
 
 async function httpAddNewOrder(req, res) {
     const order = req.body;
-    console.log(order);
+
+    if (hasAnyEmptyField(order)) {
+        return res.status(400).json({
+            error: "Missing information"
+        })
+    }
  
     const requestingUser = await getUserById(req.uid);
     if (requestingUser.role !== "Transactor") {

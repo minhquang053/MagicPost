@@ -42,7 +42,7 @@ async function httpAddNewTransfer(req, res) {
     }
 
     const requestingUser = await getUserById(req.uid);
-    if (requestingUser.role !== "Processor" && requestingUser.role !== "Manager") {
+    if (requestingUser.role !== "Transactor") {
         return res.status(401).json({
             error: "Require proper processor access"
         });

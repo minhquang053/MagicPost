@@ -84,7 +84,7 @@ async function createNewUser(user) {
     }
 
     if (user.role === "Manager") {
-        const manager = await User.findOne({ role: "Manager" });
+        const manager = await User.findOne({ location: user.location, role: "Manager" });
         if (manager) {
             throw new Error('This location already had a Manager');
         }
