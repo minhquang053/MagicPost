@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { SeverityPill } from 'src/components/severity-pill';
+import { TransfersTable } from '../transfer/all-transfers/all-transfers-table';
 
 const statusMap = {
   'processing': 'warning',
@@ -36,27 +37,27 @@ const vn_translate = {
 }
 
 export const OverviewLatestOrders = (props) => {
-  const { orders = [], sx } = props;
+  const { orders = [], sx, transform } = props;
 
   return (
     <Card sx={sx}>
-      <CardHeader title="Đơn hàng mới nhất" />
+      <CardHeader title={transform?"Hàng mới vận chuyển":"Đơn hàng mới nhất"} />
       <Scrollbar sx={{ flexGrow: 1 }}>
         <Box sx={{ minWidth: 800 }}>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>
-                  Mã đơn hàng
+                  {transform?"Mã vận chuyển":"Mã đơn hàng"}
                 </TableCell>
                 <TableCell>
-                  Điểm giao dịch
+                  {transform?"Điểm vận chuyển":"Điểm giao dịch"}
                 </TableCell>
                 <TableCell sortDirection="desc">
-                  Điểm tập kết
+                  {transform?"Điểm nhận hàng":"Điểm tập kết"}
                 </TableCell>
                 <TableCell>
-                  Loại hàng
+                  {transform?"Mã đơn hàng":"Loại hàng"}
                 </TableCell>
                 <TableCell>
                   Trạng thái
@@ -64,7 +65,33 @@ export const OverviewLatestOrders = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((order) => {
+              {transform? orders.map((transfer) => {
+                return (
+                  <TableRow
+                    hover
+                    key={transfer.transferId}
+                  >
+                    <TableCell>
+                      {transfer.transferId}
+                    </TableCell>
+                    <TableCell>
+                      {transfer.fromLocation}
+                    </TableCell>
+                    <TableCell>
+                      {transfer.toLocation}
+                    </TableCell>
+                    <TableCell>
+                      {vn_translate[transfer.orderId]}
+                    </TableCell>
+                    <TableCell>
+                      <SeverityPill color={statusMap[transfer.done?"done":"transferring"]}>
+                        {vn_translate[transfer.done?"done":"transferring"]}
+                      </SeverityPill>
+                    </TableCell>
+                  </TableRow>
+                )
+                
+              }): orders.map((order) => {
                 return (
                   <TableRow
                     hover
@@ -96,7 +123,7 @@ export const OverviewLatestOrders = (props) => {
       </Scrollbar>
       <Divider />
       <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <Link href="/orders/all_orders">
+        <Link href={transform?"/transfers/all_transfers":"/orders/all_orders"}>
           <Button
             color="inherit"
             endIcon={(
@@ -117,5 +144,6 @@ export const OverviewLatestOrders = (props) => {
 
 OverviewLatestOrders.prototype = {
   orders: PropTypes.array,
-  sx: PropTypes.object
+  sx: PropTypes.object,
+  transform: PropTypes.bool,
 };

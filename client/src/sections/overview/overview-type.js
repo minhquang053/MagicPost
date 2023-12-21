@@ -86,7 +86,7 @@ export const OverviewType = (props) => {
 
   return (
     <Card sx={sx}>
-      <CardHeader title="Loại hàng hóa" />
+      <CardHeader title="Loại hàng gửi" />
       <CardContent>
         <Chart
           height={300}
@@ -125,7 +125,7 @@ export const OverviewType = (props) => {
                   color="text.secondary"
                   variant="subtitle2"
                 >
-                  {item}%
+                  {item.toFixed(2)}%
                 </Typography>
               </Box>
             );

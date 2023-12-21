@@ -82,9 +82,13 @@ const CreateOrderForm = () => {
         setDialogTitle('Thành công');
         setDialogMessage('Đơn hàng đã được tạo thành công!');
       } else {
-        const msg = (await response.jsomsg).error;
+        const msg = (await response.json()).error;
         setDialogTitle('Thất bại');
-        setDialogMessage(msg);
+        if (msg === 'Missing information') {
+          setDialogMessage('Chưa điền đủ thông tin')
+        } else {
+          setDialogMessage(msg);
+        }
       }
     } catch (error) {
       console.error('Error creating order:', error);

@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import ArrowDownIcon from '@heroicons/react/24/solid/ArrowDownIcon';
 import ArrowUpIcon from '@heroicons/react/24/solid/ArrowUpIcon';
-import XCircleIcon from '@heroicons/react/24/solid/XCircleIcon';
+import CheckCircleIcon from '@heroicons/react/24/solid/CheckCircleIcon';
 import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from '@mui/material';
 
-export const OverviewFailedOrders = (props) => {
-  const { difference, positive = false, sx, value, transform } = props;
+export const OverviewIncomingOrders = (props) => {
+  const { difference, positive = false, sx, value, transform } = props;  
 
   return (
     <Card sx={sx}>
@@ -21,7 +21,7 @@ export const OverviewFailedOrders = (props) => {
               color="text.secondary"
               variant="overline"
             >
-          {transform?`Đang chuyển`:`Đơn hàng thất bại`}
+              {transform?`Hàng chuyển đến`:`Hàng gửi`}
             </Typography>
             <Typography variant="h4">
               {value}
@@ -29,13 +29,13 @@ export const OverviewFailedOrders = (props) => {
           </Stack>
           <Avatar
             sx={{
-              backgroundColor: 'error.main',
+              backgroundColor: 'success.main',
               height: 56,
               width: 56
             }}
           >
             <SvgIcon>
-            <XCircleIcon />
+              <CheckCircleIcon />
             </SvgIcon>
           </Avatar>
         </Stack>
@@ -68,7 +68,7 @@ export const OverviewFailedOrders = (props) => {
               color="text.secondary"
               variant="caption"
             >
-              So với tháng trước
+            So với tháng trước 
             </Typography>
           </Stack>
         )}
@@ -77,11 +77,10 @@ export const OverviewFailedOrders = (props) => {
   );
 };
 
-OverviewFailedOrders.propTypes = {
+OverviewIncomingOrders.prototypes = {
   difference: PropTypes.number,
   positive: PropTypes.bool,
-  value: PropTypes.string.isRequired,
   sx: PropTypes.object,
+  value: PropTypes.string.isRequired,
   transform: PropTypes.bool,
-};
-
+}

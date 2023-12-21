@@ -8,6 +8,7 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { AllOrdersSearch } from 'src/sections/order/all-orders/all-orders-search';
 import { OrdersTable } from 'src/sections/order/all-orders/all-orders-table';
 import { applyPagination } from 'src/utils/apply-pagination';
+import { useAuth } from 'src/hooks/use-auth';
 
 const fetchOrders = async (start, end, type, status, searchTerm) => {
   const response = await fetch(
@@ -33,6 +34,8 @@ const useOrders = (page, rowsPerPage, data) => {
 };
 
 const Page = () => {
+  const { user } = useAuth();
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [orders, setOrders] = useState([]);
@@ -62,6 +65,7 @@ const Page = () => {
     setOrders(data);
     setPage(0); // Reset page to 0 when performing a new search
   };
+  
 
   return (
     <>
@@ -75,7 +79,7 @@ const Page = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">Đơn hàng</Typography>
               </Stack>
-              <div>
+              {user?.role === 'Transactor' && (<div>
                 <Link href="/orders/create_order">
                   <Button
                     startIcon={<SvgIcon fontSize="small">
@@ -86,7 +90,7 @@ const Page = () => {
                     Tạo đơn hàng
                   </Button>
                 </Link>
-              </div> 
+              </div>)}
             </Stack>
             <AllOrdersSearch onSearch={handleSearch} />
             <OrdersTable

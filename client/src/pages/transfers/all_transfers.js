@@ -8,6 +8,7 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { AllTransfersSearch } from 'src/sections/transfer/all-transfers/all-transfers-search';
 import { TransfersTable } from 'src/sections/transfer/all-transfers/all-transfers-table';
 import { applyPagination } from 'src/utils/apply-pagination';
+import { useAuth } from 'src/hooks/use-auth';
 
 const fetchTransfers = async (from, to, status, searchTerm) => {
   const response = await fetch(
@@ -37,6 +38,8 @@ const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [transfers, setTransfers] = useState([]);
+
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,7 +79,7 @@ const Page = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">Vận chuyển</Typography>
               </Stack>
-              <div>
+              {(user.role === 'Transactor' || user.role === 'Processor') && (<div>
                 <Link href="/transfers/create_transfer">
                   <Button
                     startIcon={<SvgIcon fontSize="small">
@@ -87,7 +90,7 @@ const Page = () => {
                     Tạo vận chuyển
                   </Button>
                 </Link>
-              </div> 
+              </div>)} 
             </Stack>
             <AllTransfersSearch onSearch={handleSearch} />
             <TransfersTable

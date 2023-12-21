@@ -15,7 +15,6 @@ export const items = [
         <ChartBarIcon />
       </SvgIcon>
     ),
-    allowedRoles: ["Admin", "Manager"],
   },
   {
     title: 'Nhân viên',
@@ -104,7 +103,7 @@ export const items = [
         <ChartPieIcon />
       </SvgIcon>
     ),
-    allowedRoles: ["Admin", "Manager"]
+    allowedRoles: ["Admin", "Manager", "Transactor"]
   },
   {
     title: 'Tài khoản',

@@ -3,7 +3,7 @@ import PauseCircleIcon from '@heroicons/react/24/solid/PauseCircleIcon';
 import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from '@mui/material';
 
 export const OverviewOngoingOrders = (props) => {
-  const { value, sx } = props;
+  const { value, sx, transform } = props;
 
   return (
     <Card sx={sx}>
@@ -19,7 +19,7 @@ export const OverviewOngoingOrders = (props) => {
               color="text.secondary"
               variant="overline"
             >
-              Đơn hàng đang xử lý
+              {transform?`Hàng đang xử lý`:`Đơn hàng đang xử lý`}
             </Typography>
             <Typography variant="h4">
               {value}
@@ -44,5 +44,6 @@ export const OverviewOngoingOrders = (props) => {
 
 OverviewOngoingOrders.propTypes = {
   value: PropTypes.string,
-  sx: PropTypes.object
+  sx: PropTypes.object,
+  transform: PropTypes.bool,
 };

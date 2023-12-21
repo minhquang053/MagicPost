@@ -7,6 +7,7 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { StaffsTable } from 'src/sections/staff/staffs-table';
 import { StaffsSearch } from 'src/sections/staff/staffs-search';
 import { applyPagination } from 'src/utils/apply-pagination';
+import { useAuth } from 'src/hooks/use-auth';
 
 const fetchStaffs = async (role, location, searchTerm) => {
   const response = await fetch(
@@ -35,6 +36,8 @@ const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [staffs, setStaffs] = useState([]);
+
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,7 +77,7 @@ const Page = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">Nhân viên</Typography>
               </Stack>
-              <div>
+              {(user.role === 'Admin' || user.role === 'Manager') && (<div>
                 <Link href="/staffs/add_staff">
                   <Button
                     startIcon={<SvgIcon fontSize="small">
@@ -85,7 +88,7 @@ const Page = () => {
                     Thêm nhân viên
                   </Button>
                 </Link>
-              </div> 
+              </div>)}
             </Stack>
             <StaffsSearch onSearch={handleSearch} />
             <StaffsTable

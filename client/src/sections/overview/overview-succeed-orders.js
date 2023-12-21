@@ -5,7 +5,7 @@ import CheckCircleIcon from '@heroicons/react/24/solid/CheckCircleIcon';
 import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from '@mui/material';
 
 export const OverviewSucceedOrders = (props) => {
-  const { difference, positive = false, sx, value } = props;
+  const { difference, positive = false, sx, value, transform } = props;  
 
   return (
     <Card sx={sx}>
@@ -21,7 +21,7 @@ export const OverviewSucceedOrders = (props) => {
               color="text.secondary"
               variant="overline"
             >
-              Đơn hàng thành công
+              {transform?`Chuyển thành công`:`Đơn hàng thành công`}
             </Typography>
             <Typography variant="h4">
               {value}
@@ -81,5 +81,6 @@ OverviewSucceedOrders.prototypes = {
   difference: PropTypes.number,
   positive: PropTypes.bool,
   sx: PropTypes.object,
-  value: PropTypes.string.isRequired
+  value: PropTypes.string.isRequired,
+  transform: PropTypes.bool,
 };

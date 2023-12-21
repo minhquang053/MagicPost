@@ -105,7 +105,7 @@ const useChartOptions = () => {
 };
 
 export const OverviewOrders = (props) => {
-  const { chartSeries, sx } = props;
+  const { chartSeries, sx, transform } = props;
   const chartOptions = useChartOptions();
 
   return (
@@ -124,7 +124,7 @@ export const OverviewOrders = (props) => {
             Cập nhật
           </Button>
         )}
-        title="Thống kê đơn hàng"
+        title={transform?"Thống kê vận chuyển":"Thống kê đơn hàng"}
       />
       <CardContent>
         <Chart
@@ -155,5 +155,6 @@ export const OverviewOrders = (props) => {
 
 OverviewOrders.protoTypes = {
   chartSeries: PropTypes.array.isRequired,
-  sx: PropTypes.object
+  sx: PropTypes.object,
+  transform: PropTypes.bool,
 };

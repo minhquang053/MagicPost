@@ -6,9 +6,11 @@ import { OverviewSucceedOrders } from 'src/sections/overview/overview-succeed-or
 import { OverviewLatestOrders } from 'src/sections/overview/overview-latest-orders';
 import { OverviewOrders } from 'src/sections/overview/overview-orders';
 import { OverviewFailedOrders } from 'src/sections/overview/overview-failed-orders';
-import { OverviewOngoingOrders } from 'src/sections/overview/overview-ongoing-orders';
+import { OverviewIncomingOrders } from 'src/sections/overview/overview-incoming-orders';
+import { OverviewOutgoingOrders } from 'src/sections/overview/overview-outgoing-orders';
 import { OverviewType } from 'src/sections/overview/overview-type';
 import { useAuth } from 'src/hooks/use-auth';
+import { OverviewOngoingOrders } from 'src/sections/overview/overview-ongoing-orders';
 
 const fetchOrderStats = async (location) => {
   const response = await fetch(
@@ -53,7 +55,7 @@ const Page = () => {
   };
 
   useEffect(() => {
-    if (user.role === "Manager") {
+    if (user.role !== "Admin") {
       setSelectedLocation(user.location);
     } else {
       fetchData();
@@ -89,7 +91,7 @@ const Page = () => {
               lg={12}
             >
               <TextField
-                select={user?.role !== "Manager"}
+                select={user?.role === "Admin"}
                 label="Địa điểm"
                 value={selectedLocation}
                 onChange={(e) => setSelectedLocation(e.target.value)}
@@ -99,7 +101,7 @@ const Page = () => {
                     style: { maxHeight: 250 },
                   },
                 }}
-                InputProps={{ readOnly: user?.role === "Manager" }}
+                InputProps={{ readOnly: user?.role !== "Admin" }}
               >
                 <MenuItem key="" value="">- Tất cả -</MenuItem>
                 {locations.map((location) => (
@@ -109,40 +111,77 @@ const Page = () => {
                 ))} 
               </TextField>
             </Grid>
+            { user?.role !== 'Transactor' && (
+              <Grid
+                xs={12}
+                sm={6}
+                lg={3}
+              >
+                <OverviewIncomingOrders
+                  difference={12}
+                  positive
+                  sx={{ height: '100%' }}
+                  value={`${orderStats?.succeed}`}
+                  transform={selectedLocation.includes('E')}
+                />
+              </Grid>
+            )}
+            { user?.role !== 'Transactor' && (
+              <Grid
+                xs={12}
+                sm={6}
+                lg={3}
+              >
+                <OverviewOutgoingOrders
+                  difference={12}
+                  positive
+                  sx={{ height: '100%' }}
+                  value={`${orderStats?.succeed}`}
+                  transform={selectedLocation.includes('E')}
+                />
+              </Grid>
+            )}
             <Grid
               xs={12}
               sm={6}
-              lg={4}
+              lg={user?.role === 'Transactor'? 4:3}
             >
               <OverviewSucceedOrders
                 difference={12}
                 positive
                 sx={{ height: '100%' }}
                 value={`${orderStats?.succeed}`}
+                transform={selectedLocation.includes('E')}
               />
             </Grid>
             <Grid
               xs={12}
               sm={6}
-              lg={4}
+              lg={user?.role === 'Transactor'? 4:3}
             >
               <OverviewFailedOrders
                 difference={16}
                 positive={false}
                 sx={{ height: '100%' }}
                 value={`${orderStats?.failed}`}
+                transform={selectedLocation.includes('E')}
               />
             </Grid>
-            <Grid
-              xs={12}
-              sm={6}
-              lg={4}
-            >
-              <OverviewOngoingOrders
-                sx={{ height: '100%' }}
-                value={`${orderStats?.ongoing}`}
-              />
-            </Grid>
+            { user?.role === 'Transactor' && (
+              <Grid
+                xs={12}
+                sm={6}
+                lg={4}
+              >
+                <OverviewOngoingOrders
+                  difference={12}
+                  positive
+                  sx={{ height: '100%' }}
+                  value={`${orderStats?.ongoing}`}
+                  transform={selectedLocation.includes('E')}
+                />
+              </Grid>
+            )}
             <Grid
               xs={12}
               lg={8}
@@ -159,6 +198,7 @@ const Page = () => {
                   }
                 ]}
                 sx={{ height: '100%' }}
+                transform={selectedLocation.includes('E')}
               />
             </Grid>
             <Grid
@@ -167,7 +207,7 @@ const Page = () => {
               lg={4}
             >
               <OverviewType
-                chartSeries={[orderStats?.type?.document, orderStats?.type?.goods]}
+                chartSeries={[orderStats?.type?.document || 0, orderStats?.type?.goods|| 0]}
                 labels={['Tài liệu', 'Hàng hóa']}
                 sx={{ height: '100%' }}
               />
@@ -180,6 +220,7 @@ const Page = () => {
               <OverviewLatestOrders
                 orders={orderStats?.latestOrders}
                 sx={{ height: '100%' }}
+                transform={selectedLocation.includes('E')}
               />
             </Grid>
           </Grid>
