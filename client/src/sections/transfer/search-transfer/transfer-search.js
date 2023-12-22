@@ -7,6 +7,7 @@ import {
   Button,
   Typography,
   Paper,
+  Grid,
 } from '@mui/material';
 
 const TransferSearch = () => {
@@ -15,6 +16,10 @@ const TransferSearch = () => {
   const [transfer, setTransfer] = useState(null);
 
   const fetchTransferById = async (transferId) => {
+    if (!transferId) {
+      return null;
+    }
+
     const response = await fetch(
       `http://localhost:3030/v1/transfers/${transferId}`,
       {
@@ -26,7 +31,16 @@ const TransferSearch = () => {
       }
     );
     const data = await response.json();
-    return data;
+    
+    if (response.ok) {
+      return data; 
+    } else {
+      setDialogTitle('Thất bại');
+      setDialogMessage("Mã vận chuyển không tồn tại")
+      setDialogOpen(true);
+
+      return null;
+    }
   };
 
   const handleSearch = async () => {
@@ -70,32 +84,30 @@ const TransferSearch = () => {
 
       {transfer && (
         <Paper elevation={3} style={{ padding: '16px', width: '450px', marginTop: '16px' }}>
-          <Typography variant="h6" gutterBottom align='center'>
-           {transfer.transferId}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Trạng thái: {transfer.done ?  'Đã nhận hàng' : 'Đang vận chuyển'}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Điểm vận chuyển {transfer.fromLocation}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Điểm nhận hàng: {transfer.toLocation}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Thời điểm vận chuyển: {transfer.transferDate}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Thời điểm nhận hàng: {transfer.confirmDate || ''}
-          </Typography>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={12}>
+              <Typography variant="h6" align="center" gutterBottom>
+                {transfer.transferId} 
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Trạng thái: {transfer.done ?  'Đã nhận hàng' : 'Đang vận chuyển'}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Điểm vận chuyển {transfer.fromLocation}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Điểm nhận hàng: {transfer.toLocation}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Thời điểm vận chuyển: {transfer.transferDate}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Thời điểm nhận hàng: {transfer.confirmDate || ''}
+              </Typography>
+            </Grid>
+          </Grid>
         </Paper>
-      )}
-
-      {!transfer && transferId && (
-        <Typography variant="body2" color="textSecondary">
-          Loading...
-        </Typography>
-      )}
+      )} 
     </Box>
   );
 };

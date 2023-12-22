@@ -41,6 +41,7 @@ const RecipientFeesForm = ({ setFormData, formData, reset }) => {
         label="COD (VND)"
         value={codShippingFee}
         onChange={(e) => {
+          e.target.value = e.target.value.replace(/[^0-9]/g, '');
           setCodShippingFee(e.target.value);
         }}
         sx={{ marginBottom: 2 }}
@@ -50,6 +51,7 @@ const RecipientFeesForm = ({ setFormData, formData, reset }) => {
         label="Thu khác"
         value={additionalFee}
         onChange={(e) => {
+          e.target.value = e.target.value.replace(/[^0-9]/g, '');
           setAdditionalFee(e.target.value);
         }}
         sx={{ marginBottom: 2 }}

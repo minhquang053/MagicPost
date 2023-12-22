@@ -81,12 +81,12 @@ const iconMap = {
 };
 
 export const OverviewType = (props) => {
-  const { chartSeries, labels, sx } = props;
+  const { chartSeries, labels, sx,transform } = props;
   const chartOptions = useChartOptions(labels);
 
   return (
     <Card sx={sx}>
-      <CardHeader title="Loại hàng gửi" />
+      <CardHeader title={transform?"Vận chuyển liên khu vực":"Loại hàng gửi"} />
       <CardContent>
         <Chart
           height={300}
@@ -139,5 +139,6 @@ export const OverviewType = (props) => {
 OverviewType.propTypes = {
   chartSeries: PropTypes.array.isRequired,
   labels: PropTypes.array.isRequired,
-  sx: PropTypes.object
+  sx: PropTypes.object,
+  transform: PropTypes.bool,
 };

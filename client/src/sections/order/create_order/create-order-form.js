@@ -29,7 +29,7 @@ const CreateOrderForm = () => {
     recipientInfo: {},
     startLocation: user.location,
     endLocation: '',
-    goodsType: {},
+    goodsType: '',
     amount: '',
     costInfo: {},
     recipientFees: {},  // Updated field for recipient fees
@@ -63,6 +63,7 @@ const CreateOrderForm = () => {
         },
         body: JSON.stringify(formData),
       });
+      const data = await response.json();
 
       if (response.ok) {
         // Reset form data after submission
@@ -72,7 +73,7 @@ const CreateOrderForm = () => {
           recipientInfo: {},
           startLocation: user.location,
           endLocation: '',
-          goodsType: {},
+          goodsType: '',
           costInfo: {},
           amount: '',
           recipientFees: {},  // Updated field for recipient fees
@@ -80,12 +81,14 @@ const CreateOrderForm = () => {
           sizeInfo: {},
         })
         setDialogTitle('Thành công');
-        setDialogMessage('Đơn hàng đã được tạo thành công!');
+        setDialogMessage(`Mã đơn hàng: ${data?.orderId}`);
       } else {
-        const msg = (await response.json()).error;
+        const msg = data.error;
         setDialogTitle('Thất bại');
         if (msg === 'Missing information') {
           setDialogMessage('Chưa điền đủ thông tin')
+        } else if (msg === 'Invalid phone number') {
+          setDialogMessage('Số điện thoại không hợp lệ')
         } else {
           setDialogMessage(msg);
         }
@@ -93,13 +96,8 @@ const CreateOrderForm = () => {
     } catch (error) {
       console.error('Error creating order:', error);
       setDialogTitle('Thất bại');
-      setDialogMessage('Đã xảy ra lỗi tạo đơn hàng.');
+      setDialogMessage('Vui lòng kiểm tra lại thông tin đơn hàng');
     }
-
-    // Close the dialog after a delay (you can adjust the delay duration)
-    setTimeout(() => {
-      setDialogOpen(false);
-    }, 10000);
   };
 
   return (

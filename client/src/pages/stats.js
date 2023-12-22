@@ -3,7 +3,6 @@ import Head from 'next/head';
 import { TextField,MenuItem, Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { OverviewSucceedOrders } from 'src/sections/overview/overview-succeed-orders';
-import { OverviewLatestOrders } from 'src/sections/overview/overview-latest-orders';
 import { OverviewOrders } from 'src/sections/overview/overview-orders';
 import { OverviewFailedOrders } from 'src/sections/overview/overview-failed-orders';
 import { OverviewIncomingOrders } from 'src/sections/overview/overview-incoming-orders';
@@ -215,18 +214,7 @@ const Page = () => {
                 sx={{ height: '100%' }}
                 transform={selectedLocation.includes('E')}
               />
-            </Grid>
-            <Grid
-              xs={12}
-              md={12}
-              lg={12}
-            >
-              <OverviewLatestOrders
-                orders={selectedLocation.includes('E')?stats?.latestTransfers:stats?.latestOrders}
-                sx={{ height: '100%' }}
-                transform={selectedLocation.includes('E')}
-              />
-            </Grid>
+            </Grid> 
           </Grid>
         </Container>
       </Box>

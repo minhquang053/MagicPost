@@ -108,6 +108,12 @@ const RecipientInformationForm = ({ setFormData, formData, reset }) => {
   }, []);
 
   const handleInputChange = (event) => {
+    if (event.target.name === 'phoneNumber') {
+      event.target.value = event.target.value.replace(/[^0-9]/g, '');
+    } else if (event.target.name === 'fullName') {
+      event.target.value = event.target.value.replace(/[0-9]/g, '');
+    }
+
     setRecipientInfo((prevInfo) => ({
       ...prevInfo,
       [event.target.name]: event.target.value,
@@ -198,6 +204,9 @@ const RecipientInformationForm = ({ setFormData, formData, reset }) => {
             name="phoneNumber"
             value={recipientInfo.phoneNumber}
             onChange={handleInputChange}
+            inputProps={{
+              maxLength: 10, 
+            }}
           />
         </Grid>
         <Grid item xs={12}>

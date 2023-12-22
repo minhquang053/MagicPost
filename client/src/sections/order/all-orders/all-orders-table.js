@@ -28,6 +28,7 @@ export const OrdersTable = (props) => {
     "document": "Tài liệu",
     "processing": "Đang xử lý",
     "transferring": "Đang vận chuyển",
+    "shipping": "Đang giao hàng",
     "done": "Đã hoàn thành",
     "failed": "Thất bại",
   }

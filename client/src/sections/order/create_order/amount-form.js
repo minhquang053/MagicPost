@@ -8,7 +8,7 @@ const AmountForm = ({ setFormData, formData, reset }) => {
 
   useEffect(() => {
     const a = parseFloat(amount) || 0;
-    if (a > 1000000) {
+    if (a >= 1000000) {
         setAmountFee(`${(a * 0.005).toFixed(2)} VND`);
     } else {
         setAmountFee('');
@@ -34,8 +34,9 @@ const AmountForm = ({ setFormData, formData, reset }) => {
         fullWidth
         label="Giá trị (VND)"
         value={amount}
-        onChange={(e) => {
-            setAmount(e.target.value);
+        onChange={(event) => {
+          event.target.value = event.target.value.replace(/[^0-9]/g, '');
+          setAmount(event.target.value);
         }}
         sx={{ marginBottom: 1 }}
       />

@@ -12,8 +12,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Card,
-  CardContent,
+  Grid,
 } from '@mui/material';
 
 const TransferSearch = () => {
@@ -25,6 +24,9 @@ const TransferSearch = () => {
   const [dialogTitle, setDialogTitle] = useState('');
 
   const fetchTransferById = async (transferId) => {
+    if (!transferId) {
+      return null;
+    }
     const response = await fetch(
       `http://localhost:3030/v1/transfers/${transferId}`,
       {
@@ -36,7 +38,15 @@ const TransferSearch = () => {
       }
     );
     const data = await response.json();
-    return data;
+    if (response.ok) {
+      return data; 
+    } else {
+      setDialogTitle('Thất bại');
+      setDialogMessage("Mã vận chuyển không tồn tại")
+      setDialogOpen(true);
+
+      return null;
+    }
   };
 
   const handleDialogClose = () => {
@@ -124,54 +134,54 @@ const TransferSearch = () => {
             onChange={(e) => setTransferId(e.target.value)}
           />
           <Button variant="contained" color="primary" onClick={handleSearch}>
-            Xác nhận
+            Kiểm tra
           </Button>
         </Stack>
 
         {/* Display search results in cards */}
         {transfer && (
           <Paper elevation={3} style={{ padding: '16px', width: '400px', marginTop: '16px' }}>
-            <Typography variant="h6" gutterBottom>
-              Transfer ID: {transfer.transferId}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Status: {transfer.done ? "Đã giao hàng": "Đang vận chuyển"}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              From Location: {transfer.fromLocation}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              To Location: {transfer.toLocation}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Transfer Date: {transfer.transferDate}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Confirm Date: {transfer.confirmDate || 'Not available'}
-            </Typography>
-            <Stack direction="row" spacing={2} mt={2}>
-              {/* Conditionally render buttons or "Already confirmed" message */}
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={12}>
+                <Typography variant="h6" align="center" gutterBottom>
+                  {transfer.transferId} 
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Trạng thái: {transfer.done ?  'Đã nhận hàng' : 'Đang vận chuyển'}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Điểm vận chuyển {transfer.fromLocation}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Điểm nhận hàng: {transfer.toLocation}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Thời điểm vận chuyển: {transfer.transferDate}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Thời điểm nhận hàng: {transfer.confirmDate || ''}
+                </Typography>
+              </Grid>
+            </Grid>
               {transfer.done ? (
-                <Typography color="textSecondary">
+                <Typography variant="subtitle1" align="center" marginTop={3}>
                   Vận chuyển đã được xác nhận
                 </Typography>
               ): (
-                <>
-                  <Button variant="contained" color="primary" onClick={handleConfirm}>
-                    Xác nhận
-                  </Button>
-                  <Button variant="contained" color="secondary" onClick={handleCancel}>
-                    Hủy bỏ
-                  </Button>
-                </>
+                <Grid container align="center" marginTop={3}>
+                  <Grid xs="6" md="6" lg="6" align="center">
+                    <Button variant="contained" color="secondary" onClick={handleCancel}>
+                      Hủy bỏ
+                    </Button>
+                  </Grid>
+                  <Grid xs="6" md="6" lg="6" align="center">
+                    <Button variant="contained" color="primary" onClick={handleConfirm}>
+                      Xác nhận
+                    </Button>
+                  </Grid>
+                </Grid>
               )}
-            </Stack>
           </Paper>
-        )}
-        {!transfer && transferId && (
-          <Typography variant="body2" color="textSecondary">
-            Loading...
-          </Typography>
         )}
       </Box>
     {/* Dialog to indicate the status */}

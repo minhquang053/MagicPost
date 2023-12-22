@@ -38,7 +38,8 @@ const SizeForm = ({ setFormData, formData, reset }) => {
                 label="Dài (cm)"
                 value={length}
                 onChange={(e) => {
-                setLength(e.target.value)
+                  e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                  setLength(e.target.value)
                 }}
                 sx={{ marginBottom: 2 }}
             />
@@ -49,7 +50,8 @@ const SizeForm = ({ setFormData, formData, reset }) => {
                 label="Rộng (cm)"
                 value={width}
                 onChange={(e) => {
-                setWidth(e.target.value)
+                  e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                  setWidth(e.target.value)
                 }}
                 sx={{ marginBottom: 2 }}
             />
@@ -60,7 +62,8 @@ const SizeForm = ({ setFormData, formData, reset }) => {
                 label="Cao (cm)"
                 value={height}
                 onChange={(e) => {
-                setHeight(e.target.value)
+                  e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                  setHeight(e.target.value)
                 }}
                 sx={{ marginBottom: 2 }}
             />

@@ -11,8 +11,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Card,
-  CardContent,
+  Paper,
+  Grid,
 } from '@mui/material';
 
 const OrderSearchSection = () => {
@@ -23,7 +23,21 @@ const OrderSearchSection = () => {
   const [dialogMessage, setDialogMessage] = useState('');
   const [dialogTitle, setDialogTitle] = useState('');
 
+  const vn_translate = {
+    'processing': 'Đang xử lý',
+    'transferring': 'Đang vận chuyển',
+    'shipping': 'Đang giao hàng',
+    'done': 'Đã hoàn thành',
+    'failed': 'Thất bại',
+    'document': 'Tài liệu',
+    'goods': 'Hàng hóa',
+  }
+
   const fetchOrderById = async (orderId) => {
+    if (!orderId) {
+      return null
+    }
+    
     const response = await fetch(
       `http://localhost:3030/v1/orders/${orderId}`,
       {
@@ -35,7 +49,16 @@ const OrderSearchSection = () => {
       }
     );
     const data = await response.json();
-    return data;
+
+    if (response.ok) {
+      return data;
+    } else {
+      setDialogTitle('Thất bại');
+      setDialogMessage("Đơn hàng không tồn tại")
+      setDialogOpen(true);
+    
+      return null;
+    }
   };
 
   const handleDialogClose = () => {
@@ -71,20 +94,27 @@ const OrderSearchSection = () => {
           })
         }
       );
+      const data = await response.json();
 
       if (response.ok) {
-        const updatedOrder = await response.json();
-        setOrder(updatedOrder);
+        setOrder(data);
         setOrderId('');
         console.log('Order updated successfully');
         setDialogTitle('Thành công');
         setDialogMessage('Xác nhận đơn hàng thành công!');
       } else {
-        // Handle the case where the update fails
-        const msg = (await response.json()).error;
+        const msg = data.error;
         console.error(`Failed to update order: ${msg}`);
         setDialogTitle('Thất bại');
-        setDialogMessage('Đã xảy ra lỗi khi xác nhận.');
+        if (msg === 'Not shipped') {
+          setDialogMessage('Đơn hàng chưa được giao');
+        } else if (msg === 'Permission required') {
+          setDialogMessage('Không có quyền xác nhận');
+        } else if (msg === 'Order not found') {
+          setDialogMessage('Đơn hàng không tồn tại');
+        } else {
+          setDialogMessage('Đã xảy ra lỗi khi xác nhận');
+        }
       }
     } catch (error) {
       console.error('Failed to update order:', error);
@@ -97,10 +127,57 @@ const OrderSearchSection = () => {
     }, 10000);
   };
 
-  const handleCancel = () => {
-    // Clear the selected order and search term
-    setOrder(null);
-    setOrderId('');
+  const handleCancel = async () => {
+    setDialogTitle('');
+    setDialogMessage('Đang xác nhận đơn hàng...');
+    setDialogOpen(true);
+
+    try {
+      const response = await fetch(
+        `http://localhost:3030/v1/orders/${orderId}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('accessToken'),
+          },
+          body: JSON.stringify({
+            'status': 'failed'
+          })
+        }
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        setOrder(data);
+        setOrderId('');
+        console.log('Order updated successfully');
+        setDialogTitle('Thành công');
+        setDialogMessage('Xác nhận đơn hàng thành công!');
+      } else {
+        // Handle the case where the update fails
+        const msg = data.error;
+        console.error(`Failed to update order: ${msg}`);
+        setDialogTitle('Thất bại');
+        if (msg === 'Not shipped') {
+          setDialogMessage('Đơn hàng chưa được giao');
+        } else if (msg === 'Permission required') {
+          setDialogMessage('Không có quyền xác nhận');
+        } else if (msg === 'Order not found') {
+          setDialogMessage('Đơn hàng không tồn tại');
+        } else {
+          setDialogMessage('Đã xảy ra lỗi khi xác nhận');
+        }
+      }
+    } catch (error) {
+      console.error('Failed to update order:', error);
+      setDialogTitle('Thất bại');
+      setDialogMessage('Đã xảy ra lỗi khi xác nhận đơn hàng.');
+    }
+
+    setTimeout(() => {
+      setDialogOpen(false);
+    }, 10000);
   };
 
   return (
@@ -122,49 +199,51 @@ const OrderSearchSection = () => {
             onChange={(e) => setOrderId(e.target.value)}
           />
           <Button variant="contained" color="primary" onClick={handleSearch}>
-            Xác nhận
+            Kiểm tra
           </Button>
         </Stack>
 
-        {/* Display search results in cards */}
         {order && (
-          <Card variant="outlined" style={{ margin: '16px', width: '300px' }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Mã đơn hàng: {order.orderId}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Điểm gửi hàng: {order.startLocation}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Điểm giao hàng: {order.endLocation}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Ngày gửi hàng: {order.createdDate}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Trạng thái đơn hàng: {order.orderStatus}
-              </Typography>
-            </CardContent>
-            <Stack direction="row" spacing={2} mt={2}>
-              {/* Conditionally render buttons or "Already confirmed" message */}
-              {order.orderStatus !== 'done' ? (
-                <>
-                  <Button variant="contained" color="primary" onClick={handleConfirm}>
-                    Xác nhận
-                  </Button>
-                  <Button variant="contained" color="secondary" onClick={handleCancel}>
-                    Hủy bỏ
-                  </Button>
-                </>
-              ) : (
-                <Typography color="textSecondary">
-                  Đơn hàng đã được xác nhận
+          <Paper elevation={3} style={{ padding: '16px', width: '400px', marginTop: '16px' }}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={12}>
+                <Typography variant="h6" align="center" gutterBottom>
+                    {order.orderId} 
                 </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Điểm gửi hàng: {order.startLocation}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Điểm giao hàng: {order.endLocation}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Ngày gửi hàng: {order.createdDate}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Trạng thái đơn hàng: {vn_translate[order.orderStatus]}
+                </Typography> 
+              </Grid>
+            </Grid>
+              { order.orderStatus === 'done' || order.orderStatus === 'failed' ? (
+                <Typography variant="subtitle1" align="center" marginTop={3}>
+                  Đơn hàng đã được giao
+                </Typography>
+              ) : (
+                <Grid container align="center" marginTop={3}>
+                  <Grid xs="6" md="6" lg="6" align="center">
+                    <Button variant="contained" color="error" onClick={handleCancel}>
+                      Giao thất bại
+                    </Button>
+                  </Grid>
+                  <Grid xs="6" md="6" lg="6" align="center">
+                    <Button variant="contained" color="success" onClick={handleConfirm}>
+                      Giao thành công
+                    </Button>
+                  </Grid>
+                </Grid>
               )}
-            </Stack>
-          </Card>
-        )}
+          </Paper>
+        )} 
       </Box>
     {/* Dialog to indicate the status */}
       <Dialog open={dialogOpen} onClose={handleDialogClose}>

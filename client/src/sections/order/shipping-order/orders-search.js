@@ -11,8 +11,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Card,
-  CardContent,
+  Paper,
+  Grid,
 } from '@mui/material';
 
 const OrderSearchSection = () => {
@@ -23,7 +23,21 @@ const OrderSearchSection = () => {
   const [dialogMessage, setDialogMessage] = useState('');
   const [dialogTitle, setDialogTitle] = useState('');
 
+  const vn_translate = {
+    'processing': 'Đang xử lý',
+    'transferring': 'Đang vận chuyển',
+    'shipping': 'Đang giao hàng',
+    'done': 'Đã hoàn thành',
+    'failed': 'Thất bại',
+    'document': 'Tài liệu',
+    'goods': 'Hàng hóa',
+  }
+
   const fetchOrderById = async (orderId) => {
+    if (!orderId) {
+      return null
+    }
+
     const response = await fetch(
       `http://localhost:3030/v1/orders/${orderId}`,
       {
@@ -35,7 +49,16 @@ const OrderSearchSection = () => {
       }
     );
     const data = await response.json();
-    return data;
+    
+    if (response.ok) {
+      return data;
+    } else {
+      setDialogTitle('Thất bại');
+      setDialogMessage("Đơn hàng không tồn tại")
+      setDialogOpen(true);
+
+      return null;
+    }
   };
 
   const handleDialogClose = () => {
@@ -122,48 +145,52 @@ const OrderSearchSection = () => {
             onChange={(e) => setOrderId(e.target.value)}
           />
           <Button variant="contained" color="primary" onClick={handleSearch}>
-            Xác nhận
+            Kiểm tra
           </Button>
         </Stack>
 
-        {/* Display search results in cards */}
         {order && (
-          <Card variant="outlined" style={{ margin: '16px', width: '300px' }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Mã đơn hàng: {order.orderId}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Điểm gửi hàng: {order.startLocation}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Điểm giao hàng: {order.endLocation}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Ngày gửi hàng: {order.createdDate}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Trạng thái đơn hàng: {order.orderStatus}
-              </Typography>
-            </CardContent>
-            <Stack direction="row" spacing={2} mt={2}>
-              {/* Conditionally render buttons or "Already confirmed" message */}
-              {order.orderStatus !== 'done' ? (
-                <>
-                  <Button variant="contained" color="primary" onClick={handleConfirm}>
-                    Xác nhận
-                  </Button>
-                  <Button variant="contained" color="secondary" onClick={handleCancel}>
-                    Hủy bỏ
-                  </Button>
-                </>
-              ) : (
-                <Typography color="textSecondary">
-                  Đơn hàng đã được xác nhận
+          <Paper elevation={3} style={{ padding: '16px', width: '400px', marginTop: '16px' }}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={12}>
+                <Typography variant="h6" align="center" gutterBottom>
+                    {order.orderId} 
                 </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Điểm gửi hàng: {order.startLocation}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Điểm giao hàng: {order.endLocation}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Ngày gửi hàng: {order.createdDate}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Trạng thái đơn hàng: {vn_translate[order.orderStatus]}
+                </Typography> 
+              </Grid>
+            </Grid>
+              {order.orderStatus === 'done' || 
+              order.orderStatus === 'shipping' ||
+              order.orderStatus === 'failed' ? (
+                <Typography variant="subtitle1" align="center" marginTop={3}>
+                  Đơn hàng đã được giao hoặc đưa vào quá trình giao
+                </Typography>
+              ): (
+                <Grid container align="center" marginTop={3}>
+                  <Grid xs="6" md="6" lg="6" align="center">
+                    <Button variant="contained" color="secondary" onClick={handleCancel}>
+                      Hủy bỏ
+                    </Button>
+                  </Grid>
+                  <Grid xs="6" md="6" lg="6" align="center">
+                    <Button variant="contained" color="primary" onClick={handleConfirm}>
+                      Xác nhận
+                    </Button>
+                  </Grid>
+                </Grid>
               )}
-            </Stack>
-          </Card>
+          </Paper>
         )}
       </Box>
     {/* Dialog to indicate the status */}

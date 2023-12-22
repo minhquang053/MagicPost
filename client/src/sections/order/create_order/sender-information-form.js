@@ -93,6 +93,11 @@ const SenderInformationForm = ({ setFormData, formData, reset }) => {
   }, []);
 
   const handleInputChange = (event) => {
+    if (event.target.name === 'phoneNumber') {
+      event.target.value = event.target.value.replace(/[^0-9]/g, '');
+    } else if (event.target.name === 'fullName') {
+      event.target.value = event.target.value.replace(/[0-9]/g, '');
+    }
     setSenderInfo((prevInfo) => ({
       ...prevInfo,
       [event.target.name]: event.target.value,
@@ -168,6 +173,7 @@ const SenderInformationForm = ({ setFormData, formData, reset }) => {
             name="fullName"
             value={senderInfo.fullName}
             onChange={handleInputChange}
+            
           />
         </Grid>
         <Grid item xs={12}>
@@ -177,6 +183,9 @@ const SenderInformationForm = ({ setFormData, formData, reset }) => {
             name="phoneNumber"
             value={senderInfo.phoneNumber}
             onChange={handleInputChange}
+            inputProps={{
+              maxLength: 10, 
+            }}
           />
         </Grid>
         <Grid item xs={12}>

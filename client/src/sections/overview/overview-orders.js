@@ -8,7 +8,8 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  SvgIcon
+  SvgIcon,
+  Link,
 } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 import { Chart } from 'src/components/chart';
@@ -111,19 +112,6 @@ export const OverviewOrders = (props) => {
   return (
     <Card sx={sx}>
       <CardHeader
-        action={(
-          <Button
-            color="inherit"
-            size="small"
-            startIcon={(
-              <SvgIcon fontSize="small">
-                <ArrowPathIcon />
-              </SvgIcon>
-            )}
-          >
-            Cập nhật
-          </Button>
-        )}
         title={transform?"Thống kê vận chuyển":"Thống kê đơn hàng"}
       />
       <CardContent>
@@ -137,17 +125,19 @@ export const OverviewOrders = (props) => {
       </CardContent>
       <Divider />
       <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <Button
-          color="inherit"
-          endIcon={(
-            <SvgIcon fontSize="small">
-              <ArrowRightIcon />
-            </SvgIcon>
-          )}
-          size="small"
-        >
-          Chi tiết
-        </Button>
+        <Link href={"/stats"}>
+          <Button
+            color="inherit"
+            endIcon={(
+              <SvgIcon fontSize="small">
+                <ArrowRightIcon />
+              </SvgIcon>
+            )}
+            size="small"
+          >
+            Chi tiết
+          </Button>
+        </Link>
       </CardActions>
     </Card>
   );

@@ -17,6 +17,11 @@ export const AllTransfersSearch = ({ onSearch }) => {
   const [selectedTo, setSelectedEnd] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
 
+  const locations = [
+    "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19", "A20", "A21", "A22", "A23", "A24", "A25", "A26", "A27", "A28", "A29", "A30", "A31", "A32", "A33", "A34", "A35", "A36", "A37", "A38", "A39", "A40", "A41", "A42", "A43", "A44", "A45", "A46", "A47", "A48", "A49", "A50", "A51", "A52", "A53", "A54", "A55", "A56", "A57", "A58", "A59", "A60", "A61", "A62", "A63",
+    "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9"
+  ]
+
   const handleSearch = () => {
     onSearch({
       searchTerm,
@@ -49,16 +54,18 @@ export const AllTransfersSearch = ({ onSearch }) => {
             value={selectedFrom}
             onChange={(e) => setSelectedStart(e.target.value)}
             sx={{ minWidth: 165 }}
-            MenuProps={{
-              PaperProps: {
-                style: {
-                  maxHeight: 200,
-                },
+            SelectProps={{
+              MenuProps: {
+                style: { maxHeight: 250 },
               },
             }}
           >
-            <MenuItem value="">- Tất cả -</MenuItem>
-            <MenuItem value="test">test</MenuItem>
+            <MenuItem key="" value="">- Tất cả -</MenuItem>
+            {locations.map((location) => (
+              <MenuItem key={location} value={location}>
+                {location}
+              </MenuItem>
+            ))} 
           </TextField>
           <TextField
             select
@@ -66,16 +73,18 @@ export const AllTransfersSearch = ({ onSearch }) => {
             value={selectedTo}
             onChange={(e) => setSelectedEnd(e.target.value)}
             sx={{ minWidth: 160 }}
-            MenuProps={{
-              PaperProps: {
-                style: {
-                  maxHeight: 200,
-                },
+            SelectProps={{
+              MenuProps: {
+                style: { maxHeight: 250 },
               },
             }}
           >
-            <MenuItem value="">- Tất cả -</MenuItem>
-            <MenuItem value="end">end</MenuItem>
+            <MenuItem key="" value="">- Tất cả -</MenuItem>
+            {locations.map((location) => (
+              <MenuItem key={location} value={location}>
+                {location}
+              </MenuItem>
+            ))} 
           </TextField>
           <TextField
             select

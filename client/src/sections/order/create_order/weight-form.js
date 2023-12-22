@@ -41,6 +41,7 @@ const WeightForm = ({ setFormData, formData, reset }) => {
             label="Cân nặng thực tế (kg)"
             value={realWeight}
             onChange={(e) => {
+              e.target.value = e.target.value.replace(/[^0-9]/g, '');
               setRealWeight(e.target.value)
             }}
             sx={{ marginBottom: 2 }}
@@ -52,6 +53,7 @@ const WeightForm = ({ setFormData, formData, reset }) => {
             label="Cân nặng quy đổi (kg)"
             value={exchangedWeight}
             onChange={(e) => {
+              e.target.value = e.target.value.replace(/[^0-9]/g, '');
               setExchangedWeight(e.target.value)
             }}
             sx={{ marginBottom: 2 }}

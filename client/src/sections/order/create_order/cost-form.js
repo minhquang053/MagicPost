@@ -78,7 +78,10 @@ const CostForm = ({ setFormData , formData, reset }) => {
         fullWidth
         label="Cước chính"
         value={mainCost}
-        onChange={(e) => setMainCost(e.target.value)}
+        onChange={(e) => {
+          e.target.value = e.target.value.replace(/[^0-9]/g, '');
+          setMainCost(e.target.value);
+        }}
         sx={{ marginBottom: 2 }}
         InputProps={{ readOnly: true }}
       />
@@ -86,7 +89,10 @@ const CostForm = ({ setFormData , formData, reset }) => {
         fullWidth
         label="Phụ phí"
         value={additionalCost}
-        onChange={(e) => setAdditionalCost(e.target.value)}
+        onChange={(e) => {
+          e.target.value = e.target.value.replace(/[^0-9]/g, '');
+          setAdditionalCost(e.target.value)
+        }}
         sx={{ marginBottom: 2 }}
         InputProps={{ readOnly: true }}
       />
@@ -94,7 +100,10 @@ const CostForm = ({ setFormData , formData, reset }) => {
         fullWidth
         label="Cước GTGT"
         value={gtgtCost}
-        onChange={(e) => setGtgtCost(e.target.value)}
+        onChange={(e) => {
+          e.target.value = e.target.value.replace(/[^0-9]/g, '');
+          setGtgtCost(e.target.value)
+        }}
         sx={{ marginBottom: 2 }}
         InputProps={{ readOnly: true }}
       />

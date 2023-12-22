@@ -49,13 +49,13 @@ export const items = [
         allowedRoles: ["Transactor"],
       },
       {
-        title: "Xác nhận đơn hàng",
-        path: '/orders/confirm_order',
+        title: "Giao đơn hàng",
+        path: '/orders/shipping_order',
         allowedRoles: ["Transactor"],
       },
       {
-        title: "Giao đơn hàng",
-        path: '/orders/shipping_order',
+        title: "Xác nhận đơn hàng",
+        path: '/orders/confirm_order',
         allowedRoles: ["Transactor"],
       },
       {
@@ -98,6 +98,7 @@ export const items = [
   },
   {
     title: "Thống kê",
+    path: '/stats',
     icon: (
       <SvgIcon fontSize="small">
         <ChartPieIcon />
