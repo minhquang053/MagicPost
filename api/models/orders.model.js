@@ -24,10 +24,15 @@ async function getOrderById(orderId) {
         .findOne({ orderId: orderId })
 }
 
-async function getOrderCountWithStatus(statuses, location) {
+async function getOrderCountWithStatus(statuses, location, start) {
     const locRegex = new RegExp(location, 'i');
-    return await Order
-        .countDocuments({ startLocation: locRegex, orderStatus: { $in: statuses } })
+    if (start) {
+        return await Order
+            .countDocuments({ startLocation: locRegex, orderStatus: { $in: statuses } })
+    } else {
+        return await Order
+            .countDocuments({ endLocation: locRegex, orderStatus: { $in: statuses } })
+    }
 }
 
 async function getOrderCountWithType(type, location) {

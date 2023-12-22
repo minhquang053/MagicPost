@@ -10,6 +10,7 @@ const {
     getUserById
 } = require('../../models/users.model');
 const { validateOrderInfo, isFieldEmpty, isAnyFieldEmpty, hasAnyEmptyField } = require('../../services/internal');
+const { isVietnamesePhoneNumberValid } = require('../../services/validator');
 
 async function httpGetAllOrders(req, res) {
     const query = req.query
@@ -28,8 +29,6 @@ async function httpGetOrderById(req, res) {
             error: 'Order not found',
         });
     }
-
-    console.log(order);
 
     return res.status(200).json(order);
 }
@@ -60,7 +59,8 @@ async function httpChangeOrderStatusById(req, res) {
         } 
     }
     
-    if (targetOrder.newStatus === 'done' && targetOrder.orderStatus !== 'shipping') {
+    if ((targetOrder.newStatus === 'done' || targetOrder.newStatus === 'failed') 
+        && targetOrder.orderStatus !== 'shipping') {
         return res.status(400).json({
             error: "Not shipped"
         })
@@ -74,19 +74,25 @@ async function httpChangeOrderStatusById(req, res) {
         });
     }
 
-    const order = await changeOrderStatusById(orderId, newStatus);
+    try {
+        const order = await changeOrderStatusById(orderId, newStatus);
+        if (!order) {
+            return res.status(400).json({
+                error: "Order not found"
+            })
+        }
 
-    if (!order) {
-        return res.status(400).json({
-            error: "Order not found"
+        return res.status(200).json(order);
+    } catch (err) {
+        return res.status(500).json({
+            error: "Couldn't change order status" 
         })
-    }
-
-    return res.status(200).json(order);
+    }    
 }
 
 async function httpAddNewOrder(req, res) {
     const order = req.body;
+    console.log(order);
 
     if (hasAnyEmptyField(order)) {
         return res.status(400).json({
@@ -94,6 +100,12 @@ async function httpAddNewOrder(req, res) {
         })
     }
  
+    if (!isVietnamesePhoneNumberValid(order.senderInfo.phoneNumber) || !isVietnamesePhoneNumberValid(order.recipientInfo.phoneNumber)) {
+        return res.status(400).json({
+            error: "Invalid phone number"
+        })
+    }
+
     const requestingUser = await getUserById(req.uid);
     if (requestingUser.role !== "Transactor") {
         return res.status(401).json({

@@ -37,11 +37,17 @@ async function httpGetLocationByFromLocation(req, res) {
     const fromLoc = req.params.id;
     const orderId = req.query.orderId;
 
+    if (!orderId) {
+        return res.status(400).json({
+            error: "Missing order id",
+        });
+    }
+
     const order = await getOrderById(orderId);
     if (!order) {
         return res.status(404).json({
             error: "Order not found",
-        })
+        });
     }
 
     const latestTransfer = await getLatestTransferByOrderId(order.orderId);

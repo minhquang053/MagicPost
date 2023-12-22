@@ -4,6 +4,7 @@ const {
     getTransferById,
     finishTransferById,
     createNewTransfer,
+    checkMatchedTransfer,
 } = require('../../models/transfers.model');
 
 const {
@@ -42,12 +43,25 @@ async function httpAddNewTransfer(req, res) {
     }
 
     const requestingUser = await getUserById(req.uid);
-    if (requestingUser.role !== "Transactor") {
+    if (requestingUser.role !== "Transactor" && requestingUser.role !== "Processor") {
         return res.status(401).json({
             error: "Require proper processor access"
         });
     }
-    transfer.fromLocation = requestingUser.location;
+
+    if (transfer.fromLocation !== requestingUser.location) {
+        return res.status(400).json({
+            error: "Invalid user location",
+        })
+    }
+
+    const matchedTransfer = await checkMatchedTransfer(transfer.fromLocation, transfer.toLocation, transfer.orderId);
+    console.log(matchedTransfer);
+    if (matchedTransfer) {
+        return res.status(400).json({
+            error: "Transfer matched",
+        })
+    } 
 
     try {
         await createNewTransfer(transfer); 
