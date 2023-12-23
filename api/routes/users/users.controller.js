@@ -4,6 +4,7 @@ const {
     changeUserProfile,
     createNewUser,
     deleteUserById,
+    getUserByEmail,
 } = require('../../models/users.model');
 const bcrypt = require('bcrypt');
 
@@ -71,8 +72,34 @@ async function httpChangeUserProfile(req, res) {
     const userProfile = req.body.user;
     const userId = req.uid;
 
+    const oldProfile = await getUserById(userId);
+    if ((oldProfile.email === 'manager@gmail.com' || oldProfile.email === 'transactor@gmail.com')
+        && !userProfile.avatar) {
+        return res.status(400).json({
+            error: "Can't modify tester account"
+        }); 
+    }
+
+    if (userProfile.email) {
+        if (!isEmailValid(userProfile.email)) {
+            return res.status(400).json({
+                error: "Invalid email"
+            })
+        }
+        const matchedEmail = await getUserByEmail(userProfile.email);
+        if (matchedEmail && userProfile.email !== oldProfile.email) {
+            return res.status(400).json({
+                error: "Email already existed"
+            })
+        }
+        if (!isVietnamesePhoneNumberValid(userProfile.phone)) {
+        return res.status(400).json({
+            error: "Invalid phone number"
+        })
+    }
+    }
+
     if (userProfile.newPassword) {
-        const oldProfile = await getUserById(userId);
         try {
             const valid = await bcrypt.compare(userProfile.oldPassword, oldProfile.password)
             if (!valid) {
