@@ -19,7 +19,7 @@ export const OverviewOngoingOrders = (props) => {
               color="text.secondary"
               variant="overline"
             >
-              {transform?`Hàng đang xử lý`:`Đơn hàng chưa hoàn thành`}
+              {transform?`Đang chuyển`:`Đơn hàng chưa hoàn thành`}
             </Typography>
             <Typography variant="h4">
               {value}

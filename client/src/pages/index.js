@@ -157,24 +157,26 @@ const Page = () => {
                 transform={selectedLocation.includes('E')}
               />
             </Grid>
-            <Grid
-              xs={12}
-              sm={6}
-              lg={user?.role === 'Transactor'? 4:3}
-            >
-              <OverviewFailedOrders
-                difference={16}
-                positive={false}
-                sx={{ height: '100%' }}
-                value={`${selectedLocation.includes('E')?stats?.ongoing || 0:stats?.failed || 0}`}
-                transform={selectedLocation.includes('E')}
-              />
-            </Grid>
-            { user?.role === 'Transactor' && (
+            { !selectedLocation.includes('E') && (
               <Grid
                 xs={12}
                 sm={6}
-                lg={4}
+                lg={user?.role === 'Transactor'? 4:3}
+              >
+                <OverviewFailedOrders
+                  difference={16}
+                  positive={false}
+                  sx={{ height: '100%' }}
+                  value={`${selectedLocation.includes('E')?stats?.ongoing || 0:stats?.failed || 0}`}
+                  transform={selectedLocation.includes('E')}
+                />
+              </Grid>
+            )}
+            { (user?.role === 'Transactor' || selectedLocation.includes('E')) && (
+              <Grid
+                xs={12}
+                sm={6}
+                lg={user?.role === 'Transactor'? 4:3}
               >
                 <OverviewOngoingOrders
                   difference={12}
