@@ -77,7 +77,7 @@ const Page = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">Nhân viên</Typography>
               </Stack>
-              {(user.role === 'Admin' || user.role === 'Manager') && (<div>
+              {(user?.role === 'Admin' || user?.role === 'Manager') && (<div>
                 <Link href="/staffs/add_staff">
                   <Button
                     startIcon={<SvgIcon fontSize="small">

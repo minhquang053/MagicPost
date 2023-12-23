@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
 import Head from 'next/head';
-import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -8,7 +7,6 @@ import {
   Alert,
   Box,
   Button,
-  Link,
   Stack,
   Tab,
   Tabs,
@@ -24,20 +22,20 @@ const Page = () => {
   const [method, setMethod] = useState('email');
   const formik = useFormik({
     initialValues: {
-      email: 'tester@gmail.com',
-      password: 'hellotester',
+      email: '',
+      password: '',
       submit: null
     },
     validationSchema: Yup.object({
       email: Yup
         .string()
-        .email('Must be a valid email')
+        .email('Email không hợp lệ')
         .max(255)
-        .required('Email is required'),
+        .required('Vui lòng nhập email'),
       password: Yup
         .string()
         .max(255)
-        .required('Password is required')
+        .required('Vui lòng nhập mật khẩu')
     }),
     onSubmit: async (values, helpers) => {
       try {
@@ -154,7 +152,11 @@ const Page = () => {
                   sx={{ mt: 3 }}
                 >
                   <div>
-                    You can use <b>tester@gmail.com</b> and password <b>hellotester</b>
+                    Lần lượt là email và mật khẩu để dùng thử web
+                    <br/>
+                    Giao dịch viên: <b>transactor@gmail.com</b> - <b>hellotester</b>
+                    <br/>
+                    Trưởng điểm: <b>manager@gmail.com</b> - <b>hellotester</b>
                   </div>
                 </Alert>
               </form>

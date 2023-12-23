@@ -8,6 +8,7 @@ import {
   Typography,
   Paper,
   Grid,
+  useMediaQuery,
 } from '@mui/material';
 
 const TransferSearch = () => {
@@ -59,6 +60,8 @@ const TransferSearch = () => {
     }
   }, []);
 
+  const isSmallScreen = useMediaQuery('(max-width: 400px)');
+
   return (
     <Box
       component="form"
@@ -71,7 +74,7 @@ const TransferSearch = () => {
         Tra cứu vận chuyển
       </Typography>
 
-      <Stack direction="row" spacing={2}>
+      <Stack direction={isSmallScreen?"column":"row"} spacing={2}>
         <TextField
           label="Mã vận chuyển"
           value={transferId}
@@ -83,7 +86,7 @@ const TransferSearch = () => {
       </Stack>
 
       {transfer && (
-        <Paper elevation={3} style={{ padding: '16px', width: '450px', marginTop: '16px' }}>
+        <Paper elevation={3} sx={{ padding: 4, margin: [4, 4, 4 ,4], boxShadow: 3 }}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={12}>
               <Typography variant="h6" align="center" gutterBottom>

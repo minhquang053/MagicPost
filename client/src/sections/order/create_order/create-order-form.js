@@ -27,7 +27,7 @@ const CreateOrderForm = () => {
   const [formData, setFormData] = useState({
     senderInfo: {},
     recipientInfo: {},
-    startLocation: user.location,
+    startLocation: user?.location,
     endLocation: '',
     goodsType: '',
     amount: '',
@@ -71,7 +71,7 @@ const CreateOrderForm = () => {
         setFormData({
           senderInfo: {},
           recipientInfo: {},
-          startLocation: user.location,
+          startLocation: user?.location,
           endLocation: '',
           goodsType: '',
           costInfo: {},

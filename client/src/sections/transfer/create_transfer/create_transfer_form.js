@@ -20,7 +20,7 @@ const CreateTransferForm = () => {
   const { user } = useAuth();
   const [formData, setFormData] = useState({
     orderId: '',
-    fromLocation: user.location,
+    fromLocation: user?.location,
     toLocation: '',
   });
 
@@ -147,11 +147,12 @@ const CreateTransferForm = () => {
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={6} md={2}>
+            <Grid item xs={12} md={2}>
               <Button
                 variant="contained"
                 color="secondary"
                 onClick={handleUpdate}
+                sx={{float: 'right'}}
               >
                 Cập nhật
               </Button>

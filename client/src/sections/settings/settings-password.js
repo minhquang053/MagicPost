@@ -54,6 +54,8 @@ export const SettingsPassword = () => {
           })
         }
       );
+
+      const data = await response.json();
       if (response.ok) {
         setOldPassword('');
         setNewPassword('');
@@ -61,7 +63,11 @@ export const SettingsPassword = () => {
         setDialogMessage('Đổi mật khẩu thành công');
       } else {
         setDialogTitle('Thất bại');
-        setDialogMessage('Mật khẩu cũ không đúng');
+        if (data.error === `Can't modify tester account`) {
+          setDialogMessage('Không thể chỉnh sửa tài khoản dùng thử')
+        } else {
+          setDialogMessage('Mật khẩu cũ không đúng');
+        } 
         console.error("Failed to update user password");
       }
     } catch(err) {

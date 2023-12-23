@@ -105,10 +105,10 @@ export async function makeDeliveryReceipt(order) {
                                         text: `1. Họ tên địa chỉ người gửi:\n`,
                                         bold: true
                                     },
-                                    `${senderInfo.fullName}
-                                    ${senderInfo.address} - ${senderInfo.ward} - ${senderInfo.district} - ${senderInfo.province}\n\n`,
+                                    `${senderInfo?.fullName}
+                                    ${senderInfo?.address} - ${senderInfo?.ward} - ${senderInfo?.district} - ${senderInfo?.province}\n\n`,
                                     { text: `Điện thoại: `, bold: true } ,
-                                    `${senderInfo.phoneNumber}`
+                                    `${senderInfo?.phoneNumber}`
                                 ],
                                 fontSize: 11,
                             },
@@ -118,10 +118,10 @@ export async function makeDeliveryReceipt(order) {
                                         text: `2. Họ tên địa chỉ người nhận:\n`,
                                         bold: true
                                     },
-                                    `${recipientInfo.fullName}
-                                    ${recipientInfo.address} - ${recipientInfo.ward} - ${recipientInfo.district} - ${recipientInfo.province}\n\n`,
+                                    `${recipientInfo?.fullName}
+                                    ${recipientInfo?.address} - ${recipientInfo?.ward} - ${recipientInfo?.district} - ${recipientInfo?.province}\n\n`,
                                     { text: `Điện thoại: `, bold: "true"},
-                                    `${recipientInfo.phoneNumber}`
+                                    `${recipientInfo?.phoneNumber}`
                                 ],
                                 fontSize: 11
                             },
@@ -142,10 +142,10 @@ export async function makeDeliveryReceipt(order) {
                                 {
                                     columns: [
                                         {
-                                            text: `Khối lượng thực tế: ${weightInfo.real}\n`
+                                            text: `Khối lượng thực tế: ${weightInfo?.real}\n`
                                         },
                                         {
-                                            text: `Khối lượng quy đổi: ${weightInfo.exchanged}\n`
+                                            text: `Khối lượng quy đổi: ${weightInfo?.exchanged}\n`
                                         },
                                     ],
                                     fontSize: 11
@@ -158,16 +158,16 @@ export async function makeDeliveryReceipt(order) {
                                 {
                                     columns: [
                                         {
-                                            text: `a. Cước chính: ${costInfo.main}
-                                                b. Phụ phí: ${costInfo.additional}
-                                                c. Cước GTGT: ${costInfo.gtgt}`,
+                                            text: `a. Cước chính: ${costInfo?.main}
+                                                b. Phụ phí: ${costInfo?.additional}
+                                                c. Cước GTGT: ${costInfo?.gtgt}`,
                                             width: 'auto',
                                         },
                                         {
                                             text: [
-                                                `d. Tổng cước (gồm VAT): ${costInfo.main + costInfo.additional + costInfo.gtgt}\n`,
+                                                `d. Tổng cước (gồm VAT): ${costInfo?.main + costInfo?.additional + costInfo?.gtgt}\n`,
                                                 `e. Thu khác: 0\n`,
-                                                { text: `f. Tổng thu: `, bold: true }, `${costInfo.main + costInfo.additional + costInfo.gtgt}`
+                                                { text: `f. Tổng thu: `, bold: true }, `${costInfo?.main + costInfo?.additional + costInfo?.gtgt}`
                                             ],
                                             width: '*',
                                         },
@@ -182,9 +182,9 @@ export async function makeDeliveryReceipt(order) {
                                         text: `6. Thu của người nhận:\n`,
                                         bold: true
                                     },
-                                    `COD: ${recipientFees.cod}
-                                    Thu khác: ${recipientFees.additional}\n`,
-                                    { text: `Tổng thu: `, bold: true }, `${recipientFees.cod + recipientFees.additional}`
+                                    `COD: ${recipientFees?.cod}
+                                    Thu khác: ${recipientFees?.additional}\n`,
+                                    { text: `Tổng thu: `, bold: true }, `${recipientFees?.cod + recipientFees?.additional}`
                                 ],
                                 fontSize: 11
                             }
@@ -224,7 +224,7 @@ export async function makeDeliveryReceipt(order) {
                                                 text: `9. Ngày giờ gửi:\n`,
                                                 bold: true
                                             },
-                                            `${order.createdDate}`
+                                            `${order?.createdDate}`
                                         ],
                                         fontSize: 11
                                     },

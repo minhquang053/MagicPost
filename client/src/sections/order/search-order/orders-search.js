@@ -9,7 +9,8 @@ import {
   Typography,
   Paper,
   SvgIcon,
-  IconButton
+  IconButton,
+  useMediaQuery
 } from '@mui/material';
 import PrinterIcon from '@heroicons/react/24/solid/PrinterIcon';
 import { makeDeliveryReceipt } from 'src/utils/make-delivery-receipt';
@@ -77,6 +78,8 @@ const OrderSearchSection = () => {
     }
   }, []);
 
+  const isSmallScreen = useMediaQuery('(max-width: 400px)');
+
   return (
     <Box
       component="form"
@@ -89,7 +92,7 @@ const OrderSearchSection = () => {
         Tra cứu đơn hàng
       </Typography>
 
-      <Stack direction="row" spacing={2}>
+      <Stack direction={isSmallScreen?"column":"row"} spacing={2}>
         <TextField
           label="Mã đơn hàng"
           value={orderId}

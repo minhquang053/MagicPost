@@ -6,9 +6,9 @@ import {
   OutlinedInput,
   SvgIcon,
   TextField,
-  Stack,
   MenuItem,
   Button,
+  useMediaQuery,
 } from '@mui/material';
 
 export const AllOrdersSearch = ({ onSearch }) => {
@@ -32,9 +32,17 @@ export const AllOrdersSearch = ({ onSearch }) => {
     });
   };
 
+  const isSmallScreen = useMediaQuery('(max-width:900px)');
+
   return (
     <Card sx={{ p: 2 }}>
-      <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: isSmallScreen ? 'column' : 'row',
+          justifyContent: 'space-between', // Added for alignment on larger screens
+        }}
+      >
         <OutlinedInput
           fullWidth
           placeholder="Nhập mã đơn hàng"
@@ -45,16 +53,26 @@ export const AllOrdersSearch = ({ onSearch }) => {
               </SvgIcon>
             </InputAdornment>
           )}
-          sx={{ maxWidth: 500 }}
+          sx={{
+            width: isSmallScreen ? '100%' : 'calc(50% - 4px)', // Adjusted width for larger screens
+            marginBottom: isSmallScreen ? '8px' : '0px',
+            marginRight: isSmallScreen ? '0px' : '8px',
+          }}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <Stack direction="row" spacing={1} justifyContent="flex-end">
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: isSmallScreen ? 'column' : 'row',
+            gap: '8px',
+          }}
+        >
           <TextField
             select
             label="Điểm gửi hàng"
             value={selectedStart}
             onChange={(e) => setSelectedStart(e.target.value)}
-            sx={{ minWidth: 145 }}
+            sx={{ minWidth: 145, marginBottom: isSmallScreen ? '8px' : '0px', marginTop: isSmallScreen ? '8px' : '0px' }}
             SelectProps={{
               MenuProps: {
                 style: { maxHeight: 250 },
@@ -73,7 +91,7 @@ export const AllOrdersSearch = ({ onSearch }) => {
             label="Điểm giao hàng"
             value={selectedEnd}
             onChange={(e) => setSelectedEnd(e.target.value)}
-            sx={{ minWidth: 155 }}
+            sx={{ minWidth: 155, marginBottom: isSmallScreen ? '8px' : '0px' }}
             SelectProps={{
               MenuProps: {
                 style: { maxHeight: 250 },
@@ -92,7 +110,7 @@ export const AllOrdersSearch = ({ onSearch }) => {
             label="Loại hàng"
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            sx={{ minWidth: 112 }}
+            sx={{ minWidth: 112, marginBottom: isSmallScreen ? '8px' : '0px' }}
             MenuProps={{
               PaperProps: {
                 style: {
@@ -110,7 +128,7 @@ export const AllOrdersSearch = ({ onSearch }) => {
             label="Trạng thái"
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            sx={{ minWidth: 114 }}
+            sx={{ minWidth: 114, marginBottom: isSmallScreen ? '8px' : '0px' }}
             MenuProps={{
               PaperProps: {
                 style: {
@@ -126,13 +144,18 @@ export const AllOrdersSearch = ({ onSearch }) => {
             <MenuItem value="done">Đã hoàn thành</MenuItem>
             <MenuItem value="failed">Thất bại</MenuItem>
           </TextField>
-          <Button variant="contained" onClick={handleSearch}
-            sx={{ minWidth: 120 }}
+          <Button
+            variant="contained"
+            onClick={handleSearch}
+            sx={{
+              minWidth: isSmallScreen ? '100%' : '120px',
+              marginTop: isSmallScreen ? '8px' : '0px',
+            }}
           >
             Tìm kiếm
           </Button>
-        </Stack>
-      </Stack>
+        </div>
+      </div>
     </Card>
   );
-};
+}; 

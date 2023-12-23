@@ -9,6 +9,7 @@ import {
   Stack,
   MenuItem,
   Button,
+  useMediaQuery,
 } from '@mui/material';
 
 export const AllTransfersSearch = ({ onSearch }) => {
@@ -22,6 +23,8 @@ export const AllTransfersSearch = ({ onSearch }) => {
     "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9"
   ]
 
+  const isSmallScreen = useMediaQuery('(max-width:800px)');
+
   const handleSearch = () => {
     onSearch({
       searchTerm,
@@ -33,7 +36,13 @@ export const AllTransfersSearch = ({ onSearch }) => {
 
   return (
     <Card sx={{ p: 2 }}>
-      <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: isSmallScreen ? 'column' : 'row',
+          justifyContent: 'space-between', // Added for alignment on larger screens
+        }}
+      >
         <OutlinedInput
           fullWidth
           placeholder="Nhập mã vận chuyển/đơn hàng"
@@ -44,16 +53,26 @@ export const AllTransfersSearch = ({ onSearch }) => {
               </SvgIcon>
             </InputAdornment>
           )}
-          sx={{ maxWidth: 500 }}
+          sx={{
+            width: isSmallScreen ? '100%' : 'calc(50% - 4px)', // Adjusted width for larger screens
+            marginBottom: isSmallScreen ? '8px' : '0px',
+            marginRight: isSmallScreen ? '0px' : '8px',
+          }}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <Stack direction="row" spacing={1} justifyContent="flex-end">
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: isSmallScreen ? 'column' : 'row',
+            gap: '8px',
+          }}
+        >
           <TextField
             select
             label="Điểm vận chuyển"
             value={selectedFrom}
             onChange={(e) => setSelectedStart(e.target.value)}
-            sx={{ minWidth: 165 }}
+            sx={{ minWidth: 165, marginBottom: isSmallScreen ? '8px' : '0px', marginTop: isSmallScreen ? '8px' : '0px' }}
             SelectProps={{
               MenuProps: {
                 style: { maxHeight: 250 },
@@ -72,7 +91,7 @@ export const AllTransfersSearch = ({ onSearch }) => {
             label="Điểm nhận hàng"
             value={selectedTo}
             onChange={(e) => setSelectedEnd(e.target.value)}
-            sx={{ minWidth: 160 }}
+            sx={{ minWidth: 160, marginBottom: isSmallScreen ? '8px' : '0px' }}
             SelectProps={{
               MenuProps: {
                 style: { maxHeight: 250 },
@@ -91,7 +110,7 @@ export const AllTransfersSearch = ({ onSearch }) => {
             label="Trạng thái"
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            sx={{ minWidth: 114 }}
+            sx={{ minWidth: 114, marginBottom: isSmallScreen ? '8px' : '0px' }}
             MenuProps={{
               PaperProps: {
                 style: {
@@ -104,13 +123,18 @@ export const AllTransfersSearch = ({ onSearch }) => {
             <MenuItem value="transferring">Đang vận chuyển</MenuItem>
             <MenuItem value="done">Đã hoàn thành</MenuItem>
           </TextField>
-          <Button variant="contained" onClick={handleSearch}
-            sx={{ minWidth: 120 }}
+          <Button
+            variant="contained"
+            onClick={handleSearch}
+            sx={{
+              minWidth: isSmallScreen ? '100%' : '120px',
+              marginTop: isSmallScreen ? '8px' : '0px',
+            }}
           >
             Tìm kiếm
           </Button>
-        </Stack>
-      </Stack>
+        </div>
+      </div>
     </Card>
   );
 };

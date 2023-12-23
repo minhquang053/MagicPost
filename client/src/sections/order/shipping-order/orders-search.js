@@ -13,6 +13,7 @@ import {
   DialogTitle,
   Paper,
   Grid,
+  useMediaQuery,
 } from '@mui/material';
 
 const OrderSearchSection = () => {
@@ -126,6 +127,8 @@ const OrderSearchSection = () => {
     setOrderId('');
   };
 
+  const isSmallScreen = useMediaQuery('(max-width: 440px)');
+
   return (
     <Container>
       <Box
@@ -138,7 +141,7 @@ const OrderSearchSection = () => {
           Giao đơn hàng
         </Typography>
 
-        <Stack direction="row" spacing={2}>
+        <Stack direction={isSmallScreen?"column":"row"} spacing={2}>
           <TextField
             label="Mã đơn hàng"
             value={orderId}

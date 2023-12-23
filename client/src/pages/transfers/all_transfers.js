@@ -79,7 +79,7 @@ const Page = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">Vận chuyển</Typography>
               </Stack>
-              {(user.role === 'Transactor' || user.role === 'Processor') && (<div>
+              {(user?.role === 'Transactor' || user?.role === 'Processor') && (<div>
                 <Link href="/transfers/create_transfer">
                   <Button
                     startIcon={<SvgIcon fontSize="small">

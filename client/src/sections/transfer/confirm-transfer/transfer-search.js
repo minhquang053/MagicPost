@@ -13,6 +13,7 @@ import {
   DialogContentText,
   DialogTitle,
   Grid,
+  useMediaQuery,
 } from '@mui/material';
 
 const TransferSearch = () => {
@@ -114,6 +115,8 @@ const TransferSearch = () => {
     setTransfer(null);
     setTransferId('');
   };
+  
+  const isSmallScreen = useMediaQuery('(max-width: 440px)');
 
   return (
     <Container>
@@ -127,7 +130,7 @@ const TransferSearch = () => {
           Xác nhận vận chuyển 
         </Typography>
 
-        <Stack direction="row" spacing={2}>
+        <Stack direction={isSmallScreen ? "column":"row"} spacing={2}>
           <TextField
             label="Mã vận chuyển"
             value={transferId}
@@ -140,7 +143,7 @@ const TransferSearch = () => {
 
         {/* Display search results in cards */}
         {transfer && (
-          <Paper elevation={3} style={{ padding: '16px', width: '400px', marginTop: '16px' }}>
+          <Paper elevation={3} sx={{ padding: 4, margin: [4, 4, 4 ,4], boxShadow: 3 }}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={12}>
                 <Typography variant="h6" align="center" gutterBottom>
