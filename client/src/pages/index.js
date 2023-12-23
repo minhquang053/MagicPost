@@ -61,7 +61,7 @@ const Page = () => {
     if (user?.role !== "Admin") {
       setSelectedLocation(user?.location);
     } else {
-      fetchData();
+      setSelectedLocation('');
     }
   }, []);
 

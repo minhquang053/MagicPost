@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import ArrowDownIcon from '@heroicons/react/24/solid/ArrowDownIcon';
 import ArrowUpIcon from '@heroicons/react/24/solid/ArrowUpIcon';
-import CheckCircleIcon from '@heroicons/react/24/solid/CheckCircleIcon';
+import ArchiveBoxIcon from '@heroicons/react/24/solid/ArchiveBoxIcon';
 import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from '@mui/material';
 
 export const OverviewIncomingOrders = (props) => {
@@ -29,13 +29,13 @@ export const OverviewIncomingOrders = (props) => {
           </Stack>
           <Avatar
             sx={{
-              backgroundColor: 'success.main',
+              backgroundColor: 'primary.main',
               height: 56,
               width: 56
             }}
           >
             <SvgIcon>
-              <CheckCircleIcon />
+              <ArchiveBoxIcon />
             </SvgIcon>
           </Avatar>
         </Stack>

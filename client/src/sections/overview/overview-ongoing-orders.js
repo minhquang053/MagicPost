@@ -27,7 +27,7 @@ export const OverviewOngoingOrders = (props) => {
           </Stack>
           <Avatar
             sx={{
-              backgroundColor: 'primary.main',
+              backgroundColor: 'warning.main',
               height: 56,
               width: 56
             }}
