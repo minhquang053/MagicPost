@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { TextField,MenuItem, Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { OverviewSucceedOrders } from 'src/sections/overview/overview-succeed-orders';
+import { OverviewLatestOrders } from 'src/sections/overview/overview-latest-orders';
 import { OverviewOrders } from 'src/sections/overview/overview-orders';
 import { OverviewFailedOrders } from 'src/sections/overview/overview-failed-orders';
 import { OverviewIncomingOrders } from 'src/sections/overview/overview-incoming-orders';
@@ -60,7 +61,7 @@ const Page = () => {
     if (user?.role !== "Admin") {
       setSelectedLocation(user?.location);
     } else {
-      fetchData();
+      setSelectedLocation('');
     }
   }, []);
 
@@ -156,24 +157,26 @@ const Page = () => {
                 transform={selectedLocation.includes('E')}
               />
             </Grid>
-            <Grid
-              xs={12}
-              sm={6}
-              lg={user?.role === 'Transactor'? 4:3}
-            >
-              <OverviewFailedOrders
-                difference={16}
-                positive={false}
-                sx={{ height: '100%' }}
-                value={`${selectedLocation.includes('E')?stats?.ongoing || 0:stats?.failed || 0}`}
-                transform={selectedLocation.includes('E')}
-              />
-            </Grid>
-            { user?.role === 'Transactor' && (
+            { !selectedLocation.includes('E') && (
               <Grid
                 xs={12}
                 sm={6}
-                lg={4}
+                lg={user?.role === 'Transactor'? 4:3}
+              >
+                <OverviewFailedOrders
+                  difference={16}
+                  positive={false}
+                  sx={{ height: '100%' }}
+                  value={`${selectedLocation.includes('E')?stats?.ongoing || 0:stats?.failed || 0}`}
+                  transform={selectedLocation.includes('E')}
+                />
+              </Grid>
+            )}
+            { (user?.role === 'Transactor' || selectedLocation.includes('E')) && (
+              <Grid
+                xs={12}
+                sm={6}
+                lg={user?.role === 'Transactor'? 4:3}
               >
                 <OverviewOngoingOrders
                   difference={12}
@@ -214,7 +217,7 @@ const Page = () => {
                 sx={{ height: '100%' }}
                 transform={selectedLocation.includes('E')}
               />
-            </Grid> 
+            </Grid>
           </Grid>
         </Container>
       </Box>
