@@ -3,15 +3,17 @@ import axios from 'axios'
 import { TextField, Button, Grid } from '@mui/material'
 
 // rotas
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 
 function Search() {
     const navigate = useNavigate();
+
     const itemList = {
         text: "Info",
         to: "/info"
     };
+
     const [orderId, setorderId] = useState('');
     const [responseData, setResponseData] = useState(null);
     const [error, setError] = useState(null);
@@ -19,6 +21,16 @@ function Search() {
     const handleInputChange = (event) => {
         setorderId(event.target.value);
       };
+
+    const fetchData = async (orderId) => {
+        if (orderId) {
+            const response = await axios.get(`https://magic-post-7ed53u57vq-de.a.run.app/v1/tracking/${orderId}`);
+              
+            // Handle the response as needed
+            setResponseData(response.data);
+            setError(null); // Reset error on successful response
+        }
+    }
 
     const handleSubmit = async (event) => { 
         //navigate(itemList.to);
@@ -28,14 +40,7 @@ function Search() {
                 event.preventDefault();
               }
               
-            if (orderId) {
-                
-                const response = await axios.get(`https://magic-post-7ed53u57vq-de.a.run.app/v1/tracking/${orderId}`);
-              
-            // Handle the response as needed
-            setResponseData(response.data);
-            setError(null); // Reset error on successful response
-            }
+            await fetchData(orderId);
 
           } catch (error) {
             // Handle errors

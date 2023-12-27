@@ -1,6 +1,6 @@
 // ItemInfo.jsx
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import { useLocation} from 'react-router-dom';
 import { Paper} from '@mui/material';
 import {
     Grid,  
@@ -15,6 +15,11 @@ import { useNavigate } from 'react-router-dom';
 const ItemInfo = () => {
 
     const navigate = useNavigate();
+    const location = useLocation();
+    
+    const {state} = location;
+    const [aData, setAData] = useState('');
+    
     const handleSearch = async() => {
         navigate("/");
     };
@@ -27,10 +32,27 @@ const ItemInfo = () => {
         'failed': 'Thất bại',
         'document': 'Tài liệu',
         'goods': 'Hàng hóa',
-      }
+      };
+    
+    const fetchData = async (orderId) => {
+        if (orderId) {
+            const response = await fetch(`https://magic-post-7ed53u57vq-de.a.run.app/v1/tracking/${orderId}`);
+              
+            // Handle the response as needed
+            const data = await response.json();
 
-  const location = useLocation();
-  const {state} = location;
+            if (response.ok) {
+                setAData(data);
+            }
+        }
+    }
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const orderIdFromUrl = searchParams.get('orderId');
+        fetchData(orderIdFromUrl);
+    }, [location.search]);
+
   //const { order, transfers } = location.state;
 
   if (state && state.error) {
@@ -51,8 +73,15 @@ const ItemInfo = () => {
     </Grid>
     );
   } 
-  else if (state && state.order && state.transfers) {
-    const { order, transfers } = location.state;
+  else if ((state && state.order && state.transfers) || aData !== '') {
+    let order, transfers;
+    if (aData !== '') {
+        order = aData.order;
+        transfers = aData.transfers;
+    } else {
+        order = location.state?.order;
+        transfers = location.state?.transfers;
+    }
      return (
       <Box
       component="form"
