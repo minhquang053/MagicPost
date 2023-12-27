@@ -13,6 +13,14 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 
 const Footer = () => {
 
+  const FooterContainer = styled(Box)({
+    position: 'fixed',
+    bottom: 0,
+    width: '100%',
+    backgroundColor: '#ededed',
+    zIndex: 1000, // Adjust the z-index if necessary
+  });
+
   const StackColumn = styled(Stack) (() => ({
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -34,7 +42,7 @@ const Footer = () => {
   }));
 
   return (
-    
+  
     <BoxRow 
     component = 'footer'
     sx={{
@@ -70,14 +78,14 @@ const Footer = () => {
       </StackColumn>
 
       <StackColumn>
-        <FooterTitle text={'hBSales'} />
+        <FooterTitle text={'Contact'} />
         <Stack 
         direction='row' 
         width= '70px'
         maxWidth='100%'
         justifyContent='space-between'
         >
-          <Link href="#" variant="body2" 
+          <Link href="https://www.instagram.com/dothai123/" variant="body2" 
           sx={{
             color: '#414141',
             "&:hover": {
@@ -87,7 +95,8 @@ const Footer = () => {
           >
             <InstagramIcon />  
           </Link> 
-          <Link href="#"variant="body2" 
+
+          <Link href="https://www.facebook.com/profile.php?id=100035207406906"variant="body2" 
           sx={{
             color: '#414141',
             "&:hover": {
@@ -102,10 +111,12 @@ const Footer = () => {
         variant='caption'
         component='p' 
         >
-          &copy; 2022 HBSales Inc.
+          &copy; 2023 MagicPost Inc.
         </Typography>
-      </StackColumn>
+      </StackColumn>  
     </BoxRow>
+
+  
   )
 }
 
