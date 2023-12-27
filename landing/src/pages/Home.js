@@ -4,13 +4,15 @@ import GetStarted from '../components/GetStarted';
 import Header from '../components/Header';
 import Search from '../components/Search';
 
+
 const Home = () => {
   return (
     <>
-    <Header />
-    <Search />
-    <GetStarted />
-    <GetInTouch />
+
+      <Header />
+      <Search />
+      <GetStarted />
+      <GetInTouch />
     </>
 
   )
