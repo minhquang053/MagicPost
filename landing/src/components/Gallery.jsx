@@ -70,25 +70,13 @@ const Gallery = () => {
             >
                 <Title 
                 text={
-                    'Plans and dimension'
+                    'Sứ mệnh'
                 }
                 textAlign={'center'}
                 />
-                <Typography
-                variant='h5'
-                component='h4'
-                align='center'
-                sx={{
-                    paddingTop: 1,
-                }}
-                >
-                    Rooms Gallery
-                </Typography>
+                
                 <Paragraph text={
-                    'We have more 5000 reviews and our\
-                    customers trust on our quality product\
-                    and trust own our product. If you interested,\
-                    contact us.'
+                    'MagicPost là thương hiệu chuyển phát nhanh uy tín và bền vững tại Việt Nam..'
                 } 
                 maxWidth = {'sm'}
                 mx={'auto'}

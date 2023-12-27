@@ -4,7 +4,7 @@ import React from 'react'
 const FooterLink = ({ text }) => {
   return (
     <Link 
-    href="#"
+    href="/"
     variant='p'
     component='a'
     sx={{

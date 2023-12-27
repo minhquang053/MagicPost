@@ -10,10 +10,10 @@ const Header = () => {
         minHeight: '80vh',
         display: 'flex',
         justifyContent: 'center',
-        // tamanhos
+        
         gap: theme.spacing(2),
         paddingTop: theme.spacing(10),
-        // cor de fundo
+        
         backgroundColor: 'white',
         [theme.breakpoints.down('md')]: {
             flexDirection: 'column',
@@ -48,7 +48,7 @@ const Header = () => {
                     color: 'black',
                 }}
                 >
-                    INTERNATIONAL COVERAGE
+                    MAGIC POST
                 </Typography>
 
                 <Typography
@@ -60,33 +60,11 @@ const Header = () => {
                     color: 'black',
                 }}
                 >
-                    MagicPost proudly expands international coverage to 
-                    bring the best experience to customers
+                    MagicPost tự hào là đơn vị vận chuyển có phạm vi phủ sóng khắp cả nước 
+                    nhằm mang lại trải nghiệm tốt nhất cho khách hàng.
                 </Typography>
 
                 <Box>
-                    <Button 
-                    variant='contained'
-                    sx={{
-                        mr: 2,
-                        px: 4, 
-                        py: 1,
-                        fontSize: '0.9rem',
-                        textTransform: 'capitalize',
-                        borderRadius: 0,
-                        borderColor: '#14192d',
-                        color: '#fff',
-                        backgroundColor: '#14192d',
-                        "&&:hover": {
-                            backgroundColor: "#343a55"
-                        },
-                        "&&:focus": {
-                            backgroundColor: "#343a55"
-                        }
-                    }}
-                    >
-                        Shipment track
-                    </Button>
                     <Button 
                     component={Link} 
                     to={'/about'}
@@ -100,6 +78,7 @@ const Header = () => {
                         color: '#fff',
                         backgroundColor: 'black',
                         borderColor: '#fff',
+                        //width: '100%', // Set width to 100%
                         "&&:hover": {
                             color: '#343a55',
                             borderColor: '#343a55',
@@ -110,7 +89,7 @@ const Header = () => {
                         }
                     }}
                     >
-                        Explore
+                        Tìm hiểu thêm
                     </Button>
                 </Box>
             </BoxText>
