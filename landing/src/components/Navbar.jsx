@@ -9,14 +9,17 @@ import {
     styled,
     ListItemButton,
     ListItemText,
+    Button
 } from '@mui/material';
 // menu
 import DrawerItem from './DrawerItem';
-// rotas
+// rote
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+//img
+import logo from "../assets/logo.svg"
 
-
-// personalizacao
+// personalize
 const StyledToolbar = styled(Toolbar) ({
     display: 'flex',
     justifyContent: 'space-between',
@@ -45,9 +48,20 @@ const itemList = [
     }
 ];
 
-
 const Navbar = () => {
-    
+    const navigate = useNavigate();
+    const handleSubmit = async(event) => {
+    //navigate(itemList[0].to);
+    try {
+        if (event) {
+            event.preventDefault();
+        }
+        navigate(itemList[0].to);
+    } catch(error) {
+        console.error('Error back to Home Page:', error);
+    }
+    }
+
     return (
         <AppBar 
         component="nav" 
@@ -58,13 +72,32 @@ const Navbar = () => {
         elevation={0}
         >
             <StyledToolbar>
-                <Typography
+                <ListMenu>
+                  
+                        <img
+                        src={logo}
+                        alt="logo"
+                        style={{ 
+                        width: "10%", 
+                        marginRight: 10,
+                        marginBottom: -20,
+                        }}
+                        />
+                    
+                    
+                    
+                        <Button
+                onClick={handleSubmit}
                 variant="h6"
                 component="h2"
 
                 >
-                    MagicPost
-                </Typography>
+                    Magic Post
+                </Button>
+                    
+                    
+                </ListMenu>
+                
                 <Box sx={{display: { xs: 'block', sm: 'none' } }}>
                     <DrawerItem /> 
                 </Box> 

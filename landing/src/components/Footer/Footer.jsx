@@ -12,7 +12,6 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 
 const Footer = () => {
-
   const FooterContainer = styled(Box)({
     position: 'fixed',
     bottom: 0,
@@ -52,33 +51,24 @@ const Footer = () => {
     >
       <StackColumn>
         <FooterTitle text={'address'} />
-        <FooterLink 
-        text={'15th Louis St, london 92382, eng'} 
-        />
-        <FooterLink 
-        text={'25 999-345-10800'} 
-        />
-        <FooterLink 
-        text={'info@housesales.com'} 
-        />
+        <Typography> 
+          2 Pham Van Dong, Dich Vong Hau, Cau Giay, Ha Noi
+        </Typography>
+        <Typography>
+          25 999-345-10800
+        </Typography> 
+        <Typography>
+           minhcaca322@gmail.com
+        </Typography> 
       </StackColumn>
       
       <StackColumn>
         <FooterTitle text={'our services'} />
-        <FooterLink text={'buy house'} />
-        <FooterLink text={'sell house'} />
-        <FooterLink text={'rent house'} />
-        <FooterLink text={'build house'} />
-      </StackColumn>
-      <StackColumn>
-        <FooterTitle text={'our company'} />
-        <FooterLink text={'reporting'} />
-        <FooterLink text={'get in touch'} />
-        <FooterLink text={'management'} />
+        <FooterLink text={'Shipment tracking'} />
       </StackColumn>
 
       <StackColumn>
-        <FooterTitle text={'Contact'} />
+        <FooterTitle text={'Support'} />
         <Stack 
         direction='row' 
         width= '70px'
