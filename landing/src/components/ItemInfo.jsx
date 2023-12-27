@@ -35,22 +35,25 @@ const ItemInfo = () => {
 
   if (state && state.error) {
     // Render error message if there is an error
-    return <div>Error: {state.error}</div>;
+    return (
+    <Grid item xs={12} md={12}>
+        <Typography variant="h6" color="textSecondary" gutterBottom>
+           Error: {state.error}                
+        </Typography>
+        <Button 
+      variant="contained" 
+      color="primary" 
+      onClick={handleSearch}
+      style={{ marginBottom: '50px' }}
+      >
+          Quay về trang chủ
+      </Button>
+    </Grid>
+    );
   } 
   else if (state && state.order && state.transfers) {
     const { order, transfers } = location.state;
      return (
-        /*<div>
-        <h2>Order ID: {order.orderId}</h2>
-        <h3>Transfers:</h3>
-        <ul>
-          {transfers.map((transfer, index) => (
-            <li key={index}>
-              From Location: {transfer.fromLocation}, To Location: {transfer.toLocation}
-            </li>
-          ))}
-        </ul>
-      </div>*/
       <Box
       component="form"
       display="flex"
@@ -129,7 +132,7 @@ const ItemInfo = () => {
       onClick={handleSearch}
       style={{ marginBottom: '50px' }}
       >
-          Back to home page
+          Quay về trang chủ
       </Button>
     </Box>
   );

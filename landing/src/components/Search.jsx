@@ -55,10 +55,10 @@ function Search() {
           console.log('Transfers:', transfers);
     
           // Navigate to the new path with order and transfers as props
-          navigate(itemList.to, { state: { order, transfers } });
+          navigate(`${itemList.to}?orderId=${order.orderId}`, { state: { order, transfers } });
         } else if(error){
             // Navigate to the new path with error message
-            navigate(itemList.to, { state: { error } });
+            navigate(`${itemList.to}?error=${encodeURIComponent(error)}`, { state: { error } });
         }
       }, [responseData, error, navigate, itemList.to]);
 
@@ -83,7 +83,7 @@ function Search() {
                     size='medium'
                     style={{ width: '300px', marginBottom: '8px' }}
                     id="tracking"
-                    label="Shipment tracking"
+                    label="Nhập mã vận đơn của bạn"
                     name="tracking"
                     value={orderId} //Very IMPORTANT !!!
                     autoComplete="tracking"
@@ -113,7 +113,7 @@ function Search() {
                     }
                 }}
                 >
-                    Search
+                    Tìm kiếm
             </Button> 
         </Grid>
                 

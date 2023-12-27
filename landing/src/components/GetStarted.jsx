@@ -47,18 +47,18 @@ const GetStarted = () => {
                 >
                     <Title
                     text={
-                        'About Us'
+                        'Về chúng tôi'
                     }
                     textAlign={'start'}
                     />
                     <CustomTypography >
-                    <span>MagicPost is an express delivery brand<br />
-                    based on the development of technology<br />
-                    and the Internet. We own a wide network<br />
-                    to support fast delivery activities not only<br />
-                    in the inner city but also in the suburbs<br />
-                    and remote areas of provinces throughout<br />
-                    Vietnam.</span>
+                    <span>MagicPost là thương hiệu chuyển phát nhanh<br />
+                    dựa trên sự phát triển của công nghệ và Internet.<br />
+                    Chúng tôi sở hữu một mạng lưới rộng khắp<br />
+                    để hỗ trợ các hoạt động giao hàng nhanh không chỉ<br />
+                    ở nội thành mà còn ở ngoại ô và vùng sâu vùng xa <br />
+                    của các tỉnh trên toàn Việt Nam.    
+                    </span>
                     </CustomTypography> 
                 </Box>
 
@@ -96,14 +96,14 @@ const GetStarted = () => {
                 >
                     <Title
                     text={
-                        'Match with the best agent'
+                        'Giá trị cốt lõi'
                         
                     }
                     textAlign={'start'}
                     />
                     <CustomTypography>
-                        Our verified partner Agents are local experts who<br /> 
-                        earn an average of 4.8/5 stars from buyers and sellers.
+                    Bổn phận, Chia sẻ, Trách nhiệm là ba giá trị cơ bản của J&T Express nhằm mang đến chất lượng dịch vụ giao hàng tốt nhất cho khách hàng.<br /> 
+                    Chúng tôi cam kết phục vụ một cách trung thực và có trách nhiệm đối với từng đơn hàng của khách hàng.
                     </CustomTypography>
                 </Box>
             </CustomGridItem>

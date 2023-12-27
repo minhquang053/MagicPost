@@ -22,16 +22,13 @@ const GetInTouch = () => {
         >
             <Title 
             text={
-                'Contact us to buy property'
+                'Liên hệ ngay để nhận tư vấn'
                 } 
             textAlign={'center'}
             />
             <Paragraph 
             text={
-                'It is our commitment to ensure a professional and enjoyable \
-                new home buying experience for you. \
-                If you want to get a home to start living as a family in an \
-                area that you love click the button below.'
+                'Cam kết của chúng tôi là đảm bảo trải nghiệm vận chuyển chuyên nghiệp và bảo mật cho bạn. Nếu bạn có bất kỳ thắc mắc nào, hãy nhấp vào nút bên dưới để được giải đáp.'
             }
             maxWidth = {'sm'}
             mx={0}
@@ -56,7 +53,7 @@ const GetInTouch = () => {
                 }
             }}
             >
-                get in touch
+                Bạn cần hỗ trợ ?
             </Button>
  
         </Stack>

@@ -35,7 +35,7 @@ const Content = () => {
             >
                 <Title
                 text={
-                    'What we are offering?'
+                    'Cam kết của chúng tôi'
                 }
                 textAlign={'start'}
                 />
@@ -48,14 +48,15 @@ const Content = () => {
                     paddingTop: 1,
                 }}
                 >
-                    Property facilities
+                    Cơ sở vật chất
                 </Typography>
 
                 <Paragraph 
                 text={
-                    ' We have more 5000 reviews\
-                    and our customers trust on out quality\
-                    product and trust own our product.'
+                    'Chúng tôi có đội ngũ tư vấn và vận chuyển lên đến 5000 nhân viên \
+                    cùng vô số những đánh giá tích cực từ phía khách hàng \
+                    Chúng tôi luôn tự tin về đội ngũ hùng hậu\
+                    và đặt chất lượng lên hàng đầu.'
                 }
                 maxWidth = {'75%'}
                 mx={0}
@@ -89,7 +90,7 @@ const Content = () => {
                             textTransform: 'capitalize',
                         }}
                         >
-                        gym
+                        Phục vụ văn minh
                         </Typography>
                     </CardContent>
                 </Card>
@@ -121,7 +122,7 @@ const Content = () => {
                             textTransform: 'capitalize',
                         }}
                         >
-                        parking
+                        Phạm vi giao nhận
                         </Typography>
                     </CardContent>
                 </Card>
@@ -177,7 +178,7 @@ const Content = () => {
                             textTransform: 'capitalize',
                         }}
                         >
-                        local dining
+                        Tra cứu hành trình online
                         </Typography>
                     </CardContent>
                 </Card>
@@ -210,7 +211,7 @@ const Content = () => {
                             textTransform: 'capitalize',
                         }}
                         >
-                        swimming pool
+                        Vận chuyển nhanh chóng
                         </Typography>
                     </CardContent>
                 </Card>
@@ -242,7 +243,7 @@ const Content = () => {
                             textTransform: 'capitalize',
                         }}
                         >
-                        Internet
+                        Customer Service
                         </Typography>
                     </CardContent>
                 </Card>

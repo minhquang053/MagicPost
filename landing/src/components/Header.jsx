@@ -48,7 +48,7 @@ const Header = () => {
                     color: 'black',
                 }}
                 >
-                    INTERNATIONAL COVERAGE
+                    MAGIC POST
                 </Typography>
 
                 <Typography
@@ -60,8 +60,8 @@ const Header = () => {
                     color: 'black',
                 }}
                 >
-                    MagicPost proudly expands international coverage to 
-                    bring the best experience to customers
+                    MagicPost tự hào là đơn vị vận chuyển có phạm vi phủ sóng khắp cả nước 
+                    nhằm mang lại trải nghiệm tốt nhất cho khách hàng.
                 </Typography>
 
                 <Box>
@@ -89,7 +89,7 @@ const Header = () => {
                         }
                     }}
                     >
-                        Learn more
+                        Tìm hiểu thêm
                     </Button>
                 </Box>
             </BoxText>

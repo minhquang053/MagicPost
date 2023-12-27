@@ -35,15 +35,15 @@ const ListMenu = styled(List)(({ theme }) => ({
 //rotas
 const itemList = [
     {
-      text: "Home",
+      text: "Trang chủ",
       to: "/" 
     },
     {
-      text: "About",
+      text: "Cam kết",
       to: "/about"
     },
     {
-        text: "Contact",
+        text: "Hỗ trợ",
         to: "/contact"
     }
 ];
@@ -81,16 +81,14 @@ const Navbar = () => {
                         width: "10%", 
                         marginRight: 10,
                         marginBottom: -20,
+                        marginTop:-10,
                         }}
                         />
-                    
-                    
-                    
+
                         <Button
                 onClick={handleSubmit}
                 variant="h6"
                 component="h2"
-
                 >
                     Magic Post
                 </Button>
@@ -112,7 +110,10 @@ const Navbar = () => {
                                     "&:hover": {
                                         backgroundColor: 'transparent',
                                         color: '#1e2a5a',
-                                    }
+                                    },
+                                    whiteSpace: 'nowrap', // Set text to nowrap
+                                    overflow: 'hidden',   // Hide any overflow beyond the container
+                                    textOverflow: 'ellipsis' // Display ellipsis (...) if the text overflows
                                 }}
                                 >
                                     <ListItemText primary={text} />
