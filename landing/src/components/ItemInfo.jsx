@@ -91,7 +91,7 @@ const ItemInfo = () => {
       mt={4}
     >
       <Typography variant="h4" gutterBottom>
-        Your Order Information
+        Kiểm tra đơn hàng 
       </Typography>
 
       {
