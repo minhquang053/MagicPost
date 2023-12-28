@@ -15,6 +15,7 @@ export const items = [
         <ChartBarIcon />
       </SvgIcon>
     ),
+    allowedRoles: ["Admin", "Manager", "Transactor"],
   },
   {
     title: 'Nhân viên',
