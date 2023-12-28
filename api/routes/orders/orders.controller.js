@@ -9,7 +9,7 @@ const { getLatestTransferByOrderId } = require('../../models/transfers.model');
 const {
     getUserById
 } = require('../../models/users.model');
-const { validateOrderInfo, isFieldEmpty, isAnyFieldEmpty, hasAnyEmptyField } = require('../../services/internal');
+const { hasAnyEmptyField } = require('../../services/internal');
 const { isVietnamesePhoneNumberValid } = require('../../services/validator');
 
 async function httpGetAllOrders(req, res) {
@@ -37,13 +37,7 @@ async function httpChangeOrderStatusById(req, res) {
     const orderId = req.params.id;
     const newStatus = req.body.status;
     const targetOrder = await getOrderById(orderId);
-    targetOrder.newStatus = newStatus;
-
-    // if (!validateOrderInfo(targetOrder)) {
-    //     return res.status(400).json({
-    //         error: "Invalid status or status order"
-    //     })
-    // } 
+    targetOrder.newStatus = newStatus; 
 
     if (targetOrder.newStatus === 'shipping') {
         const latestTransfer = await getLatestTransferByOrderId(orderId);

@@ -8,7 +8,6 @@ const {
 } = require('../../models/users.model');
 const bcrypt = require('bcrypt');
 
-const { validateUserInfo } = require('../../services/internal');
 const { isEmailValid, isVietnamesePhoneNumberValid } = require('../../services/validator');
 
 async function httpGetAllUsers(req, res) {
@@ -32,41 +31,6 @@ async function httpGetUserById(req, res) {
     }
     return res.status(200).json(user);
 }
-
-// async function httpChangeUserRoleById(req, res) {
-//     const targetId = Number(req.params.id);
-//     const targetUser = await getUserById(targetId);
-//     const newRole = req.body.role;
-//     targetUser.newRole = newRole;
-
-//     if (!validateUserInfo({ role: newRole })) {
-//         return res.status(400).json({
-//             error: "Invalid role"
-//         })
-//     }
-
-//     if (targetUser.role === targetUser.newRole) {
-//         return res.status(400).json({
-//             error: "New role is the same as before"
-//         })
-//     }
-
-//     const requestingUser = await getUserById(req.uid);
-//     if (!editRolePermissionGranted(requestingUser, targetUser)) {
-//         return res.status(401).json({
-//             error: "Permission required"
-//         });
-//     }
-
-//     const user = await changeUserRoleById(targetId, newRole);
-//     if (!user) {
-//         return res.status(500).json({
-//             error: 'User role not changed'
-//         });
-//     }
-
-//     return res.status(200).json(user);
-// }
 
 async function httpChangeUserProfile(req, res) {
     const userProfile = req.body.user;
@@ -134,11 +98,6 @@ async function httpChangeUserProfile(req, res) {
 async function httpAddNewUser(req, res) {
     const user = req.body;
  
-    // if (!validateUserInfo({ role: user.role, location: user.location })) {
-    //     return res.status(400).json({
-    //         error: "Invalid role or location"
-    //     })
-    // }
     if (!isEmailValid(user.email)) {
         return res.status(400).json({
             error: "Invalid email"
