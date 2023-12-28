@@ -3,6 +3,9 @@ import React, {useEffect, useState} from 'react';
 import { useLocation} from 'react-router-dom';
 import { Paper} from '@mui/material';
 import {
+    Stepper,
+    Step,
+    StepLabel,
     Grid,  
     Typography,
     Box,
@@ -13,7 +16,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 const ItemInfo = () => {
-
+    let order, transfers;
+    
     const navigate = useNavigate();
     const location = useLocation();
     
@@ -34,6 +38,8 @@ const ItemInfo = () => {
         'goods': 'Hàng hóa',
       };
     
+    
+
     const fetchData = async (orderId) => {
         if (orderId) {
             const response = await fetch(`https://magic-post-7ed53u57vq-de.a.run.app/v1/tracking/${orderId}`);
@@ -74,7 +80,7 @@ const ItemInfo = () => {
     );
   } 
   else if ((state && state.order && state.transfers) || aData !== '') {
-    let order, transfers;
+    //let order, transfers;
     if (aData !== '') {
         order = aData.order;
         transfers = aData.transfers;
@@ -91,16 +97,18 @@ const ItemInfo = () => {
       mt={4}
     >
       <Typography variant="h4" gutterBottom>
-        Kiểm tra đơn hàng 
+        Thông tin đơn hàng 
       </Typography>
 
       {
         order && (
             <Paper elevation={3} sx={{ padding: 4, margin: [4, 4, 4 ,4], boxShadow: 3 }}>
                 <Grid container spacing={3}>
+                    
+
                     <Grid item xs={12} md={12}>
                         <Typography variant="h5" align="center">
-                            {order.orderId}
+                            Code : {order.orderId}
                         </Typography>
                     </Grid>
                     <Grid item xs={12} md={12}>
@@ -114,15 +122,47 @@ const ItemInfo = () => {
                             Điểm gửi hàng: {order.startLocation}
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                            Điểm giao hàng: {order.endLocation}
+                            Điểm nhận hàng: {order.endLocation}
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                            Thời gian tạo đơn: {order.createdDate}
+                            Thời gian tạo đơn: {new Date(order.createdDate).toLocaleDateString('en-GB')}
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                            Thời gian hoàn thành: {order.doneDate || ''}
+                            Thời gian hoàn thành : {transfers[0].done ? 'Đã hoàn thành.' 
+                            : 'Chưa có dữ kiện.'}
                         </Typography>
                     </Grid>
+
+                    {/* Display transfer information */}
+                    
+                    <Grid item xs={12} md={12}>
+                         <Typography variant="h6" color="textSecondary" gutterBottom>
+                                Thông tin vận chuyển
+                         </Typography>
+                         {transfers.length > 0 ? (
+                            transfers.map((transfer, index) => (
+                            <Grid key={index} item xs={12} md={12}>
+                            <Typography variant="body2" color="textSecondary" gutterBottom>
+                                Ngày vận chuyển: {new Date(transfer.transferDate).toLocaleDateString('en-GB')}&nbsp;
+                                từ điểm tập kết: {transfer.fromLocation}&nbsp;
+                                đến điểm tập kết: {transfer.toLocation}
+                            </Typography>
+                            
+                            {/* Add more transfer details if needed */}
+                            </Grid>
+                            ))
+                         ) : (
+                            <Typography variant="body2" color="textSecondary">
+                                Đơn hàng vẫn đang được đóng gói và sẽ sớm
+                                được chuyển đi trong thời gian ngắn nhất.
+                            </Typography>
+                         )}
+                        <Typography variant="body2" color="textSecondary" gutterBottom>
+                            {transfers.done ? 'Đơn hàng đã đến nơi. Khách hàng vui lòng ra điểm giao dịch gần nhất để nhận hàng' 
+                            : 'Đơn hàng vẫn đang trong quá trình vận chuyển và sẽ đến tay bạn trong thời gian sớm nhất.'}
+                        </Typography>
+                    </Grid>
+
                     <Grid item xs={12} md={12}>
                         <Typography variant="h6" color="textSecondary" gutterBottom>
                             Thông tin người gửi
