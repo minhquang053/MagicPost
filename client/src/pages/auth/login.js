@@ -156,6 +156,8 @@ const Page = () => {
                     <br/>
                     Giao dịch viên: <b>transactor@gmail.com</b> - <b>hellotester</b>
                     <br/>
+                    Nhân viên: <b>processor@gmail.com</b> - <b>hellotester</b>
+                    <br/>
                     Trưởng điểm: <b>manager@gmail.com</b> - <b>hellotester</b>
                   </div>
                 </Alert>
