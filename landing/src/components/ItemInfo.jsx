@@ -3,9 +3,6 @@ import React, {useEffect, useState} from 'react';
 import { useLocation} from 'react-router-dom';
 import { Paper} from '@mui/material';
 import {
-    Stepper,
-    Step,
-    StepLabel,
     Grid,  
     Typography,
     Box,
@@ -97,7 +94,7 @@ const ItemInfo = () => {
       mt={4}
     >
       <Typography variant="h4" gutterBottom>
-        Thông tin đơn hàng 
+        Kiểm tra đơn hàng
       </Typography>
 
       {
@@ -108,7 +105,7 @@ const ItemInfo = () => {
 
                     <Grid item xs={12} md={12}>
                         <Typography variant="h5" align="center">
-                            Code : {order.orderId}
+                            {order.orderId}
                         </Typography>
                     </Grid>
                     <Grid item xs={12} md={12}>
@@ -128,8 +125,7 @@ const ItemInfo = () => {
                             Thời gian tạo đơn: {new Date(order.createdDate).toLocaleDateString('en-GB')}
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                            Thời gian hoàn thành : {transfers[0].done ? 'Đã hoàn thành.' 
-                            : 'Chưa có dữ kiện.'}
+                            Thời gian hoàn thành : {order.orderStatus === 'done'?new Date(transfers[2].confirmDate).toLocaleDateString('en-GB'):'Chưa có dữ kiện.'}
                         </Typography>
                     </Grid>
 
@@ -139,14 +135,17 @@ const ItemInfo = () => {
                          <Typography variant="h6" color="textSecondary" gutterBottom>
                                 Thông tin vận chuyển
                          </Typography>
+                         <Typography variant="body2" color="textSecondary" gutterBottom>
+                                {new Date(transfers[0].transferDate).toLocaleDateString('en-GB')}:&nbsp;
+                                Đơn hàng vận chuyển từ {transfers[0].fromLocation.includes('A')?'điểm giao dịch':'điểm tập kết'} {transfers[0].fromLocation}&nbsp;
+                        </Typography>
                          {transfers.length > 0 ? (
                             transfers.map((transfer, index) => (
                             <Grid key={index} item xs={12} md={12}>
-                            <Typography variant="body2" color="textSecondary" gutterBottom>
-                                Ngày vận chuyển: {new Date(transfer.transferDate).toLocaleDateString('en-GB')}&nbsp;
-                                từ điểm tập kết: {transfer.fromLocation}&nbsp;
-                                đến điểm tập kết: {transfer.toLocation}
-                            </Typography>
+                            {transfer.done && <Typography variant="body2" color="textSecondary" gutterBottom>
+                                {new Date(transfer.confirmDate).toLocaleDateString('en-GB')}:&nbsp;
+                                Đơn hàng đến {transfer.toLocation.includes('A')?'điểm giao dịch':'điểm tập kết'} {transfer.toLocation}
+                            </Typography>}
                             
                             {/* Add more transfer details if needed */}
                             </Grid>
@@ -157,10 +156,6 @@ const ItemInfo = () => {
                                 được chuyển đi trong thời gian ngắn nhất.
                             </Typography>
                          )}
-                        <Typography variant="body2" color="textSecondary" gutterBottom>
-                            {transfers.done ? 'Đơn hàng đã đến nơi. Khách hàng vui lòng ra điểm giao dịch gần nhất để nhận hàng' 
-                            : 'Đơn hàng vẫn đang trong quá trình vận chuyển và sẽ đến tay bạn trong thời gian sớm nhất.'}
-                        </Typography>
                     </Grid>
 
                     <Grid item xs={12} md={12}>
