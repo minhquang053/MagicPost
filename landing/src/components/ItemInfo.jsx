@@ -125,10 +125,11 @@ const ItemInfo = () => {
                             Điểm nhận hàng: {order.endLocation}
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                            Thời gian tạo đơn: {order.createdDate}
+                            Thời gian tạo đơn: {new Date(order.createdDate).toLocaleDateString('en-GB')}
                         </Typography>
                         <Typography variant="body2" color="textSecondary">
-                            Thời gian hoàn thành: {order.doneDate || ''}
+                            Thời gian hoàn thành : {transfers[0].done ? 'Đã hoàn thành.' 
+                            : 'Chưa có dữ kiện.'}
                         </Typography>
                     </Grid>
 
