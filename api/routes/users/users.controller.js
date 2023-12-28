@@ -73,7 +73,7 @@ async function httpChangeUserProfile(req, res) {
     const userId = req.uid;
 
     const oldProfile = await getUserById(userId);
-    if ((oldProfile.email === 'manager@gmail.com' || oldProfile.email === 'transactor@gmail.com')
+    if ((oldProfile.email === 'manager@gmail.com' || oldProfile.email === 'transactor@gmail.com' || oldProfile.email === 'processor@gmail.com')
         && !userProfile.avatar) {
         return res.status(400).json({
             error: "Can't modify tester account"
